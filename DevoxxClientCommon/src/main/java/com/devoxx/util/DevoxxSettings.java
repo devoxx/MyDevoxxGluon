@@ -95,6 +95,7 @@ public class DevoxxSettings {
     public static final String SIGN_UP = "sign_up";
     public static final String SAVED_CONFERENCE_ID = "devoxx_cfp_id";
     public static final String SAVED_ACCOUNT_ID = "devoxx_cfp_account";
+    public static final String SWITCH_TO_NEWS = "SWITCH_TO_NEWS";
 
     private static final String WEARABLE_DAY_PATTERN  = "MMMM dd, uuuu";
     private static final String TIME_PATTERN = "h:mma";

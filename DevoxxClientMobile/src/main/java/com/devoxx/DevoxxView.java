@@ -40,6 +40,7 @@ public class DevoxxView {
 
     static final AppViewRegistry REGISTRY = new AppViewRegistry();
 
+    public static final AppView NEWS            = view( NewsPresenter.class,           MaterialDesignIcon.SMS,                SHOW_IN_DRAWER);
     public static final AppView SESSIONS        = view( SessionsPresenter.class,       MaterialDesignIcon.DASHBOARD,          SHOW_IN_DRAWER);
     public static final AppView SESSION         = view( SessionPresenter.class,        MaterialDesignIcon.RECORD_VOICE_OVER);
     public static final AppView SPEAKERS        = view( SpeakersPresenter.class,       MaterialDesignIcon.SPEAKER,            SHOW_IN_DRAWER);
@@ -56,7 +57,7 @@ public class DevoxxView {
     public static final AppView BADGE           = view( BadgePresenter.class,          MaterialDesignIcon.CONTACTS);
     public static final AppView SEARCH          = view( SearchPresenter.class,         MaterialDesignIcon.SEARCH);
     public static final AppView ABOUT           = view( AboutPresenter.class,          MaterialDesignIcon.AC_UNIT,            SHOW_IN_DRAWER);
-    public static final AppView CONF_SELECTOR   = view( ConfSelectorPresenter.class,   MaterialDesignIcon.ANNOUNCEMENT,       SHOW_IN_DRAWER, HOME_VIEW, SKIP_VIEW_STACK);
+    public static final AppView CONF_SELECTOR   = view( ConfSelectorPresenter.class,   MaterialDesignIcon.SELECT_ALL,         SHOW_IN_DRAWER, HOME_VIEW, SKIP_VIEW_STACK);
 
     private static AppView view(Class<? extends GluonPresenter<?>> presenterClass, MaterialDesignIcon menuIcon, AppView.Flag... flags ) {
         return REGISTRY.createView( name(presenterClass),

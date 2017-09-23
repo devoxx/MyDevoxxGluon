@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.gluonhq.charm.glisten.mvc.View?>
+<?import com.gluonhq.charm.glisten.control.CardPane?>
+<View fx:id="newsView" styleClass="news-view" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.devoxx.views.NewsPresenter">
+    <center>
+        <CardPane fx:id="newsCardPane"/>
+    </center>
+</View>

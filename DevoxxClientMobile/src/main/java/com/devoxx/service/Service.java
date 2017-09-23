@@ -30,6 +30,7 @@ import com.devoxx.model.Conference;
 import com.devoxx.model.Exhibitor;
 import com.devoxx.model.Favorite;
 import com.devoxx.model.Floor;
+import com.devoxx.model.News;
 import com.devoxx.model.Note;
 import com.devoxx.model.ProposalType;
 import com.devoxx.model.Session;
@@ -237,4 +238,10 @@ public interface Service {
      * Updates the list of favorites from the data source.
      */
     void refreshFavorites();
+
+    /**
+     * Retrieves the list of news.
+     * @return An ObservableList of news
+     */
+    ObservableList<News> retrieveNews();
 }

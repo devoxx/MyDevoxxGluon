@@ -966,3 +966,38 @@
 .sch-fav-dialog > * > .icon-text {
     -fx-text-fill: #333333;
 }
+
+/** Activity Feed **/
+
+.news-view .card  {
+    -fx-spacing: 0.416667em;
+    -fx-background-color: #f1e1af;
+    -fx-background-radius: 0.592766em;
+}
+
+.news-view .card > .content > .header {
+    -fx-background-color: #f1be6c;
+    -fx-spacing: 0.833333em;
+    -fx-padding: 0.833333em;
+    -fx-alignment: center-left;
+    -fx-background-radius: 0.592766em 0.592766em 0em 0em;
+    -fx-effect: dropshadow(three-pass-box, -elevation-shadow-color, 4, 0, 0, 2);
+}
+
+.news-view .card > .content > .header > .label.icon-text {
+    -fx-font-size: 18px;
+}
+
+.news-view .card > .content > .header > .label.title {
+    -fx-text-fill: black;
+    -fx-font-weight: normal;
+    -fx-font-size: 1.1em;
+    -fx-alignment: center-left;
+    -fx-wrap-text: true;
+}
+
+.news-view .card > .content > .label {
+    -fx-text-fill: black;
+    -fx-background-color: transparent;
+    -fx-padding: 0.833333em;
+}

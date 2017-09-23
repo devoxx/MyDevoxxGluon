@@ -37,6 +37,8 @@ import com.devoxx.views.helper.FilterSessionsPresenter;
 import com.devoxx.views.helper.LoginPrompter;
 import com.devoxx.views.helper.Placeholder;
 import com.devoxx.views.helper.SessionVisuals.SessionListType;
+import com.gluonhq.charm.down.Services;
+import com.gluonhq.charm.down.plugins.SettingsService;
 import com.gluonhq.charm.glisten.afterburner.GluonPresenter;
 import com.gluonhq.charm.glisten.afterburner.GluonView;
 import com.gluonhq.charm.glisten.application.MobileApplication;
@@ -69,6 +71,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 public class SessionsPresenter  extends GluonPresenter<DevoxxApplication> {
@@ -124,26 +127,19 @@ public class SessionsPresenter  extends GluonPresenter<DevoxxApplication> {
         final Button filterButton = createFilterButton();
 
         sessions.setOnShowing(event -> {
-            AppBar appBar = getApp().getAppBar();
-            appBar.setNavIcon(getApp().getNavMenuButton());
-            appBar.setTitleText(DevoxxView.SESSIONS.getTitle());
-            appBar.getActionItems().addAll(getApp().getSearchButton(), filterButton);
 
-            // Will never be null
-            if (DevoxxSettings.FAV_AND_SCHEDULE_ENABLED) {
-                lastSelectedButton.setSelected(true);
-                if (currentHandler != null) {
-                    currentHandler.handle(null);
+            // Check if we need to switch to News
+            final Optional<SettingsService> service = Services.get(SettingsService.class);
+            if (service.isPresent()) {
+                Boolean switchToNewsView = Boolean.parseBoolean(service.get().retrieve(DevoxxSettings.SWITCH_TO_NEWS));
+                if (switchToNewsView) {
+                    DevoxxView.NEWS.switchView();
+                } else {
+                    initialize(filterButton);
                 }
+            } else {
+                initialize(filterButton);
             }
-
-            if (scheduleListView != null) {
-                scheduleListView.setSelectedItem(null);
-            }
-
-            // check if a reload was requested, each time the sessions view is opened
-            service.checkIfReloadRequested();
-            service.refreshFavorites();
         });
 
         // Filter
@@ -161,6 +157,29 @@ public class SessionsPresenter  extends GluonPresenter<DevoxxApplication> {
             }
             return filterPopup;
         });
+    }
+    
+    private void initialize(Button filterButton) {
+        AppBar appBar = getApp().getAppBar();
+        appBar.setNavIcon(getApp().getNavMenuButton());
+        appBar.setTitleText(DevoxxView.SESSIONS.getTitle());
+        appBar.getActionItems().setAll(getApp().getSearchButton(), filterButton);
+
+        // Will never be null
+        if (DevoxxSettings.FAV_AND_SCHEDULE_ENABLED) {
+            lastSelectedButton.setSelected(true);
+            if (currentHandler != null) {
+                currentHandler.handle(null);
+            }
+        }
+
+        if (scheduleListView != null) {
+            scheduleListView.setSelectedItem(null);
+        }
+
+        // check if a reload was requested, each time the sessions view is opened
+        service.checkIfReloadRequested();
+        service.refreshFavorites();
     }
 
     private BottomNavigation createBottomNavigation() {

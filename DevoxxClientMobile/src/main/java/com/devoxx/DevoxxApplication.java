@@ -28,8 +28,13 @@ package com.devoxx;
 import com.airhacks.afterburner.injection.Injector;
 import com.devoxx.service.DevoxxService;
 import com.devoxx.service.Service;
-import com.devoxx.util.*;
+import com.devoxx.util.DevoxxLogging;
+import com.devoxx.util.DevoxxNotifications;
+import com.devoxx.util.DevoxxSearch;
+import com.devoxx.util.DevoxxSettings;
+import com.devoxx.util.Strings;
 import com.devoxx.views.DevoxxSplash;
+import com.devoxx.views.SessionsPresenter;
 import com.devoxx.views.helper.ConnectivityUtils;
 import com.devoxx.views.helper.SessionVisuals;
 import com.gluonhq.charm.down.Platform;
@@ -54,7 +59,6 @@ import javafx.stage.Window;
 import java.util.Locale;
 
 import static com.devoxx.DevoxxView.SEARCH;
-import com.devoxx.views.SessionsPresenter;
 
 public class DevoxxApplication extends MobileApplication {
     
@@ -135,7 +139,14 @@ public class DevoxxApplication extends MobileApplication {
 
         service.conferenceProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                DevoxxView.SESSIONS.switchView();
+                // Only switch view if the new conference is different from the 
+                // saved conference id
+                Services.get(SettingsService.class).ifPresent(settingsService -> {
+                    String configuredConference = settingsService.retrieve(DevoxxSettings.SAVED_CONFERENCE_ID);
+                    if (configuredConference != null && !configuredConference.equalsIgnoreCase(newValue.getId())) {
+                        DevoxxView.SESSIONS.switchView();
+                    }
+                });
             }
         });
 
