@@ -34,6 +34,7 @@ import com.devoxx.model.Favorite;
 import com.devoxx.model.Favorites;
 import com.devoxx.model.Floor;
 import com.devoxx.model.Link;
+import com.devoxx.model.News;
 import com.devoxx.model.Note;
 import com.devoxx.model.ProposalType;
 import com.devoxx.model.Scheduled;
@@ -98,12 +99,16 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.StringReader;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -130,22 +135,40 @@ public class DevoxxService implements Service {
             rootDir = Services.get(StorageService.class)
                     .flatMap(StorageService::getPrivateStorage)
                     .orElseThrow(() -> new IOException("Private storage file not available"));
-            Services.get(RuntimeArgsService.class).ifPresent(ras -> {
-                ras.addListener(RuntimeArgsService.LAUNCH_PUSH_NOTIFICATION_KEY, (f) -> {
-                    System.out.println(">>> received a silent push notification with contents: " + f);
-                    System.out.println("[DBG] writing reload file");
-                    File reloadMe = new File (rootDir, "reload");
-                    try (BufferedWriter br = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(reloadMe)))) {
-                        br.write(f);
-                        System.out.println("[DBG] writing reload file done");
-                    } catch (IOException ex) {
-                        LOG.log(Level.SEVERE, null, ex);
-                        System.out.println("[DBG] exception writing reload file "+ex);
-                    }
-                });
-            });
         } catch (IOException ex) {
             LOG.log(Level.SEVERE, null, ex);
+        }
+        Services.get(RuntimeArgsService.class).ifPresent(ras -> {
+            ras.addListener(RuntimeArgsService.LAUNCH_PUSH_NOTIFICATION_KEY, (f) -> {
+                final JsonReader reader = Json.createReader(new StringReader(f));
+                final JsonObject pushNotification = reader.readObject();
+                reader.close();
+                final String identifier = pushNotification.getString("id");
+
+                if (identifier != null && identifier.equalsIgnoreCase("news")) {
+                    Services.get(SettingsService.class).ifPresent(settingsService -> {
+                        settingsService.store(DevoxxSettings.SWITCH_TO_NEWS, Boolean.TRUE.toString());
+                    });
+                } else {
+                    if (rootDir != null) {
+                        reload(f);
+                    }
+                }
+            });
+        });
+    }
+
+    private static void reload(String f) {
+        System.out.println("[DBG] writing reload file");
+        File reloadMe = new File (rootDir, "reload");
+        try {
+            BufferedWriter br = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(reloadMe)));
+            br.write(f);
+            br.close();
+            System.out.println("[DBG] writing reload file done");
+        } catch (IOException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            System.out.println("[DBG] exception writing reload file "+ ex);
         }
     }
 
@@ -176,6 +199,8 @@ public class DevoxxService implements Service {
     private ReadOnlyListWrapper<Track> tracks = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
     private ObservableList<ProposalType> internalProposalTypes = null;
     private ReadOnlyListWrapper<ProposalType> proposalTypes = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
+    private ObservableList<News> internalNews = null;
+    private ReadOnlyListWrapper<News> news = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
     private ReadOnlyListWrapper<Floor> exhibitionMaps;
 
     // user specific data
@@ -270,6 +295,13 @@ public class DevoxxService implements Service {
                 }
                 internalProposalTypes = retrieveProposalTypesInternal();
                 Bindings.bindContent(proposalTypes, internalProposalTypes);
+                
+                if (internalNews != null) {
+                    internalNews.clear();
+                    Bindings.unbindContent(news, internalNews);
+                }
+                internalNews = retrieveNewsInternal();
+                Bindings.bindContent(news, internalNews);
 
                 exhibitionMaps = new ReadOnlyListWrapper<>(retrieveExhibitionMapsInternal());
 
@@ -982,6 +1014,16 @@ public class DevoxxService implements Service {
                 }
             });
         }
+    }
+
+    @Override
+    public ObservableList<News> retrieveNews() {
+        return news.getReadOnlyProperty();
+    }
+
+    private ObservableList<News> retrieveNewsInternal() {
+        RemoteFunctionList fnNews = RemoteFunctionBuilder.create("news").list();
+        return fnNews.call(News.class);
     }
 
     private ObservableList<Note> internalRetrieveNotes() {
