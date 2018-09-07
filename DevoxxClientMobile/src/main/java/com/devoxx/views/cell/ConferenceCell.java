@@ -37,7 +37,6 @@ import com.gluonhq.charm.glisten.control.CharmListCell;
 import javafx.beans.binding.DoubleBinding;
 import javafx.css.PseudoClass;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
@@ -127,20 +126,17 @@ public class ConferenceCell extends CharmListCell<Conference> {
             if (imageTask != null) {
                 imageTask.cancel();
             }
-            // if (!item.getId().equals("51")) {
-                imageTask = new ETagImageTask("conference_" + item.getId(), item.getImageURL());
-                imageTask.setOnSucceeded(e -> {
-                    background.setImage(imageTask.getValue());
-                });
-                imageTask.exceptionProperty().addListener((o, ov, nv) -> {
-                    LOG.log(Level.SEVERE, nv.getMessage());
-                });
-                executor.submit(imageTask);
-                imageTask.image().ifPresent(background::setImage);
-            /*} else {
-                background.setImage(new Image(item.getImageURL(), true));
-            }*/
-            
+
+            imageTask = new ETagImageTask("conference_" + item.getId(), item.getImageURL());
+            imageTask.setOnSucceeded(e -> {
+                background.setImage(imageTask.getValue());
+            });
+            imageTask.exceptionProperty().addListener((o, ov, nv) -> {
+                LOG.log(Level.SEVERE, nv.getMessage());
+            });
+            executor.submit(imageTask);
+            imageTask.image().ifPresent(background::setImage);
+
             background.fitWidthProperty().bind(widthProperty.subtract(2));
             
             content.setOnMouseReleased(e -> {
