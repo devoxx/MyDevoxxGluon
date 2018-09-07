@@ -31,7 +31,7 @@ dependencies {
     
     compile 'com.gluonhq:glisten-afterburner:1.4.0'
     compile 'com.gluonhq:charm-glisten-connect-view:5.0.1'
-    compile 'com.gluonhq:charm-cloudlink-client:4.5.1'
+    compile 'com.gluonhq:charm-cloudlink-client:4.5.2'
     compile 'com.gluonhq:maps:1.0.2'
 }
 
