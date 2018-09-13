@@ -12,7 +12,7 @@
     <top>
         <HBox>
             <VBox fx:id="headers" styleClass="headers">
-                <Label fx:id="header" styleClass="header" text="%OTN.CONFERENCE_SELECTOR.HEADER"/>
+                <Label fx:id="header" styleClass="header" text="%OTN.CONFERENCE_SELECTOR.HEADER.DEVOXX"/>
                 <Label fx:id="description" styleClass="description" text="%OTN.CONFERENCE_SELECTOR.DESCRIPTION"/>
             </VBox>
             <Region HBox.hgrow="ALWAYS"/>

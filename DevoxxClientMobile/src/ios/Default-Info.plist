@@ -5,24 +5,13 @@
         <key>CFBundleIdentifier</key>
         <string>com.devoxx.mydevoxx.swift</string>
         <key>CFBundleVersion</key>
-        <!-- buildnumber --><string>277</string>
+        <!-- buildnumber --><string>297</string>
         <key>CFBundleShortVersionString</key>
         <string>2.9.1</string>
         <key>CFBundleExecutable</key>
         <string>DevoxxClient</string>
-        <key>CFBundleIconFiles</key>
-        <array>
-                <string>Icon-60</string>
-                <string>Icon-76</string>
-                <string>Icon-Small-40</string>
-                <string>Icon-Small</string>
-        </array>
-        <key>CFBundleIconFiles~ipad</key>
-        <array>
-                <string>Icon-76</string>
-                <string>Icon-Small-40</string>
-                <string>Icon-Small</string>
-        </array>
+        <key>CFBundleIconName</key>
+        <string>AppIcon</string>
         <key>CFBundleName</key>
         <string>Devoxx</string>
         <key>CFBundlePackageType</key>

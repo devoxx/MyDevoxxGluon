@@ -1,29 +1,49 @@
+/**
+ * Copyright (c) 2018, Gluon Software
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
+ * following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation and/or other materials provided
+ *    with the distribution.
+ *
+ * 3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse
+ *    or promote products derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package com.devoxx.views.cell;
 
 import com.devoxx.DevoxxView;
 import com.devoxx.model.Conference;
 import com.devoxx.service.Service;
 import com.devoxx.util.DevoxxSettings;
+import com.devoxx.views.helper.ETagImageTask;
 import com.gluonhq.charm.down.Services;
 import com.gluonhq.charm.down.plugins.SettingsService;
-import com.gluonhq.charm.down.plugins.StorageService;
 import com.gluonhq.charm.glisten.application.MobileApplication;
 import com.gluonhq.charm.glisten.control.CharmListCell;
-import com.gluonhq.connect.provider.RestClient;
 import javafx.beans.binding.DoubleBinding;
-import javafx.concurrent.Task;
 import javafx.css.PseudoClass;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
@@ -36,7 +56,7 @@ public class ConferenceCell extends CharmListCell<Conference> {
     private static final PseudoClass PSEUDO_CLASS_VOXXED = PseudoClass.getPseudoClass("voxxed");
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MMMM dd, yyyy");
     
-    private static final ExecutorService executor = Executors.newCachedThreadPool();
+    private static final ExecutorService executor = Executors.newSingleThreadExecutor();
     
     private final Service service;
     private final Label name;
@@ -85,10 +105,13 @@ public class ConferenceCell extends CharmListCell<Conference> {
         getStyleClass().add("conference-cell"); 
     }
 
+    private ETagImageTask imageTask;
+
     @Override
     public void updateItem(Conference item, boolean empty) {
         super.updateItem(item, empty);
         
+        background.setImage(null);
         if (item != null && !empty) {
             eventType.setText(item.getEventType().name());
             
@@ -100,16 +123,20 @@ public class ConferenceCell extends CharmListCell<Conference> {
                         LocalDate.parse(item.getEndDate()).format(DATE_TIME_FORMATTER));
             }
 
-            final Task<InputStream> inputStreamTask = loadBackgroundImage(item);
-            inputStreamTask.setOnSucceeded(e -> {
-                Image image = new Image(inputStreamTask.getValue());
-                background.setImage(image);
+            if (imageTask != null) {
+                imageTask.cancel();
+            }
+
+            imageTask = new ETagImageTask("conference_" + item.getId(), item.getImageURL());
+            imageTask.setOnSucceeded(e -> {
+                background.setImage(imageTask.getValue());
             });
-            inputStreamTask.exceptionProperty().addListener((o, ov, nv) -> {
+            imageTask.exceptionProperty().addListener((o, ov, nv) -> {
                 LOG.log(Level.SEVERE, nv.getMessage());
             });
-            executor.submit(inputStreamTask);
-            
+            executor.submit(imageTask);
+            imageTask.image().ifPresent(background::setImage);
+
             background.fitWidthProperty().bind(widthProperty.subtract(2));
             
             content.setOnMouseReleased(e -> {
@@ -125,54 +152,6 @@ public class ConferenceCell extends CharmListCell<Conference> {
             setGraphic(root);
         } else {
             setGraphic(null);
-        }
-    }
-
-    private Task<InputStream> loadBackgroundImage(Conference conference) {
-
-        return new Task<InputStream>() {
-
-            @Override
-            protected InputStream call() throws Exception {
-                final String eventImageFileName = conference.getId() + "_event_background_image.jpeg";
-                final Optional<File> optionalRootDir = Services.get(StorageService.class).flatMap(StorageService::getPrivateStorage);
-                if (optionalRootDir.isPresent()) {
-                    final File rootDir = optionalRootDir.get();
-                    File eventImageFile = new File(rootDir, eventImageFileName);
-                    if (eventImageFile.exists()) {
-                        return new FileInputStream(eventImageFile);
-                    }
-                }
-                
-                // File not found on local device, download from internet
-                RestClient restClient = RestClient.create()
-                        .method("GET")
-                        .contentType("image/jpeg")
-                        .host(conference.getImageURL())
-                        .readTimeout(30000)
-                        .connectTimeout(60000);
-                final InputStream inputStream = restClient.createRestDataSource().getInputStream();
-                
-                // Write to file
-                if (optionalRootDir.isPresent()) {
-                    final File rootDir = optionalRootDir.get();
-                    File eventImageFile = new File(rootDir, eventImageFileName);
-                    writeToFile(inputStream, eventImageFile);
-                    return new FileInputStream(eventImageFile);
-                }
-                
-                // If no setting service is present, return the InputStream directly
-                return inputStream;
-            }
-        };
-    }
-
-    private void writeToFile(InputStream inputStream, File eventImageFile) throws IOException {
-        FileOutputStream writer = new FileOutputStream(eventImageFile);
-        byte[] buffer = new byte[2048];
-        int len;
-        while ((len = inputStream.read(buffer)) != -1) {
-            writer.write(buffer, 0, len);
         }
     }
 }

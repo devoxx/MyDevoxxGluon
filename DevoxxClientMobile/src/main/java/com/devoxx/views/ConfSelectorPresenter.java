@@ -43,6 +43,7 @@ import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.StackPane;
@@ -62,15 +63,18 @@ public class ConfSelectorPresenter extends GluonPresenter<DevoxxApplication> {
 
     @FXML
     private ResourceBundle bundle = ResourceBundle.getBundle("com/devoxx/views/confselector");
-    
+
     @FXML
     private CharmListView<Conference, LocalDateTime> selector;
-    
+
     @FXML
     private View confSelectorView;
 
     @FXML
     private StackPane filterPane;
+
+    @FXML
+    public Label header;
 
     @Inject
     private Service service;
@@ -121,10 +125,12 @@ public class ConfSelectorPresenter extends GluonPresenter<DevoxxApplication> {
         
         devoxx.setOnAction(e -> {
             selector.setItems(service.retrieveConferences(Conference.Type.DEVOXX));
+            header.setText(bundle.getString("OTN.CONFERENCE_SELECTOR.HEADER.DEVOXX"));
             STATUS_BAR.pseudoClassStateChanged(PSEUDO_CLASS_STATUS_VOXXED, false);
         });
         voxxed.setOnAction(e -> {
             selector.setItems(service.retrieveConferences(Conference.Type.VOXXED));
+            header.setText(bundle.getString("OTN.CONFERENCE_SELECTOR.HEADER.VOXXED"));
             STATUS_BAR.pseudoClassStateChanged(PSEUDO_CLASS_STATUS_VOXXED, true);
         });
 
