@@ -33,7 +33,6 @@ import com.devoxx.util.DevoxxSettings;
 import com.devoxx.views.helper.Placeholder;
 import com.devoxx.views.helper.SessionVisuals.SessionListType;
 import com.gluonhq.charm.down.Services;
-import com.gluonhq.charm.down.plugins.DisplayService;
 import com.gluonhq.charm.down.plugins.RuntimeArgsService;
 import com.gluonhq.charm.down.plugins.SettingsService;
 import com.gluonhq.charm.down.plugins.StorageService;
@@ -349,11 +348,14 @@ public class DevoxxService implements Service {
             setConference(conference.get());
             ready.set(true);
         } else {
-            conference.addListener((observable, oldValue, newValue) -> {
-                if (newValue != null) {
+            conference.setOnSucceeded(e -> {
+                if (conference.get() != null) {
                     setConference(conference.get());
                     ready.set(true);
                 }
+            });
+            conference.setOnFailed(e -> {
+                LOG.log(Level.WARNING, String.format(REMOTE_FUNCTION_FAILED_MSG, "conference"), e.getSource().getException());
             });
         }
         
