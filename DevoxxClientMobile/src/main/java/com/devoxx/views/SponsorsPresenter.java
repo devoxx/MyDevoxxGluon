@@ -50,7 +50,7 @@ public class SponsorsPresenter extends GluonPresenter<DevoxxApplication> {
     
     private static final String PLACEHOLDER_TITLE = DevoxxBundle.getString("OTN.PLACEHOLDER.TITLE");
     private static final String PLACEHOLDER_MESSAGE = DevoxxBundle.getString("OTN.PLACEHOLDER.MESSAGE");
-    private static boolean loadDataFromService = true;
+    private boolean loadDataFromService = true;
 
     @FXML
     private View sponsors;
