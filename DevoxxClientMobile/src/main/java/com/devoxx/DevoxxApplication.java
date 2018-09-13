@@ -136,14 +136,6 @@ public class DevoxxApplication extends MobileApplication {
             }
         });
 
-        service.conferenceProperty().addListener((observable, oldValue, newValue) -> {
-            // No need to switch if we are updating the latest content in service
-            // For more details, check DevoxxService#retrieveConference
-            if (newValue != null && !oldValue.getId().equals(newValue.getId())) {
-                DevoxxView.SESSIONS.switchView();
-            }
-        });
-
         String deviceFactorSuffix = Services.get(DeviceService.class)
                 .map(s -> {
                     if (Platform.isAndroid() && s.getModel() != null) {
