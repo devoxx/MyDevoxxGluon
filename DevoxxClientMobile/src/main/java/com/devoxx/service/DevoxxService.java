@@ -47,15 +47,9 @@ import com.gluonhq.cloudlink.client.user.UserClient;
 import com.gluonhq.connect.ConnectState;
 import com.gluonhq.connect.GluonObservableList;
 import com.gluonhq.connect.GluonObservableObject;
-import com.gluonhq.connect.converter.InputStreamIterableInputConverter;
 import com.gluonhq.connect.converter.JsonInputConverter;
-import com.gluonhq.connect.converter.JsonIterableInputConverter;
 import com.gluonhq.connect.provider.DataProvider;
-import com.gluonhq.connect.provider.InputStreamListDataReader;
-import com.gluonhq.connect.provider.ListDataReader;
-import com.gluonhq.connect.source.BasicInputDataSource;
 import javafx.beans.property.*;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -79,9 +73,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.devoxx.views.helper.Util.hidePastConferenceMessage;
-import static com.devoxx.views.helper.Util.safeStr;
-import static com.devoxx.views.helper.Util.showPastConferenceMessage;
+import static com.devoxx.views.helper.Util.*;
 
 public class DevoxxService implements Service {
 
@@ -161,11 +153,6 @@ public class DevoxxService implements Service {
     private ListChangeListener<Session> internalFavoredSessionsListener = null;
     private ObservableList<Session> internalFavoredSessions = FXCollections.observableArrayList();
     private ObservableList<Favorite> favorites = FXCollections.observableArrayList();
-    private ChangeListener<Throwable> exceptionChangeListener = (obs, ov, nv) -> {
-        if (nv != null) {
-            LOG.log(Level.SEVERE, nv.getMessage());
-        }
-    };
 
     public DevoxxService() {
         ready.set(false);
@@ -344,27 +331,28 @@ public class DevoxxService implements Service {
 
     @Override
     public GluonObservableList<Conference> retrievePastConferences() {
-        InputStreamIterableInputConverter<Conference> converter = new JsonIterableInputConverter<>(Conference.class);
-        ListDataReader<Conference> listDataReader = new InputStreamListDataReader<>(new BasicInputDataSource(DevoxxService.class.getResourceAsStream("pastEvents.json")), converter);
-
-        GluonObservableList<Conference> conferences = DataProvider.retrieveList(listDataReader);
-        conferences.exceptionProperty().addListener((obs, ov, nv) -> {
-            if (nv != null) {
-                nv.printStackTrace();
-            }
-        });
-
+        RemoteFunctionList fnConferences = RemoteFunctionBuilder.create("conferences")
+                .param("time", "past")
+                .param("type", "")
+                .list();
+        final GluonObservableList<Conference> conferences = fnConferences.call(Conference.class);
+        conferences.setOnFailed(e -> LOG.log(
+                Level.WARNING,
+                String.format(REMOTE_FUNCTION_FAILED_MSG, "conferences" + " in retrievePastConferences()"),
+                e.getSource().getException()));
         return conferences;
     }
     
     @Override
     public GluonObservableList<Conference> retrieveConferences(Conference.Type type) {
         RemoteFunctionList fnConferences = RemoteFunctionBuilder.create("conferences")
+                .param("time", "future")
                 .param("type", type.name())
                 .list();
         final GluonObservableList<Conference> conferences = fnConferences.call(Conference.class);
-        conferences.exceptionProperty().addListener(exceptionChangeListener);
-        conferences.initializedProperty().addListener(o -> conferences.exceptionProperty().removeListener(exceptionChangeListener));
+        conferences.setOnFailed(e -> LOG.log(Level.WARNING,
+                String.format(REMOTE_FUNCTION_FAILED_MSG, "conferences") + " in retrieveConferences()",
+                e.getSource().getException()));
         return conferences;
     }
 
@@ -374,8 +362,7 @@ public class DevoxxService implements Service {
                 .param("id", conferenceId)
                 .object();
         GluonObservableObject<Conference> conference = fnConference.call(Conference.class);
-        conference.exceptionProperty().addListener(o -> conference.getException().printStackTrace());
-        
+
         if (conference.isInitialized()) {
             setConference(conference.get());
             ready.set(true);
@@ -386,9 +373,7 @@ public class DevoxxService implements Service {
                     ready.set(true);
                 }
             });
-            conference.setOnFailed(e -> {
-                LOG.log(Level.WARNING, String.format(REMOTE_FUNCTION_FAILED_MSG, "conference"), e.getSource().getException());
-            });
+            conference.setOnFailed(e -> LOG.log(Level.WARNING, String.format(REMOTE_FUNCTION_FAILED_MSG, "conference"), e.getSource().getException()));
         }
         
         return conference;
