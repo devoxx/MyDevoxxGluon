@@ -153,7 +153,7 @@ public interface Service {
      *
      * @return
      */
-    ObservableList<Sponsor> retrieveSponsors();
+    GluonObservableList<Sponsor> retrieveSponsors();
 
     /**
      * Starts the authentication process. This will show a View in which the user can authenticate

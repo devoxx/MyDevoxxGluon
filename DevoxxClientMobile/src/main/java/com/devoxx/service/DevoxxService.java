@@ -33,7 +33,6 @@ import com.devoxx.util.DevoxxSettings;
 import com.devoxx.views.helper.Placeholder;
 import com.devoxx.views.helper.SessionVisuals.SessionListType;
 import com.gluonhq.charm.down.Services;
-import com.gluonhq.charm.down.plugins.DisplayService;
 import com.gluonhq.charm.down.plugins.RuntimeArgsService;
 import com.gluonhq.charm.down.plugins.SettingsService;
 import com.gluonhq.charm.down.plugins.StorageService;
@@ -155,7 +154,6 @@ public class DevoxxService implements Service {
     private ListChangeListener<Session> internalFavoredSessionsListener = null;
     private ObservableList<Session> internalFavoredSessions = FXCollections.observableArrayList();
     private ObservableList<Favorite> favorites = FXCollections.observableArrayList();
-    private ObservableList<Sponsor> sponsors = FXCollections.observableArrayList();
     private ChangeListener<Throwable> exceptionChangeListener = (obs, ov, nv) -> {
         if (nv != null) {
             LOG.log(Level.SEVERE, nv.getMessage());
@@ -350,11 +348,14 @@ public class DevoxxService implements Service {
             setConference(conference.get());
             ready.set(true);
         } else {
-            conference.addListener((observable, oldValue, newValue) -> {
-                if (newValue != null) {
+            conference.setOnSucceeded(e -> {
+                if (conference.get() != null) {
                     setConference(conference.get());
                     ready.set(true);
                 }
+            });
+            conference.setOnFailed(e -> {
+                LOG.log(Level.WARNING, String.format(REMOTE_FUNCTION_FAILED_MSG, "conference"), e.getSource().getException());
             });
         }
         
@@ -602,14 +603,13 @@ public class DevoxxService implements Service {
     }
 
     @Override
-    public ObservableList<Sponsor> retrieveSponsors() {
+    public GluonObservableList<Sponsor> retrieveSponsors() {
         RemoteFunctionList fnSponsors = RemoteFunctionBuilder.create("sponsors")
                 .param("conferenceId", getConference().getId())
                 .list();
         GluonObservableList<Sponsor> badgeSponsorsList = fnSponsors.call(Sponsor.class);
-        badgeSponsorsList.setOnSucceeded(e -> sponsors.setAll(badgeSponsorsList));
         badgeSponsorsList.setOnFailed(e -> LOG.log(Level.WARNING, String.format(REMOTE_FUNCTION_FAILED_MSG, "sponsors"), e.getSource().getException()));
-        return sponsors;
+        return badgeSponsorsList;
     }
 
     @Override
@@ -926,7 +926,6 @@ public class DevoxxService implements Service {
         badges = null;
         sponsorBadges = null;
         favoredSessions = null;
-        sponsors.clear();
         internalFavoredSessions.clear();
         ready.set(false);
 

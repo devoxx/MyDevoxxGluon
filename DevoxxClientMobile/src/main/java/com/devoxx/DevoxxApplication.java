@@ -136,12 +136,6 @@ public class DevoxxApplication extends MobileApplication {
             }
         });
 
-        service.conferenceProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                DevoxxView.SESSIONS.switchView();
-            }
-        });
-
         String deviceFactorSuffix = Services.get(DeviceService.class)
                 .map(s -> {
                     if (Platform.isAndroid() && s.getModel() != null) {

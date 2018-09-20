@@ -37,17 +37,20 @@ import com.devoxx.views.helper.Placeholder;
 import com.gluonhq.charm.glisten.afterburner.GluonPresenter;
 import com.gluonhq.charm.glisten.control.AppBar;
 import com.gluonhq.charm.glisten.control.CharmListView;
-import com.gluonhq.charm.glisten.control.Toast;
+import com.gluonhq.charm.glisten.control.ProgressIndicator;
 import com.gluonhq.charm.glisten.mvc.View;
-import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
-import javafx.collections.ObservableList;
+import com.gluonhq.connect.GluonObservableList;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 
 import javax.inject.Inject;
 
 public class SponsorsPresenter extends GluonPresenter<DevoxxApplication> {
     
-    private static final String PLACEHOLDER_MESSAGE = DevoxxBundle.getString("OTN.SPONSORS.PLACEHOLDER_MESSAGE");
+    private static final String PLACEHOLDER_TITLE = DevoxxBundle.getString("OTN.PLACEHOLDER.TITLE");
+    private static final String PLACEHOLDER_MESSAGE = DevoxxBundle.getString("OTN.PLACEHOLDER.MESSAGE");
+    private boolean loadDataFromService = true;
 
     @FXML
     private View sponsors;
@@ -63,20 +66,16 @@ public class SponsorsPresenter extends GluonPresenter<DevoxxApplication> {
             AppBar appBar = getApp().getAppBar();
             appBar.setNavIcon(getApp().getNavBackButton());
             appBar.setTitleText(DevoxxView.SPONSORS.getTitle());
-            appBar.getActionItems().add(MaterialDesignIcon.REFRESH.button(e -> {
-                sponsorListView.setItems(service.retrieveSponsors());
-                Toast toast = new Toast(DevoxxBundle.getString("OTN.SPONSORS.REFRESH_MESSAGE"));
-                toast.show();
-            }));
             sponsorListView.setSelectedItem(null);
+            if (loadDataFromService) {
+                retrieveSponsorList();
+                loadDataFromService = false;
+            }
         });
 
         sponsorListView.getStyleClass().add("sponsor-list-view");
 
-        sponsorListView.setPlaceholder(new Placeholder(PLACEHOLDER_MESSAGE, DevoxxView.SPONSORS.getMenuIcon()));
-
-        ObservableList<Sponsor> sponsorsList = service.retrieveSponsors();
-        sponsorListView.setItems(sponsorsList);
+        sponsorListView.setPlaceholder(new Placeholder(PLACEHOLDER_TITLE, PLACEHOLDER_MESSAGE, DevoxxView.SPONSORS.getMenuIcon()));
 
         sponsorListView.setHeadersFunction(Sponsor::getLevel);
         sponsorListView.setHeaderComparator((category1, category2) -> Integer.compare(category1.getValue(), category2.getValue()));
@@ -85,12 +84,33 @@ public class SponsorsPresenter extends GluonPresenter<DevoxxApplication> {
         sponsorListView.setHeaderCellFactory(p -> new SponsorHeaderCell());
         sponsorListView.setComparator((s1, s2) -> s1.getName().compareTo(s2.getName()));
 
-//        sponsorListView.selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-//            if (newValue != null) {
-//                DevoxxView.SPONSOR.switchView().ifPresent(presenter ->
-//                        ((SponsorPresenter)presenter).setSponsor(newValue.getName(), newValue.getSlug()));
-//            }
-//        });
+        service.conferenceProperty().addListener(o -> {
+            sponsorListView.setItems(FXCollections.emptyObservableList());
+            loadDataFromService = true;
+        });
+    }
+
+    private void retrieveSponsorList() {
+        final AppBar appBar = getApp().getAppBar();
+        appBar.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
+        appBar.setProgressBarVisible(true);
+        
+        sponsorListView.setPlaceholder(new Placeholder(PLACEHOLDER_TITLE, PLACEHOLDER_MESSAGE, DevoxxView.SPONSORS.getMenuIcon()));
+        
+        GluonObservableList<Sponsor> sponsorsList = service.retrieveSponsors();
+        sponsorsList.setOnSucceeded(e -> {
+            appBar.setProgressBarVisible(false);
+            sponsorListView.setItems(sponsorsList);
+            if (sponsorsList.isEmpty()) {
+                sponsorListView.setPlaceholder(Placeholder.empty("sponsors", service.getConference().getName()));
+            }
+        });
+        sponsorsList.setOnFailed(e -> {
+            appBar.setProgressBarVisible(false);
+            final Button retry = new Button("Retry");
+            retry.setOnAction(ae -> retrieveSponsorList());
+            sponsorListView.setPlaceholder(Placeholder.failure("Sponsors", retry));
+        });
     }
 
 }
