@@ -232,11 +232,8 @@ public class Conference {
         return cfpActive;
     }
 
-    public void setCfpActive(String cfpActive) {
-        if (cfpActive == null) {
-            this.cfpActive = false;
-        }
-        this.cfpActive = Boolean.parseBoolean(cfpActive);
+    public void setCfpActive(Boolean cfpActive) {
+        this.cfpActive = cfpActive == null ? false : cfpActive;
     }
 
     public String getImportDate() {
@@ -493,7 +490,18 @@ public class Conference {
     }
     
     public enum Type {
-        DEVOXX,
-        VOXXED;
+        DEVOXX("Devoxx"),
+        VOXXED("Voxxed");
+
+        private String name;
+
+        Type(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
     }
 }

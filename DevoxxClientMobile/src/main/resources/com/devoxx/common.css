@@ -103,7 +103,7 @@
 }
 
 .conference-cell .content > .top {
-    -fx-spacing: 0.2em
+    -fx-spacing: 0.2em;
 }
 
 .conference-cell .label {
@@ -129,6 +129,16 @@
     -fx-font-size: 1.25em;
 }
 
+/** PastConference Message **/
+.past-conference > .content {
+    -fx-alignment: center-left;
+    -fx-background-color: rgba(0, 0, 0, 0.9);
+    -fx-padding: 0 0 0 1em;
+}
+
+.past-conference > .content > .label {
+    -fx-text-fill: white;
+}
 
 /* use alternate color for bottom border on text input controls */
 .text-input:focused {

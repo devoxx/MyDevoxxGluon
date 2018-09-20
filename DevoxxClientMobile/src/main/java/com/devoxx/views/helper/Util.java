@@ -34,15 +34,22 @@ import com.gluonhq.charm.down.Platform;
 import com.gluonhq.charm.down.Services;
 import com.gluonhq.charm.down.plugins.BrowserService;
 import com.gluonhq.charm.down.plugins.SettingsService;
+import com.gluonhq.charm.glisten.application.MobileApplication;
+import com.gluonhq.charm.glisten.control.AppBar;
 import com.gluonhq.charm.glisten.control.Avatar;
 import com.gluonhq.charm.glisten.control.FloatingActionButton;
 import com.gluonhq.charm.glisten.control.Toast;
+import com.gluonhq.charm.glisten.layout.Layer;
 import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
 import com.gluonhq.cloudlink.client.media.MediaClient;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.util.Duration;
 
@@ -62,6 +69,7 @@ public class Util {
     public static final Image DEFAULT_EXHIBITION_MAP = new Image(ExhibitionMapPresenter.class.getResource("circle.png").toString());
 
     private static MediaClient mediaClient = new MediaClient();
+    private static Layer sidePopupView;
 
     private Util() {}
 
@@ -198,5 +206,39 @@ public class Util {
 
     public static String safeStr(String s) {
         return s == null? "": s.trim();
+    }
+
+    public static void hidePastConferenceMessage() {
+        if (sidePopupView != null) {
+            sidePopupView.hide();
+        }
+    }
+
+    public static void showPastConferenceMessage() {
+        if (sidePopupView == null) {
+            Label label = new Label("You are viewing a past conference");
+            Button button = MaterialDesignIcon.CLOSE.button();
+            Region region = new Region();
+            HBox hBox = new HBox(label, region, button);
+            hBox.getStyleClass().add("content");
+            HBox.setHgrow(region, Priority.ALWAYS);
+
+            sidePopupView = new Layer() {
+                @Override
+                public void layoutChildren() {
+                    MobileApplication mobileApplication = MobileApplication.getInstance();
+                    AppBar appBar = mobileApplication.getAppBar();
+                    double prefWidth = mobileApplication.getGlassPane().getWidth();
+                    double prefHeight = hBox.prefHeight(prefWidth);
+                    hBox.resizeRelocate(appBar.getLayoutBounds().getMinX(), appBar.getLayoutBounds().getHeight(), prefWidth, prefHeight);
+                    super.layoutChildren();
+                }
+            };
+            sidePopupView.getStyleClass().add("past-conference");
+            sidePopupView.setAutoHide(false);
+            sidePopupView.getChildren().add(hBox);
+            button.setOnAction(e -> sidePopupView.hide());
+        }
+        sidePopupView.show();
     }
 }

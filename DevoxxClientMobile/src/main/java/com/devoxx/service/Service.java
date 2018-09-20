@@ -60,6 +60,13 @@ import java.util.Optional;
 public interface Service {
 
     /**
+     * Returns a list of past conferences.
+     *
+     * @return List of Devoxx and Voxxed conferences
+     */
+    GluonObservableList<Conference> retrievePastConferences();
+
+    /**
      * Returns a list of conferences.
      * 
      * @param type whether Devoxx or Voxxed

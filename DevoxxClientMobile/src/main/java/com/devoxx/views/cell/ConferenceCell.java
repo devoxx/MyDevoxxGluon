@@ -56,8 +56,13 @@ public class ConferenceCell extends CharmListCell<Conference> {
     private static final PseudoClass PSEUDO_CLASS_VOXXED = PseudoClass.getPseudoClass("voxxed");
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MMMM dd, yyyy");
     
-    private static final ExecutorService executor = Executors.newSingleThreadExecutor();
-    
+    private static final ExecutorService executor = Executors.newSingleThreadExecutor(r -> {
+        Thread thread = Executors.defaultThreadFactory().newThread(r);
+        thread.setName("Conference Image Loader");
+        thread.setDaemon(true);
+        return thread;
+    });
+
     private final Service service;
     private final Label name;
     private final Label eventType;

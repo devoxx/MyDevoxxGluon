@@ -47,8 +47,13 @@ import com.gluonhq.cloudlink.client.user.UserClient;
 import com.gluonhq.connect.ConnectState;
 import com.gluonhq.connect.GluonObservableList;
 import com.gluonhq.connect.GluonObservableObject;
+import com.gluonhq.connect.converter.InputStreamIterableInputConverter;
 import com.gluonhq.connect.converter.JsonInputConverter;
+import com.gluonhq.connect.converter.JsonIterableInputConverter;
 import com.gluonhq.connect.provider.DataProvider;
+import com.gluonhq.connect.provider.InputStreamListDataReader;
+import com.gluonhq.connect.provider.ListDataReader;
+import com.gluonhq.connect.source.BasicInputDataSource;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
@@ -74,7 +79,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static com.devoxx.views.helper.Util.hidePastConferenceMessage;
 import static com.devoxx.views.helper.Util.safeStr;
+import static com.devoxx.views.helper.Util.showPastConferenceMessage;
 
 public class DevoxxService implements Service {
 
@@ -235,6 +242,12 @@ public class DevoxxService implements Service {
 
                 favorites.clear();
                 refreshFavorites();
+
+                if (isConferenceFromPast(nv)) {
+                    showPastConferenceMessage();
+                } else {
+                    hidePastConferenceMessage();
+                }
             }
         });
 
@@ -249,6 +262,10 @@ public class DevoxxService implements Service {
                 }
             }
         });
+    }
+
+    private boolean isConferenceFromPast(Conference conference) {
+        return conference.getDaysUntilEnd() < 0;
     }
 
     @Override
@@ -325,6 +342,21 @@ public class DevoxxService implements Service {
         return conference.getReadOnlyProperty();
     }
 
+    @Override
+    public GluonObservableList<Conference> retrievePastConferences() {
+        InputStreamIterableInputConverter<Conference> converter = new JsonIterableInputConverter<>(Conference.class);
+        ListDataReader<Conference> listDataReader = new InputStreamListDataReader<>(new BasicInputDataSource(DevoxxService.class.getResourceAsStream("pastEvents.json")), converter);
+
+        GluonObservableList<Conference> conferences = DataProvider.retrieveList(listDataReader);
+        conferences.exceptionProperty().addListener((obs, ov, nv) -> {
+            if (nv != null) {
+                nv.printStackTrace();
+            }
+        });
+
+        return conferences;
+    }
+    
     @Override
     public GluonObservableList<Conference> retrieveConferences(Conference.Type type) {
         RemoteFunctionList fnConferences = RemoteFunctionBuilder.create("conferences")
@@ -434,7 +466,7 @@ public class DevoxxService implements Service {
         sessions.clear();
 
         RemoteFunctionList fnSessions = RemoteFunctionBuilder.create("sessions")
-                .param("cfpEndpoint", getConference().getCfpURL() + "/api")
+                .param("cfpEndpoint", getCfpURL())
                 .param("conferenceId", getConference().getCfpVersion())
                 .list();
 
@@ -477,7 +509,7 @@ public class DevoxxService implements Service {
         speakers.clear();
 
         RemoteFunctionList fnSpeakers = RemoteFunctionBuilder.create("speakers")
-                .param("cfpEndpoint", getConference().getCfpURL() + "/api")
+                .param("cfpEndpoint", getCfpURL())
                 .param("conferenceId", getConference().getCfpVersion())
                 .list();
 
@@ -507,7 +539,7 @@ public class DevoxxService implements Service {
                 return new ReadOnlyObjectWrapper<>(speakerWithUuid).getReadOnlyProperty();
             } else {
                 RemoteFunctionObject fnSpeaker = RemoteFunctionBuilder.create("speaker")
-                        .param("cfpEndpoint", getConference().getCfpURL() + "/api")
+                        .param("cfpEndpoint", getCfpURL())
                         .param("conferenceId", getConference().getCfpVersion())
                         .param("uuid", uuid)
                         .object();
@@ -522,6 +554,12 @@ public class DevoxxService implements Service {
         }
 
         return new ReadOnlyObjectWrapper<>();
+    }
+
+    private String getCfpURL() {
+        final String cfpURL = getConference().getCfpURL();
+        if (cfpURL == null) return "";
+        return cfpURL.endsWith("/api") ? cfpURL : cfpURL + "/api";
     }
 
     private void updateSpeakerDetails(Speaker updatedSpeaker) {
@@ -560,7 +598,7 @@ public class DevoxxService implements Service {
 
     private void retrieveProposalTypesInternal() {
         RemoteFunctionObject fnProposalTypes = RemoteFunctionBuilder.create("proposalTypes")
-                .param("cfpEndpoint", getConference().getCfpURL() + "/api")
+                .param("cfpEndpoint", getCfpURL())
                 .param("conferenceId", getConference().getCfpVersion())
                 .object();
 
@@ -639,7 +677,7 @@ public class DevoxxService implements Service {
         }
 
         RemoteFunctionObject fnFavored = RemoteFunctionBuilder.create("favored")
-                .param("0", getConference().getCfpURL() + "/api")
+                .param("0", getCfpURL())
                 .param("1", cfpUserUuid.get())
                 .object();
 
@@ -664,7 +702,7 @@ public class DevoxxService implements Service {
                     for (Session session : c.getRemoved()) {
                         LOG.log(Level.INFO, "Removing Session: " + session.getTalk().getId() + " / " + session.getTitle());
                         RemoteFunctionObject fnRemove = RemoteFunctionBuilder.create(functionPrefix + "Remove")
-                                .param("0", getConference().getCfpURL() + "/api")
+                                .param("0", getCfpURL())
                                 .param("1", cfpUserUuid.get())
                                 .param("2", session.getTalk().getId())
                                 .object();
@@ -676,7 +714,7 @@ public class DevoxxService implements Service {
                     for (Session session : c.getAddedSubList()) {
                         LOG.log(Level.INFO, "Adding Session: " + session.getTalk().getId() + " / " + session.getTitle());
                         RemoteFunctionObject fnAdd = RemoteFunctionBuilder.create(functionPrefix + "Add")
-                                .param("0", getConference().getCfpURL() + "/api")
+                                .param("0", getCfpURL())
                                 .param("1", cfpUserUuid.get())
                                 .param("2", session.getTalk().getId())
                                 .object();
@@ -753,7 +791,7 @@ public class DevoxxService implements Service {
         // This RF uses https://api.voxxed.com/api/voxxeddays/location/$locationId
         // instead of cfpEndpoint
         RemoteFunctionObject fnLocation = RemoteFunctionBuilder.create("location")
-                // .param("cfpEndpoint", getConference().getCfpURL() + "/api")
+                // .param("cfpEndpoint", getCfpURL())
                 .param("locationId", String.valueOf(getConference().getLocationId()))
                 .object();
         return fnLocation.call(Location.class);
@@ -776,7 +814,7 @@ public class DevoxxService implements Service {
             LOG.log(Level.WARNING, "Can not send vote, authenticated user doesn't have an email address.");
         } else {
             RemoteFunctionObject fnVoteTalk = RemoteFunctionBuilder.create("voteTalk")
-                    .param("0", getConference().getCfpURL() + "/api")
+                    .param("0", getCfpURL())
                     .param("1", String.valueOf(vote.getValue()))
                     .param("2", authenticatedUser.getEmail())
                     .param("3", vote.getTalkId())
@@ -804,7 +842,7 @@ public class DevoxxService implements Service {
         if (getConference() != null && DevoxxSettings.conferenceHasFavoriteCount(getConference()) && 
                 (allFavorites.getState() == ConnectState.SUCCEEDED || allFavorites.getState() == ConnectState.FAILED)) {
             RemoteFunctionObject fnAllFavorites = RemoteFunctionBuilder.create("allFavorites")
-                    .param("0", getConference().getCfpURL() + "/api")
+                    .param("0", getCfpURL())
                     .object();
             allFavorites = fnAllFavorites.call(new JsonInputConverter<>(Favorites.class));
             allFavorites.setOnSucceeded(e -> {
@@ -880,7 +918,7 @@ public class DevoxxService implements Service {
                         }
                     } else {
                         RemoteFunctionObject fnVerifyAccount = RemoteFunctionBuilder.create("verifyAccount")
-                                .param("0", getConference().getCfpURL() + "/api")
+                                .param("0", getCfpURL())
                                 .param("1", user.getNetworkId())
                                 .param("2", user.getLoginMethod().name())
                                 .param("3", user.getEmail())
