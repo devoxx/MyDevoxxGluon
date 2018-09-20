@@ -81,8 +81,8 @@ public class ConfSelectorPresenter extends GluonPresenter<DevoxxApplication> {
     @Inject
     private Service service;
 
-    final Comparator<Conference> futureConferenceComparator = (s1, s2) -> LocalDate.parse(s1.getFromDate()).compareTo(LocalDate.parse(s2.getFromDate()));
-    final Comparator<Conference> pastConferenceComparator = (s1, s2) -> LocalDate.parse(s2.getFromDate()).compareTo(LocalDate.parse(s1.getFromDate()));
+    private final Comparator<Conference> futureConferenceComparator = (s1, s2) -> LocalDate.parse(s1.getFromDate()).compareTo(LocalDate.parse(s2.getFromDate()));
+    private final Comparator<Conference> pastConferenceComparator = (s1, s2) -> LocalDate.parse(s2.getFromDate()).compareTo(LocalDate.parse(s1.getFromDate()));
 
     public void initialize() {
         final Optional<SettingsService> settingsService = Services.get(SettingsService.class);
@@ -129,8 +129,8 @@ public class ConfSelectorPresenter extends GluonPresenter<DevoxxApplication> {
         Menu menu = new Menu();
         MenuItem devoxx = new MenuItem(Conference.Type.DEVOXX.toString());
         MenuItem voxxed = new MenuItem(Conference.Type.VOXXED.toString());
-        MenuItem pastConferences = new MenuItem(bundle.getString("OTN.CONFERENCE_SELECTOR.HEADER.PAST_CONFERENCES"));
-        menu.getItems().addAll(devoxx, voxxed, pastConferences);
+        MenuItem pastEvents = new MenuItem(bundle.getString("OTN.CONFERENCE_SELECTOR.HEADER.PAST_EVENTS"));
+        menu.getItems().addAll(devoxx, voxxed, pastEvents);
         
         devoxx.setOnAction(e -> {
             selector.setComparator(futureConferenceComparator);
@@ -144,10 +144,10 @@ public class ConfSelectorPresenter extends GluonPresenter<DevoxxApplication> {
             header.setText(bundle.getString("OTN.CONFERENCE_SELECTOR.HEADER.VOXXED"));
             STATUS_BAR.pseudoClassStateChanged(PSEUDO_CLASS_STATUS_VOXXED, true);
         });
-        pastConferences.setOnAction(e -> {
+        pastEvents.setOnAction(e -> {
             selector.setComparator(pastConferenceComparator);
             selector.setItems(service.retrievePastConferences());
-            header.setText(bundle.getString("OTN.CONFERENCE_SELECTOR.HEADER.PAST_CONFERENCES"));
+            header.setText(bundle.getString("OTN.CONFERENCE_SELECTOR.HEADER.PAST_EVENTS"));
             STATUS_BAR.pseudoClassStateChanged(PSEUDO_CLASS_STATUS_VOXXED, false);
         });
         

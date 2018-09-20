@@ -69,7 +69,7 @@ public class Util {
     public static final Image DEFAULT_EXHIBITION_MAP = new Image(ExhibitionMapPresenter.class.getResource("circle.png").toString());
 
     private static MediaClient mediaClient = new MediaClient();
-    private static Layer sidePopupView;
+    private static Layer pastConferenceMessage;
 
     private Util() {}
 
@@ -209,21 +209,21 @@ public class Util {
     }
 
     public static void hidePastConferenceMessage() {
-        if (sidePopupView != null) {
-            sidePopupView.hide();
+        if (pastConferenceMessage != null) {
+            pastConferenceMessage.hide();
         }
     }
 
     public static void showPastConferenceMessage() {
-        if (sidePopupView == null) {
-            Label label = new Label("You are viewing a past conference");
+        if (pastConferenceMessage == null) {
+            Label label = new Label(DevoxxBundle.getString("OTN.CONF.PAST.MESSAGE"));
             Button button = MaterialDesignIcon.CLOSE.button();
             Region region = new Region();
             HBox hBox = new HBox(label, region, button);
             hBox.getStyleClass().add("content");
             HBox.setHgrow(region, Priority.ALWAYS);
 
-            sidePopupView = new Layer() {
+            pastConferenceMessage = new Layer() {
                 @Override
                 public void layoutChildren() {
                     MobileApplication mobileApplication = MobileApplication.getInstance();
@@ -234,11 +234,11 @@ public class Util {
                     super.layoutChildren();
                 }
             };
-            sidePopupView.getStyleClass().add("past-conference");
-            sidePopupView.setAutoHide(false);
-            sidePopupView.getChildren().add(hBox);
-            button.setOnAction(e -> sidePopupView.hide());
+            pastConferenceMessage.getStyleClass().add("past-conference");
+            pastConferenceMessage.setAutoHide(false);
+            pastConferenceMessage.getChildren().add(hBox);
+            button.setOnAction(e -> pastConferenceMessage.hide());
         }
-        sidePopupView.show();
+        pastConferenceMessage.show();
     }
 }
