@@ -251,8 +251,9 @@ public class DevoxxService implements Service {
         });
     }
 
+    // A conference is considered from past if 7 days have passed since its end date
     private boolean isConferenceFromPast(Conference conference) {
-        return conference.getDaysUntilEnd() < 0;
+        return conference.getDaysUntilEnd() < -7;
     }
 
     @Override
