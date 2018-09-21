@@ -40,6 +40,7 @@ import com.gluonhq.charm.glisten.control.ProgressIndicator;
 import com.gluonhq.charm.glisten.layout.layer.MenuPopupView;
 import com.gluonhq.charm.glisten.mvc.View;
 import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
+import javafx.application.Platform;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -113,11 +114,13 @@ public class ConfSelectorPresenter extends GluonPresenter<DevoxxApplication> {
         MenuPopupView popup = getMenuPopupView(filter);
         
         filter.setOnAction(e -> {
-            if (popup.isShowing()) {
-                popup.hide();
-            } else {
-                popup.show();
-            }
+            Platform.runLater(() -> {
+                if (popup.isShowing()) {
+                    popup.hide();
+                } else {
+                    popup.show();
+                }
+            });
             e.consume();
         });
 
@@ -153,6 +156,7 @@ public class ConfSelectorPresenter extends GluonPresenter<DevoxxApplication> {
         
 
         final MenuPopupView menuPopupView = new MenuPopupView(filter, menu);
+        menuPopupView.getStyleClass().add("conf-selector");
         menuPopupView.setSide(RIGHT);
         return menuPopupView;
     }

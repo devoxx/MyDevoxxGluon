@@ -129,6 +129,11 @@
     -fx-font-size: 1.25em;
 }
 
+.conf-selector.popup-view .label {
+    -fx-font-size: 1.25em;
+    -fx-padding: 1em 4em 1em 1em;
+}
+
 /** PastConference Message **/
 .past-conference > .content {
     -fx-alignment: center-left;
