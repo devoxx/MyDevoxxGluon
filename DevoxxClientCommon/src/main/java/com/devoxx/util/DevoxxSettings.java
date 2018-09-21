@@ -97,6 +97,11 @@ public class DevoxxSettings {
      * URL to submit review on Play Store
      */
     public static final String ANDROID_REVIEW_URL = "market://details?id=com.devoxx";
+
+    /**
+     * No. of days after which a conference can be considered as a past conference.
+     */
+    public static final int DAYS_PAST_END_DATE = 7;
     
 
     public final static Locale LOCALE = Locale.getDefault();

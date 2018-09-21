@@ -73,6 +73,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static com.devoxx.util.DevoxxSettings.DAYS_PAST_END_DATE;
 import static com.devoxx.views.helper.Util.*;
 
 public class DevoxxService implements Service {
@@ -251,9 +252,12 @@ public class DevoxxService implements Service {
         });
     }
 
-    // A conference is considered from past if 7 days have passed since its end date
+    /**
+     * A conference is considered from past if
+     * {@link DevoxxSettings#DAYS_PAST_END_DATE} days have passed since its end date
+     */
     private boolean isConferenceFromPast(Conference conference) {
-        return conference.getDaysUntilEnd() < -7;
+        return conference.getDaysUntilEnd() < -(DAYS_PAST_END_DATE);
     }
 
     @Override
