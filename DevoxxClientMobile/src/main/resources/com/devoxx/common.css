@@ -999,11 +999,16 @@
 }
 
 .navigation-drawer .primary-title {
+    -fx-wrap-text: true;
     -fx-text-fill: white;
-    -fx-font-size: 3em;
+    -fx-font-size: 2.5em;
     -fx-font-weight: bold;
     -fx-padding: 0em 0em 0.416667em 0.416667em;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+
+.navigation-drawer .primary-title:voxxed {
+    -fx-font-size: 2em;
 }
 
 /* Experiences View */

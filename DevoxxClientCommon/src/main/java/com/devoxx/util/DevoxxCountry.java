@@ -34,6 +34,7 @@ public enum DevoxxCountry {
     PL("Poland"),
     BE("Belgium"),
     MA("Morocco"),
+    UA("Ukraine"),
     US("United States");
 
     private final String country;
@@ -58,7 +59,6 @@ public enum DevoxxCountry {
     public static String getConfShortName(String country) {
         return fromCountry(country)
                 .map(Enum::toString)
-                .orElse("");
+                .orElse(country);
     }
-    
 }

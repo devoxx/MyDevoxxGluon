@@ -138,13 +138,13 @@ public class ConfSelectorPresenter extends GluonPresenter<DevoxxApplication> {
         devoxx.setOnAction(e -> {
             selector.setComparator(futureConferenceComparator);
             selector.setItems(service.retrieveConferences(Conference.Type.DEVOXX));
-            header.setText(bundle.getString("OTN.CONFERENCE_SELECTOR.HEADER.DEVOXX"));
+            header.setText(Conference.Type.DEVOXX.getDisplayName());
             STATUS_BAR.pseudoClassStateChanged(PSEUDO_CLASS_STATUS_VOXXED, false);
         });
         voxxed.setOnAction(e -> {
             selector.setComparator(futureConferenceComparator);
             selector.setItems(service.retrieveConferences(Conference.Type.VOXXED));
-            header.setText(bundle.getString("OTN.CONFERENCE_SELECTOR.HEADER.VOXXED"));
+            header.setText(Conference.Type.VOXXED.getDisplayName());
             STATUS_BAR.pseudoClassStateChanged(PSEUDO_CLASS_STATUS_VOXXED, true);
         });
         pastEvents.setOnAction(e -> {

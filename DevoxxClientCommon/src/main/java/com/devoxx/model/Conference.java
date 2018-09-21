@@ -470,7 +470,14 @@ public class Conference {
     }
 
     public String getCountry() {
-        return name.split(" ")[1];
+        return eventType == Type.DEVOXX ? name.split(" ")[1] : getVoxxedCountryName(name);
+    }
+
+    // Remove this one VoxxedDays Microservices is corrected
+    // and matches all other Voxxed event names
+    private String getVoxxedCountryName(String name) {
+        String[] words = name.split(" ");
+        return words[words.length - 2];
     }
 
     public boolean isSelected() {
@@ -490,13 +497,19 @@ public class Conference {
     }
     
     public enum Type {
-        DEVOXX("Devoxx"),
-        VOXXED("Voxxed");
+        DEVOXX("Devoxx", "Devoxx"),
+        VOXXED("Voxxed", "VoxxedDays");
 
         private String name;
+        private String displayName;
 
-        Type(String name) {
+        Type(String name, String displayName) {
             this.name = name;
+            this.displayName = displayName;
+        }
+
+        public String getDisplayName() {
+            return displayName;
         }
 
         @Override
