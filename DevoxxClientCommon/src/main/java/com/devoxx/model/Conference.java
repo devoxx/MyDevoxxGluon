@@ -470,14 +470,18 @@ public class Conference {
     }
 
     public String getCountry() {
-        return eventType == Type.DEVOXX ? name.split(" ")[1] : getVoxxedCountryName(name);
-    }
-
-    // Remove this one VoxxedDays Microservices is corrected
-    // and matches all other Voxxed event names
-    private String getVoxxedCountryName(String name) {
-        String[] words = name.split(" ");
-        return words[words.length - 2];
+        String[] split = name.split(" ");
+        switch (getEventType()) {
+            case DEVOXX:
+                // Devoxx Belgium 2018
+                // Devoxx UK 2018
+                return split.length >= 1 ? split[1] : "";
+            case VOXXED:
+                // Voxxed Days Ticino 2018
+                // VoxxedDays Microservices 2018
+                return split.length >= 2 ? split[split.length - 2] : "";
+        }
+        return "";
     }
 
     public boolean isSelected() {
