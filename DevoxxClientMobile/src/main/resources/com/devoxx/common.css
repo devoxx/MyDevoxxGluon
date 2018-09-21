@@ -145,6 +145,12 @@
     -fx-text-fill: white;
 }
 
+.past-conference > .content > .button,
+.past-conference > .content > .button:hover,
+.past-conference > .content > .button:pressed {
+    -fx-background-color: transparent;
+}
+
 /* use alternate color for bottom border on text input controls */
 .text-input:focused {
     -fx-border-width: 0em 0em 0.166667em 0em;
