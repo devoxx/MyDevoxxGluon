@@ -42,7 +42,7 @@ public class DevoxxView {
 
     static final AppViewRegistry REGISTRY = new AppViewRegistry();
 
-    public static final AppView SESSIONS        = view( SessionsPresenter.class,       MaterialDesignIcon.DASHBOARD,          SHOW_IN_DRAWER);
+    public static final AppView SESSIONS        = view( SessionsPresenter.class,       MaterialDesignIcon.DASHBOARD,          SHOW_IN_DRAWER, HOME_VIEW);
     public static final AppView SESSION         = view( SessionPresenter.class,        MaterialDesignIcon.RECORD_VOICE_OVER);
     public static final AppView SPEAKERS        = view( SpeakersPresenter.class,       MaterialDesignIcon.SPEAKER,            SHOW_IN_DRAWER);
     public static final AppView SPEAKER         = view( SpeakerPresenter.class,        MaterialDesignIcon.SPEAKER);
@@ -60,7 +60,7 @@ public class DevoxxView {
     public static final AppView SEARCH          = view( SearchPresenter.class,         MaterialDesignIcon.SEARCH,             SKIP_VIEW_STACK);
     public static final AppView ABOUT           = view( AboutPresenter.class,          MaterialDesignIcon.AC_UNIT,            SHOW_IN_DRAWER);
     public static final AppView FEEDBACK        = view( FeedbackPresenter.class,       MaterialDesignIcon.CREATE,             SKIP_VIEW_STACK);
-    public static final AppView CONF_SELECTOR   = view( ConfSelectorPresenter.class,   MaterialDesignIcon.ANNOUNCEMENT,       SHOW_IN_DRAWER, HOME_VIEW, SKIP_VIEW_STACK);
+    public static final AppView CONF_SELECTOR   = view( ConfSelectorPresenter.class,   MaterialDesignIcon.ANNOUNCEMENT,       SHOW_IN_DRAWER, SKIP_VIEW_STACK);
     public static final AppView VOTE            = view( VotePresenter.class,           MaterialDesignIcon.THUMBS_UP_DOWN,     SKIP_VIEW_STACK);
     // public static final AppView LEADERBOARD     = view( LeaderboardPresenter.class,    MaterialDesignIcon.STARS, SHOW_IN_DRAWER);
 
