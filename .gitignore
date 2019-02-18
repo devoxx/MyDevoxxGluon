@@ -10,5 +10,9 @@ out/
 .idea/
 *.iml
 
-# Custom
+#Eclipse
+.settings
+
+# Custom - Gluon Cloud Link license
 DevoxxClientMobile/src/main/resources/gluoncloudlink_config.json
+
