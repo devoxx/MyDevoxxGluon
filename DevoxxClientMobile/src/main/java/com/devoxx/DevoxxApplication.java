@@ -118,6 +118,8 @@ public class DevoxxApplication extends MobileApplication {
     @Override
     public void postInit(Scene scene) {
 
+        service.retrieveConference("1");
+
         // Check if conference is set and switch to Sessions view
         Services.get(SettingsService.class).ifPresent(settingsService -> {
             String conferenceId = settingsService.retrieve(DevoxxSettings.SAVED_CONFERENCE_ID);

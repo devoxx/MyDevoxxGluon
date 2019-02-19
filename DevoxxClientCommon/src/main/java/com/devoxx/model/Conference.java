@@ -43,7 +43,7 @@ public class Conference {
 
     private static final Logger LOG = Logger.getLogger(Conference.class.getName());
 
-    private static final ZoneId DEFAULT_CONFERENCE_ZONE_ID = ZoneId.of("Europe/Brussels");
+    private static final ZoneId DEFAULT_CONFERENCE_ZONE_ID = ZoneId.of("Europe/Madrid");
 
     private String id;
     private String name;
@@ -92,7 +92,7 @@ public class Conference {
     // TODO: Needed for WearService
     private boolean selected;
 
-    private ZoneId timezoneId;
+    private ZoneId timezoneId = DEFAULT_CONFERENCE_ZONE_ID;
 
     public String getId() {
         return id;
@@ -526,7 +526,8 @@ public class Conference {
     public enum Type {
         DEVOXX("Devoxx", "Devoxx"),
         VOXXED("Voxxed", "VoxxedDays"),
-        MEETUP("Meetup", "Meetup");
+        MEETUP("Meetup", "Meetup"),
+        CONFERENCE("Conference", "Conference");
 
         private String name;
         private String displayName;
