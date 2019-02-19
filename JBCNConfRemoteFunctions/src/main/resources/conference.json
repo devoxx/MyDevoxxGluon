@@ -1,0 +1,42 @@
+{
+   "id":"1",
+   "name":"JBCNConf Barcelona 2019",
+   "website":"https://www.jbcnconf.com/2019/",
+   "imageURL":"https://www.jbcnconf.com/2019/assets/img/logos/logo-jbcnconf.png",
+   "fromDate":"2019-05-27",
+   "endDate":"2019-05-29",
+   "eventType":"CONFERENCE",
+   "cfpURL":"https://www.jbcnconf.com/2019/callForPapers.html",
+   "cfpVersion":"1.0",
+   "locationId":1,
+   "myBadgeActive":true,
+   "tracks":[
+      {
+         "id":1,
+         "name":"CLOUD"
+      },
+      {
+         "id":2,
+         "name":"ARCHITECTURE"
+      }
+   ],
+   "sessionTypes":[
+      {
+         "id":1,
+         "name":"talk",
+         "pause":false
+      },
+      {
+         "id":2,
+         "name":"workshop",
+         "pause":false
+      }
+   ],
+   "floorPlans":[
+      {
+         "id":1,
+         "name":"Floor 1",
+         "imageURL":""
+      }
+   ]
+}
