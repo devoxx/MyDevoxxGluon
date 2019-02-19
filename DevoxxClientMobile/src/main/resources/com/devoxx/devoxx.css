@@ -28,13 +28,13 @@
 .root {
 
 
-    -otn-base: #d2660f;
+    -otn-base: #000000;
 
-    -otn-lighter1: #EE8836;
-    -otn-lighter2: #FFA863;
+    -otn-lighter1: #bdbdbd;
+    -otn-lighter2: #e0e0e0;
 
-    -otn-darker1: #AB4C01;
-    -otn-darker2: #833A00;
+    -otn-darker1: #757575;
+    -otn-darker2: #616161;
 
     -alternate-color: #353C5C;
 
