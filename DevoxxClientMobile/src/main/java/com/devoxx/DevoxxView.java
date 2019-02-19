@@ -60,7 +60,7 @@ public class DevoxxView {
     public static final AppView SEARCH          = view( SearchPresenter.class,         MaterialDesignIcon.SEARCH,             SKIP_VIEW_STACK);
     public static final AppView ABOUT           = view( AboutPresenter.class,          MaterialDesignIcon.AC_UNIT,            SHOW_IN_DRAWER);
     public static final AppView FEEDBACK        = view( FeedbackPresenter.class,       MaterialDesignIcon.CREATE,             SKIP_VIEW_STACK);
-    public static final AppView CONF_SELECTOR   = view( ConfSelectorPresenter.class,   MaterialDesignIcon.ANNOUNCEMENT,       SHOW_IN_DRAWER, SKIP_VIEW_STACK);
+    // public static final AppView CONF_SELECTOR   = view( ConfSelectorPresenter.class,   MaterialDesignIcon.ANNOUNCEMENT,       SHOW_IN_DRAWER, SKIP_VIEW_STACK);
     public static final AppView VOTE            = view( VotePresenter.class,           MaterialDesignIcon.THUMBS_UP_DOWN,     SKIP_VIEW_STACK);
     // public static final AppView LEADERBOARD     = view( LeaderboardPresenter.class,    MaterialDesignIcon.STARS, SHOW_IN_DRAWER);
 
