@@ -2,6 +2,6 @@ include 'DevoxxClientCommon'
 include 'DevoxxClientMobile'
 include 'DevoxxRemoteFunctions'
 
-rootProject.name = 'MyDevoxx'
+rootProject.name = 'JBCNConf_Mobile_App'
 
 project(':DevoxxClientMobile').name = 'DevoxxClient'
