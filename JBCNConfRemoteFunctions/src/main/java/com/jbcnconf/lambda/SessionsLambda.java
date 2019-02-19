@@ -7,11 +7,11 @@ import java.util.Map;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 
-public class ConferenceLambda implements RequestHandler<Map<String, Object>, String>{
+public class SessionsLambda implements RequestHandler<Map<String, Object>, String>{
 
 	@Override
 	public String handleRequest(Map<String, Object> input, Context context) {
-		return getMockResponseFor("conference");
+		return getMockResponseFor("sessions");
 	}
 
 }
