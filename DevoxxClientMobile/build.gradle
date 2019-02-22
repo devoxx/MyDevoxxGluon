@@ -33,6 +33,8 @@ dependencies {
     compile 'com.gluonhq:charm-glisten-connect-view:5.0.2'
     compile 'com.gluonhq:charm-cloudlink-client:4.5.2'
     compile 'com.gluonhq:maps:1.0.2'
+    
+    testCompile 'junit:junit:4.12'    
 }
 
 configurations.all {
