@@ -1,0 +1,145 @@
+{
+ "diamond": {
+      "name": "Red Hat",
+      "href": "https://developers.redhat.com",
+      "image": {
+        "src": "/assets/img/sponsors/redhat_rgb.png",
+        "alt": "Red Hat"
+      }
+ },
+  "galaxy-premium": [
+    {
+      "name": "Codurance",
+      "href": "https://codurance.es",
+      "image": {
+        "src": "/assets/img/sponsors/codurance.png",
+        "alt": "Codurance"
+      }
+    },
+    {
+      "name": "Casumo",
+      "href": "https://casumocareers.com",
+      "image": {
+        "src": "/assets/img/sponsors/casumo.png",
+        "alt": "Casumo"
+      }
+    }
+  ],
+  "galaxy-regular" : [
+    {
+      "name": "Best Secret",
+      "href": "https://jobs.bestsecret.com/en/it.html",
+      "image": {
+        "src": "/assets/img/sponsors/best-secret.png",
+        "alt": "Best Secret"
+      }
+    },
+    {
+      "name": "N26",
+      "href": "https://n26.com/en/careers",
+      "image": {
+        "src": "/assets/img/sponsors/N26_Logo_Black_RGB_S.png",
+        "alt": "N26"
+      }
+    },
+    {
+      "name": "Netcentric",
+      "href": "https://www.netcentric.biz/careers.html",
+      "image": {
+        "src": "/assets/img/sponsors/netcentric.jpg",
+        "alt": "netcentric"
+      }
+    }
+  ],
+  "galaxy-basic": [
+    {
+      "name": "clever cloud",
+      "href": "https://clever-cloud.com",
+      "image": {
+        "src": "/assets/img/sponsors/clever-cloud.png",
+        "alt": "clever cloud"
+      }
+    },
+    {
+      "name": "Apiumhub",
+      "href": "https://apiumhub.com/",
+      "image": {
+        "src": "/assets/img/sponsors/apiumhub.png",
+        "alt": "Apiumhub"
+      }
+    }
+  ],
+  "supporters": [
+    {
+      "name": "Barcelona JUG",
+      "href": "https://www.barcelonajug.org",
+      "image": {
+        "src": "/assets/img/logos/logo_bicolor_blog_barcelonajug.png",
+        "alt": "Barcelona Java Users Group"
+      }
+    },
+    {
+      "name": "CTecno",
+      "href": "http://www.ctecno.cat",
+      "image": {
+        "src": "/assets/img/sponsors/ctecno.png",
+        "alt": "Cercle Tecnològic de Catalunya (CTecno)"
+      }
+    },
+    {
+      "name": "ACEC",
+      "href": "http://www.asocat.org",
+      "image": {
+        "src": "/assets/img/sponsors/acec.jpg",
+        "alt": "Associacio Catalana Empreses Consultores"
+      }
+    },
+    {
+      "name": "Smart Catalonia",
+      "href": "http://www.smartcatalonia.gencat.cat",
+      "image": {
+        "src": "/assets/img/sponsors/smart-catalonia.jpg",
+        "alt": "Smart Catalonia - Generalitat de Catalunya"
+      }
+    },
+    {
+      "name": "Barcelona Activa",
+      "href": "http://www.barcelonactiva.cat",
+      "image": {
+        "src": "/assets/img/sponsors/barcelona-activa.png",
+        "alt": "Barcelona Activa"
+      }
+    }
+  ],
+  "mediapartners" : [
+    {
+      "name": "tecnonews",
+      "href": "http://www.tecnonews.info/",
+      "image": {
+        "src": "/assets/img/sponsors/tecnonews.png",
+        "alt": "Tecnonews"
+      }
+    },    {
+      "name": "transformacion digital",
+      "href": "https://www.revistatransformaciondigital.com/",
+      "image": {
+        "src": "/assets/img/sponsors/transformacion-digital.png",
+        "alt": "Revista Transformacion Digital"
+      }
+    },    {
+      "name": "tyn",
+      "href": "http://www.tynmagazine.com/",
+      "image": {
+        "src": "/assets/img/sponsors/tyn.png",
+        "alt": "TyN Magazine"
+      }
+    },    {
+      "name": "wwwhatsnew",
+      "href": "https://wwwhatsnew.com/",
+      "image": {
+        "src": "/assets/img/sponsors/wwwhatsnew.png",
+        "alt": "WWWhatsnew"
+      }
+    }
+  ]
+}
