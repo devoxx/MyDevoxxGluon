@@ -20,9 +20,11 @@ dependencies {
 
     compile 'com.amazonaws:aws-lambda-java-core:1.2.0'
     compile 'io.vertx:vertx-core:3.6.3'
+    
+    compile project(":DevoxxClientCommon")
 
     // Use JUnit test framework
-    testImplementation 'junit:junit:4.12'
+    testCompile 'junit:junit:4.12'
 	testCompile group: 'org.mockito', name: 'mockito-core', version: '2.1.0'    
 }
 

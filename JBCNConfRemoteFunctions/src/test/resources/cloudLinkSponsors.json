@@ -1,0 +1,97 @@
+[ {
+  "id" : "1",
+  "name" : "Red Hat",
+  "href" : "https://developers.redhat.com",
+  "image" : {
+    "src" : "https://www.jbcnconf.com/2019/assets/img/sponsors/redhat_rgb.png",
+    "alt" : "Red Hat"
+  },
+  "level" : {
+    "name" : "cosmos",
+    "priority" : 1
+  }
+}, {
+  "id" : "2",
+  "name" : "Codurance",
+  "href" : "https://codurance.es",
+  "image" : {
+    "src" : "https://www.jbcnconf.com/2019/assets/img/sponsors/codurance.png",
+    "alt" : "Codurance"
+  },
+  "level" : {
+    "name" : "galaxy-premium",
+    "priority" : 2
+  }
+}, {
+  "id" : "3",
+  "name" : "Casumo",
+  "href" : "https://casumocareers.com",
+  "image" : {
+    "src" : "https://www.jbcnconf.com/2019/assets/img/sponsors/casumo.png",
+    "alt" : "Casumo"
+  },
+  "level" : {
+    "name" : "galaxy-premium",
+    "priority" : 2
+  }
+}, {
+  "id" : "4",
+  "name" : "Best Secret",
+  "href" : "https://jobs.bestsecret.com/en/it.html",
+  "image" : {
+    "src" : "https://www.jbcnconf.com/2019/assets/img/sponsors/best-secret.png",
+    "alt" : "Best Secret"
+  },
+  "level" : {
+    "name" : "galaxy-regular",
+    "priority" : 3
+  }
+}, {
+  "id" : "5",
+  "name" : "N26",
+  "href" : "https://n26.com/en/careers",
+  "image" : {
+    "src" : "https://www.jbcnconf.com/2019/assets/img/sponsors/N26_Logo_Black_RGB_S.png",
+    "alt" : "N26"
+  },
+  "level" : {
+    "name" : "galaxy-regular",
+    "priority" : 3
+  }
+}, {
+  "id" : "6",
+  "name" : "Netcentric",
+  "href" : "https://www.netcentric.biz/careers.html",
+  "image" : {
+    "src" : "https://www.jbcnconf.com/2019/assets/img/sponsors/netcentric.jpg",
+    "alt" : "netcentric"
+  },
+  "level" : {
+    "name" : "galaxy-regular",
+    "priority" : 3
+  }
+}, {
+  "id" : "7",
+  "name" : "clever cloud",
+  "href" : "https://clever-cloud.com",
+  "image" : {
+    "src" : "https://www.jbcnconf.com/2019/assets/img/sponsors/clever-cloud.png",
+    "alt" : "clever cloud"
+  },
+  "level" : {
+    "name" : "galaxy-basic",
+    "priority" : 4
+  }
+}, {
+  "id" : "8",
+  "name" : "Apiumhub",
+  "href" : "https://apiumhub.com/",
+  "image" : {
+    "src" : "https://www.jbcnconf.com/2019/assets/img/sponsors/apiumhub.png",
+    "alt" : "Apiumhub"
+  },
+  "level" : {
+    "name" : "galaxy-basic",
+    "priority" : 4
+  }
+} ]

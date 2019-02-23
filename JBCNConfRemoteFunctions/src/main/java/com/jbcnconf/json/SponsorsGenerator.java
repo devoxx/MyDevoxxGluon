@@ -1,7 +1,6 @@
 package com.jbcnconf.json;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -56,7 +55,9 @@ public class SponsorsGenerator {
 		sponsor.put("id", (finalJson.size()+1) + "");
 		sponsor.put("name", levelSponsor.getString("name"));
 		sponsor.put("href", levelSponsor.getString("href"));
-		sponsor.put("image", levelSponsor.getJsonObject("image"));
+		JsonObject image = levelSponsor.getJsonObject("image");
+		image.put("src", "https://www.jbcnconf.com/2019" + image.getString("src"));
+		sponsor.put("image", image);
 		sponsor.put("level", new JsonObject().put("name", levelName).put("priority", levelPriority));
 		finalJson.add(sponsor);
 	}
