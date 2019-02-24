@@ -37,11 +37,14 @@ import com.gluonhq.charm.down.plugins.SettingsService;
 import com.gluonhq.charm.glisten.application.MobileApplication;
 import com.gluonhq.charm.glisten.control.CharmListCell;
 import javafx.css.PseudoClass;
+import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -50,9 +53,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.Group;
-import javafx.scene.image.Image;
-import javafx.scene.shape.Rectangle;
 
 public class ConferenceCell extends CharmListCell<Conference> {
 
