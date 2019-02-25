@@ -25,31 +25,36 @@
  */
 package com.devoxx.service;
 
+import java.util.Optional;
+
+import javax.inject.Singleton;
+
 import com.devoxx.model.Badge;
 import com.devoxx.model.Conference;
 import com.devoxx.model.Exhibitor;
 import com.devoxx.model.Favorite;
 import com.devoxx.model.Feedback;
 import com.devoxx.model.Floor;
+import com.devoxx.model.Location;
 import com.devoxx.model.Note;
+import com.devoxx.model.RatingData;
 import com.devoxx.model.Session;
+import com.devoxx.model.SessionType;
 import com.devoxx.model.Speaker;
 import com.devoxx.model.Sponsor;
 import com.devoxx.model.SponsorBadge;
+import com.devoxx.model.TeamMember;
 import com.devoxx.model.Track;
 import com.devoxx.model.Vote;
-import com.devoxx.model.*;
 import com.devoxx.views.helper.SessionVisuals.SessionListType;
 import com.gluonhq.cloudlink.client.user.User;
 import com.gluonhq.connect.GluonObservableList;
 import com.gluonhq.connect.GluonObservableObject;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.ObservableList;
-
-import javax.inject.Singleton;
-import java.util.Optional;
 
 /**
  * A service class that provides the data from a back end system. Some methods require an authenticated
@@ -153,6 +158,14 @@ public interface Service {
      */
     ReadOnlyListProperty<Floor> retrieveExhibitionMaps();
 
+    
+    /**
+     * Returns the list of conference team members
+     * 
+     * @return
+     */
+    GluonObservableList<TeamMember> retrieveTeam();
+    
     /**
      * Returns a list of sponsors of the conference.
      *

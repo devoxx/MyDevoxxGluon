@@ -1,0 +1,73 @@
+[
+    {
+      "name": "Nacho Cougil",
+      "position": "Java DeveLOVER",
+      "role": "President of Barcelona JUG.",
+      "twitter": "https://twitter.com/icougil",
+      "linkedin": "https://www.linkedin.com/in/ignaciocougil",
+      "bio": "I'm a Software Architect focused in projects developed with Java technologies with experience in team leadership & software project management with strong analytical and design skills.",
+      "image": {
+        "src": "https://www.jbcnconf.com/2019/assets/img/team/nacho.jpg",
+        "alt": "Nacho Cougil, President, Java Lover"
+      }
+    },
+    {
+      "name": "Jonathan Vila",
+      "position": "Senior Java Developer",
+      "role": "Treasurer at Barcelona JUG.",
+      "twitter": "https://twitter.com/vilojona",
+      "linkedin": "https://www.linkedin.com/in/jonathanvila",
+      "bio": "Interested on learning and specially about Java and microservices",
+      "image": {
+        "src": "https://www.jbcnconf.com/2019/assets/img/team/jonathan.jpg",
+        "alt": "Jonathan Vila, Treasurer, Java Lover"
+      }
+    },
+    {
+      "name": "Adela Tort",
+      "position": "Senior Java Developer",
+      "role": "Coordinator at Barcelona JUG.",
+      "twitter": "http://www.twitter.com/AdelaTort",
+      "linkedin": "https://www.linkedin.com/in/adelatort",
+      "bio": "Entusiasta por la tecnología, probando y aprendiendo siempre las últimas novedades. Me gusta intentar estar al día y ser capaz de diseñar y desarrollar aplicaciones aprovechando las últimas tecnologías del mercado.",
+      "image": {
+        "src": "https://www.jbcnconf.com/2019/assets/img/team/adela.jpg",
+        "alt": "Adela Tort, Java Lover"
+      }
+    },
+    {
+      "name": "José Guitart Ruíz",
+      "position": "Java Engineer",
+      "role": "Team Member Barcelona JUG.",
+      "bio": "IT Architect focused on Java/J2EE application design and development in several platforms and frameworks. Direct experience in design and execution of continuous integration processes.",
+      "linkedin": "https://es.linkedin.com/in/joseguitart",
+      "image": {
+        "src": "https://www.jbcnconf.com/2019/assets/img/team/jose.jpg",
+        "alt": "Jose Guitart Java Lover"
+      }
+    },
+    {
+      "name": "Sergio Ferraz",
+      "position": "Software Engineer",
+      "role": "Team Member Barcelona JUG.",
+      "bio": "I am a software developer specialized in Java.",
+      "linkedin": "https://www.linkedin.com/in/sferrazjr/",
+      "twitter": "https://twitter.com/sferrazjr",
+      "image": {
+        "src": "https://www.jbcnconf.com/2019/assets/img/team/sergio-ferraz.jpg",
+        "alt": "Sergio Ferraz"
+      }
+    },
+    {
+      "name": "Abel Salgado",
+      "position": "Software Engineer",
+      "role": "Team Member Barcelona JUG.",
+      "bio": "I am a software developer specialized in Java.",
+      "linkedin": "https://www.linkedin.com/in/abels1",
+      "twitter": "https://twitter.com/abelsromero",
+      "image": {
+        "src": "https://www.jbcnconf.com/2019/assets/img/team/abel.jpg",
+        "alt": "Abel Salgado"
+      }
+    }
+  ]
