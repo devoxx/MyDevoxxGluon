@@ -16,3 +16,5 @@ out/
 # Custom - Gluon Cloud Link license
 DevoxxClientMobile/src/main/resources/gluoncloudlink_config.json
 
+#Custom - Gluon Mobile license
+gluonmobile.license
