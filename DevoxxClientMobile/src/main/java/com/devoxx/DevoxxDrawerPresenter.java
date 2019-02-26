@@ -88,7 +88,7 @@ public class DevoxxDrawerPresenter extends GluonPresenter<DevoxxApplication> {
         });
         drawer.getItems().add(logOut);
         drawer.openProperty().addListener((o, nv, ov) -> {
-            if (nv) {
+            if (!nv) {
                 logOut.setVisible(service.isAuthenticated() && !DevoxxSettings.AUTO_AUTHENTICATION);
             }
         });
