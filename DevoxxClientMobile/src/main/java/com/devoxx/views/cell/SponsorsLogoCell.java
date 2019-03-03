@@ -25,34 +25,43 @@
  */
 package com.devoxx.views.cell;
 
+import com.devoxx.model.Level;
 import com.devoxx.model.Sponsor;
+import com.devoxx.util.ImageCache;
+import com.devoxx.views.helper.Util;
 import com.gluonhq.charm.down.Services;
 import com.gluonhq.charm.down.plugins.DisplayService;
 import com.gluonhq.charm.glisten.application.MobileApplication;
 import com.gluonhq.charm.glisten.control.CharmListCell;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 
-public class SponsorsLogoCell extends CharmListCell<Sponsor> {
+public class SponsorsLogoCell extends CharmListCell<Object> {
 
     private final BorderPane root;
     private final BorderPane content;
     private final ImageView background;
 
+    private final BorderPane levelName;
+    private final Label levelNameLabel;
+
     private static final int PHONE_HEIGHT = 222;
     private static final int TABLET_HEIGHT = 333;
     private final double maxH, padding;
-    //private static final javafx.scene.image.Image DEFAULT_IMAGE = new javafx.scene.image.Image(SpeakerCard.class.getResource("speaker.jpeg").toString());
+    private static final Image DEFAULT_BACKGROUND_IMAGE = new Image(Util.class.getResource("backgroundImage.png").toString());
 
     public SponsorsLogoCell() {
         background = new ImageView();
         background.setPreserveRatio(true);
         content = new BorderPane(background);
         root = new BorderPane(content);
-        setGraphic(root);
-
         getStyleClass().add("sponsors-logo-cell");
+
+        levelNameLabel = new Label();
+        levelName = new BorderPane(levelNameLabel);
+
         MobileApplication.getInstance().getGlassPane().widthProperty().addListener((obs, ov, nv) -> fitImage());
 
         final boolean isTablet = Services.get(DisplayService.class)
@@ -63,25 +72,29 @@ public class SponsorsLogoCell extends CharmListCell<Sponsor> {
     }
 
     @Override
-    public void updateItem(Sponsor sponsor, boolean empty) {
-        super.updateItem(sponsor, empty);
-        background.setImage(null);
+    public void updateItem(Object object, boolean empty) {
+        super.updateItem(object, empty);
+        if (object instanceof Sponsor) {
+            Sponsor sponsor = (Sponsor) object;
+            background.setImage(null);
 
-        if (sponsor != null && !empty) {
-
-            if (sponsor.getImage()!=null) {
-//            ImageCache.get(sponsor.getImage().getSrc(), () -> DEFAULT_IMAGE, downloadedImage ->
-//            {
-//                System.out.println("downloaded! " + sponsor.getName());
-//                imageView.setImage(downloadedImage);
-//                setGraphic(imageView);
-//            });
-                background.setImage(new Image(sponsor.getImage().getSrc()));
-                fitImage();
+            if (sponsor != null && !empty) {
+                if (sponsor.getImage() != null) {
+                    Image image = ImageCache.get(sponsor.getImage().getSrc(), () -> DEFAULT_BACKGROUND_IMAGE,
+                            downloadedImage -> background.setImage(downloadedImage));
+                    background.setImage(image);
+                    background.setCache(true);
+                    fitImage();
+                }
+                background.setOnMouseReleased(e -> Util.launchExternalBrowser(() -> sponsor.getHref()));
             }
-//            tile.setOnMouseReleased(event -> {
-//                System.out.println(sponsor.getName() + " on mouse released");
-//            });
+            setGraphic(root);
+        } else if (object instanceof Level) {
+            getStyleClass().add("sponsors-logo-cell-header");
+            Level level = (Level) object;
+            levelNameLabel.setText(level.getName());
+            levelName.getStyleClass().add("level-name-"+level.getPriority());
+            setGraphic(levelName);
         }
     }
 
@@ -90,23 +103,14 @@ public class SponsorsLogoCell extends CharmListCell<Sponsor> {
         if (image != null) {
             double factor = image.getHeight() / image.getWidth();
             final double maxW = MobileApplication.getInstance().getGlassPane().getWidth() - padding;
-            System.out.println("factor " + factor);
-            System.out.println("maxH " + maxH);
-            System.out.println("maxW " + maxW);
             System.out.println(maxH / maxW);
             if (factor < maxH / maxW) {
-                System.out.println("<");
                 background.setFitWidth(10000);
                 background.setFitHeight(maxH);
-                //clip.setY(0);
             } else {
-                System.out.println(">");
                 background.setFitWidth(maxW);
                 background.setFitHeight(10000);
-                //clip.setY((maxW * factor - maxH) / 2);
             }
-            //clip.setWidth(maxW);
-            //clip.setHeight(maxH);
             background.setFitWidth(maxW);
             background.setFitHeight(maxH);
         }

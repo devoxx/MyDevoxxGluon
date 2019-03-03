@@ -1458,9 +1458,41 @@
     -fx-font-size: 1.1em;
 }
 
+/** Sponsors Logo View **/
+
 .sponsors-logo-cell {
-    -fx-padding: 20;
-    -fx-border-color: silver;
-    -fx-border-style: solid;
-    -fx-border-width: 1;
+     -fx-padding: 5;
+     -fx-border-color: white;
+     -fx-border-style: solid;
+     -fx-border-width: 5;
+ }
+
+.sponsors-logo-cell-header {
+    -fx-padding: 5;
+}
+
+.sponsors-logo-cell .level-name-1 {
+    -fx-padding: 0.333333em 0em 0.333333em 1.5em;
+    -fx-background-color: #e01337;
+}
+
+.sponsors-logo-cell .level-name-2 {
+    -fx-padding: 0.333333em 0em 0.333333em 1.5em;
+    -fx-background-color: #ffc837;
+}
+
+.sponsors-logo-cell .level-name-3 {
+    -fx-padding: 0.333333em 0em 0.333333em 1.5em;
+    -fx-background-color: #fdc738;
+}
+
+.sponsors-logo-cell .level-name-4 {
+    -fx-padding: 0.333333em 0em 0.333333em 1.5em;
+    -fx-background-color: #f5c482;
+}
+
+.sponsors-logo-cell .level-name > .label {
+    -fx-text-fill: white;
+    -fx-font-size: 1.1em;
+    -fx-font-weight: 700;
 }

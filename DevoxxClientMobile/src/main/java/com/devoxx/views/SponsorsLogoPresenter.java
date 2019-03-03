@@ -27,6 +27,7 @@ package com.devoxx.views;
 
 import com.devoxx.DevoxxApplication;
 import com.devoxx.DevoxxView;
+import com.devoxx.model.Level;
 import com.devoxx.model.Sponsor;
 import com.devoxx.service.Service;
 import com.devoxx.util.DevoxxBundle;
@@ -38,28 +39,29 @@ import com.gluonhq.charm.glisten.control.CharmListView;
 import com.gluonhq.charm.glisten.control.ProgressIndicator;
 import com.gluonhq.charm.glisten.mvc.View;
 import com.gluonhq.connect.GluonObservableList;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
 import javax.inject.Inject;
 
 public class SponsorsLogoPresenter extends GluonPresenter<DevoxxApplication> {
-    
+
     private static final String PLACEHOLDER_TITLE = DevoxxBundle.getString("OTN.PLACEHOLDER.TITLE");
     private static final String PLACEHOLDER_MESSAGE = DevoxxBundle.getString("OTN.PLACEHOLDER.MESSAGE");
     private boolean loadDataFromService = true;
 
     @FXML
-    private View sponsorslist;
-    
+    private View sponsors;
+
     @FXML
-    private CharmListView<Sponsor, String> sponsorListView;
+    private CharmListView<Object, String> sponsorListView;
 
     @Inject
     private Service service;
 
     public void initialize() {
-        sponsorslist.setOnShowing(event -> {
+        sponsors.setOnShowing(event -> {
             AppBar appBar = getApp().getAppBar();
             appBar.setNavIcon(getApp().getNavBackButton());
             appBar.setTitleText(DevoxxView.SPONSORS_LOGO.getTitle());
@@ -85,13 +87,13 @@ public class SponsorsLogoPresenter extends GluonPresenter<DevoxxApplication> {
         final AppBar appBar = getApp().getAppBar();
         appBar.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
         appBar.setProgressBarVisible(true);
-        
+
         sponsorListView.setPlaceholder(new Placeholder(PLACEHOLDER_TITLE, PLACEHOLDER_MESSAGE, DevoxxView.SPONSORS_LOGO.getMenuIcon()));
-        
+
         GluonObservableList<Sponsor> sponsorsList = service.retrieveSponsors();
         sponsorsList.setOnSucceeded(e -> {
             appBar.setProgressBarVisible(false);
-            sponsorListView.setItems(sponsorsList);
+            sponsorListView.setItems(addLevelsTo(sponsorsList));
             if (sponsorsList.isEmpty()) {
                 sponsorListView.setPlaceholder(Placeholder.empty("sponsors", service.getConference().getName()));
             }
@@ -102,6 +104,20 @@ public class SponsorsLogoPresenter extends GluonPresenter<DevoxxApplication> {
             retry.setOnAction(ae -> retrieveSponsorList());
             sponsorListView.setPlaceholder(Placeholder.failure("Sponsors", retry));
         });
+    }
+
+    private ObservableList<Object> addLevelsTo(GluonObservableList<Sponsor> sponsorsList) {
+        GluonObservableList<Object> sponsorsListWithLevelHeaders = new GluonObservableList<>();
+        Level currentLevel = null;
+        for (Sponsor sponsor : sponsorsList) {
+            System.out.println(sponsor.toCSV());
+            if ((currentLevel == null) || (currentLevel.getPriority() != sponsor.getLevel().getPriority())) {
+                currentLevel = sponsor.getLevel();
+                sponsorsListWithLevelHeaders.add(currentLevel);
+            }
+            sponsorsListWithLevelHeaders.add(sponsor);
+        }
+        return sponsorsListWithLevelHeaders;
     }
 
 }
