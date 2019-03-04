@@ -25,8 +25,8 @@
  */
 
 @font-face {
-  font-family: "pirulen rg";
-  src: url('/com/devoxx/pirulen_rg.ttf');
+    font-family: "pirulen rg";
+    src: url('/com/devoxx/pirulen_rg.ttf');
 }
 
 .root {
@@ -47,6 +47,12 @@
     -carve-badge-text-error: RED;
     -toast-background: #666666;
     -map-marker-color: #566A92;
+    -priority-color0: white;
+    -priority-color1: #e01337;
+    -priority-color2: #ffc837;
+    -priority-color3: #fdc738;
+    -priority-color4: #f5c482;
+
 }
 
 /* TODO: Uncomment when StatusBar Glisten bug is fixed */
@@ -217,7 +223,7 @@
 .speakers-list-view .list-cell.header-cell,
 .sponsor-list-view .list-cell.header-cell,
 .search-list-view .list-cell.header-cell,
-.sessions-list .list-cell.header-cell{
+.sessions-list .list-cell.header-cell {
     -fx-background-insets: 0, 0em 0em 0em 0.416667em;
     -fx-background-color: -alternate-color;
     -fx-font-size: 1em;
@@ -232,7 +238,7 @@
 .search-list-view .list-cell.header-cell .list-tile .primary-text,
 .search-list-view .list-cell.header-cell .list-tile .primary-graphic,
 .sessions-list .list-cell.header-cell .list-tile .primary-text,
-.sessions-list .list-cell.header-cell .list-tile .primary-graphic{
+.sessions-list .list-cell.header-cell .list-tile .primary-graphic {
     -fx-text-fill: white;
 }
 
@@ -269,77 +275,87 @@
 }
 
 .list-cell.schedule-cell:color {
-    -fx-background-color: -track-unknown, derive(-fx-control-inner-background,-7%);
+    -fx-background-color: -track-unknown, derive(-fx-control-inner-background, -7%);
 }
 
 .list-cell.schedule-cell:track-color0 {
     -fx-background-color: -track-color0, white;
 }
+
 .list-cell.schedule-cell:track-color0:color {
-    -fx-background-color: -track-color0, derive(-fx-control-inner-background,-7%);
+    -fx-background-color: -track-color0, derive(-fx-control-inner-background, -7%);
 }
 
 .list-cell.schedule-cell:track-color1 {
     -fx-background-color: -track-color1, white;
 }
+
 .list-cell.schedule-cell:track-color1:color {
-    -fx-background-color: -track-color1, derive(-fx-control-inner-background,-7%);
+    -fx-background-color: -track-color1, derive(-fx-control-inner-background, -7%);
 }
 
 .list-cell.schedule-cell:track-color2 {
-     -fx-background-color: -track-color2, white;
+    -fx-background-color: -track-color2, white;
 }
+
 .list-cell.schedule-cell:track-color2:color {
-    -fx-background-color: -track-color2, derive(-fx-control-inner-background,-7%);
+    -fx-background-color: -track-color2, derive(-fx-control-inner-background, -7%);
 }
 
 .list-cell.schedule-cell:track-color3 {
-     -fx-background-color: -track-color3, white;
+    -fx-background-color: -track-color3, white;
 }
+
 .list-cell.schedule-cell:track-color3:color {
-    -fx-background-color: -track-color3, derive(-fx-control-inner-background,-7%);
+    -fx-background-color: -track-color3, derive(-fx-control-inner-background, -7%);
 }
 
 .list-cell.schedule-cell:track-color4 {
-     -fx-background-color: -track-color4, white;
+    -fx-background-color: -track-color4, white;
 }
+
 .list-cell.schedule-cell:track-color4:color {
-    -fx-background-color: -track-color4, derive(-fx-control-inner-background,-7%);
+    -fx-background-color: -track-color4, derive(-fx-control-inner-background, -7%);
 }
 
 .list-cell.schedule-cell:track-color5 {
-     -fx-background-color: -track-color5, white;
+    -fx-background-color: -track-color5, white;
 }
+
 .list-cell.schedule-cell:track-color5:color {
-    -fx-background-color: -track-color5, derive(-fx-control-inner-background,-7%);
+    -fx-background-color: -track-color5, derive(-fx-control-inner-background, -7%);
 }
 
 .list-cell.schedule-cell:track-color6 {
-     -fx-background-color: -track-color6, white;
+    -fx-background-color: -track-color6, white;
 }
+
 .list-cell.schedule-cell:track-color6:color {
-    -fx-background-color: -track-color6, derive(-fx-control-inner-background,-7%);
+    -fx-background-color: -track-color6, derive(-fx-control-inner-background, -7%);
 }
 
 .list-cell.schedule-cell:track-color7 {
-     -fx-background-color: -track-color7, white;
+    -fx-background-color: -track-color7, white;
 }
+
 .list-cell.schedule-cell:track-color7:color {
-    -fx-background-color: -track-color7, derive(-fx-control-inner-background,-7%);
+    -fx-background-color: -track-color7, derive(-fx-control-inner-background, -7%);
 }
 
 .list-cell.schedule-cell:track-color8 {
-     -fx-background-color: -track-color8, white;
+    -fx-background-color: -track-color8, white;
 }
+
 .list-cell.schedule-cell:track-color8:color {
-    -fx-background-color: -track-color8, derive(-fx-control-inner-background,-7%);
+    -fx-background-color: -track-color8, derive(-fx-control-inner-background, -7%);
 }
 
 .list-cell.schedule-cell:track-color9 {
     -fx-background-color: -track-color9, white;
 }
+
 .list-cell.schedule-cell:track-color9:color {
-    -fx-background-color: -track-color9, derive(-fx-control-inner-background,-7%);
+    -fx-background-color: -track-color9, derive(-fx-control-inner-background, -7%);
 }
 
 .schedule-cell .session-type {
@@ -358,7 +374,7 @@
     -fx-translate-x: 1px;
 }
 
-.schedule-cell .list-tile > .primary-graphic  > .label {
+.schedule-cell .list-tile > .primary-graphic > .label {
     -fx-rotate: -90;
     -fx-font-size: 0.35em;
     -fx-text-fill: white;
@@ -419,9 +435,11 @@
     -fx-text-fill: white;
     -fx-font-size: 1em;
 }
+
 .schedule-cell .list-tile > .secondary-graphic > .schedule.indicator > .icon-text {
     -fx-padding: 0.166667em 0.083333em 0.083333em 0.166667em;
 }
+
 .schedule-cell .list-tile > .secondary-graphic > .favorite.indicator > .icon-text {
     -fx-padding: 0.166667em 0.166667em 0.083333em 0.166667em;
     -fx-font-size: 0.9em;
@@ -430,10 +448,10 @@
 /* Avatar */
 
 .avatar.list-avatar > .decoration {
-    -fx-fill:transparent;
+    -fx-fill: transparent;
     -fx-stroke: -primary-swatch-500;
     -fx-stroke-width: 0.083333em;
-    -fx-effect: dropshadow(three-pass-box,-elevation-shadow-color, 2, 0, 0, 1);
+    -fx-effect: dropshadow(three-pass-box, -elevation-shadow-color, 2, 0, 0, 1);
 }
 
 /* Session View and Speaker View */
@@ -529,10 +547,11 @@
     /* FIXME: for some reason check-box text is black by default - check in glisten */
     -fx-text-fill: -text-light;
 }
+
 .sessions-filter .day-filter .check-box .box,
 .sessions-filter .track-filter .check-box .box,
 .sessions-filter .type-filter .check-box .box,
-.sessions-filter .period-filter .check-box .box{
+.sessions-filter .period-filter .check-box .box {
     /* FIXME: for some reason check-box box is black by default - check in glisten.  */
     /*-fx-background-color: -fx-shadow-highlight-color, -text-light, -fx-inner-border, -fx-body-color;*/
 }
@@ -729,14 +748,14 @@
 }
 
 .session-conflict-dialog > .container > .content > .session-pane > .title {
-   -fx-padding: 0em 0em 0em 2.666667em;
-   -fx-wrap-text: true;
-   -fx-font-weight: bold;
+    -fx-padding: 0em 0em 0em 2.666667em;
+    -fx-wrap-text: true;
+    -fx-font-weight: bold;
 }
 
 .session-conflict-dialog > .container > .content > .session-pane > .label {
-   -fx-padding: 0em 0em 0em 2.666667em;
-   -fx-wrap-text: true;
+    -fx-padding: 0em 0em 0em 2.666667em;
+    -fx-wrap-text: true;
 }
 
 /* Venue / Exhibitor / Sponsor View */
@@ -774,7 +793,7 @@
 
 
 /* TextArea */
-.text-area .content{
+.text-area .content {
     -fx-background-color: transparent;
 }
 
@@ -803,7 +822,7 @@
 }
 
 .avatar-pane .content-box .job-title,
-.avatar-pane .content-box .company{
+.avatar-pane .content-box .company {
     -fx-font-weight: bold;
 }
 
@@ -818,16 +837,16 @@
 }
 
 .avatar-pane .avatar {
-    -charm-radius: 2.083333em; 
+    -charm-radius: 2.083333em;
 }
 
 .search-list-view .avatar,
 .speakers-list-view .avatar {
-    -charm-radius: 2.916667em; 
+    -charm-radius: 2.916667em;
 }
 
 .speaker-card .avatar {
-    -charm-radius: 3.333333em; 
+    -charm-radius: 3.333333em;
 }
 
 /**************************
@@ -979,7 +998,7 @@
 }
 
 .qr-dialog > .container > .content > .message {
-    -fx-wrap-text : true;
+    -fx-wrap-text: true;
 }
 
 /* Login Prompter and Placeholder */
@@ -1012,7 +1031,7 @@
 }
 
 .login-prompter .title,
-.login-prompter .message, 
+.login-prompter .message,
 .placeholder .message,
 .experience-holder > .message {
     -fx-text-alignment: center;
@@ -1047,7 +1066,7 @@
     -fx-font-size: 2.5em;
     -fx-font-weight: bold;
     -fx-padding: 0em 0em 0.416667em 0.416667em;
-    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 5, 0.0, 0, 1);
 }
 
 .navigation-drawer .primary-title:voxxed {
@@ -1085,7 +1104,7 @@
 /* Darker background color when hover or pressed */
 .fab:hover,
 .fab:pressed {
-    -fx-background-color: derive( -fab-primary-background-color, -10%);
+    -fx-background-color: derive(-fab-primary-background-color, -10%);
 }
 
 .button.round.action.icon-text.fab.secondary {
@@ -1097,7 +1116,7 @@
 /* Darker background color when hover or pressed */
 .button.round.action.icon-text.fab.secondary:hover,
 .button.round.action.icon-text.fab.secondary:pressed {
-    -fx-background-color: derive( -fab-secondary-background-color, -10%);
+    -fx-background-color: derive(-fab-secondary-background-color, -10%);
 }
 
 /********************** Gluon Map Marker ***********************/
@@ -1122,6 +1141,7 @@
     -fx-spacing: 0.833333em;
     -fx-alignment: CENTER;
 }
+
 .qrcode .container .label {
     -fx-text-alignment: center;
     -fx-wrap-text: true;
@@ -1172,10 +1192,11 @@
 
 .carve-badge > .progress-bar,
 .iotworkshop-view > .progress-bar,
-.coffee-view > .instructions-container> .progress-bar{
+.coffee-view > .instructions-container > .progress-bar {
     -fx-padding: 0.085em 1 0 1;
     -fx-color: -alternate-color;
 }
+
 .coffee-view .instructions-container {
     -fx-spacing: 0.2em;
     -fx-alignment: center;
@@ -1236,9 +1257,10 @@
 .data-label > .progress-indicator {
     -fx-color: -primary-swatch-500;
 }
+
 /* Rating Box */
 .review-grid {
-    -fx-padding: 0.2em 0.4em 0.2em 0.4em; 
+    -fx-padding: 0.2em 0.4em 0.2em 0.4em;
     -fx-background-color: -alternate-color;
 }
 
@@ -1260,7 +1282,7 @@
 
 .review-grid > .buttons > .button {
     -fx-text-fill: white;
-    -fx-font-size:1.05em;
+    -fx-font-size: 1.05em;
     -fx-padding: 1.5mm 1.5mm 1.92mm 1.92mm;
 }
 
@@ -1362,8 +1384,8 @@
 }
 
 .vote-view > .center > .compliments > .virtual-flow > .clipped-container > .sheet > .list-cell:selected > .text {
-     -fx-font-weight: 800;
- }
+    -fx-font-weight: 800;
+}
 
 /* Selected rows */
 .vote-view > .center > .compliments > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected {
@@ -1457,3 +1479,30 @@
 .leader-cell > .box > .point {
     -fx-font-size: 1.1em;
 }
+
+/** Sponsors Logo View **/
+
+.list-cell.sponsors-logo-cell {
+    -fx-padding: 15;
+}
+
+.list-cell.sponsor-logo-header-cell:priority-color0 {
+    -fx-background-color: -priority-color1;
+}
+
+.list-cell.sponsor-logo-header-cell:priority-color1 {
+    -fx-background-color: -priority-color2;
+}
+
+.list-cell.sponsor-logo-header-cell:priority-color2 {
+    -fx-background-color: -priority-color3;
+}
+
+.list-cell.sponsor-logo-header-cell:priority-color3 {
+    -fx-background-color: -priority-color4;
+}
+
+.list-cell.sponsor-logo-header-cell:priority-color4 {
+    -fx-background-color: -priority-color0;
+}
+

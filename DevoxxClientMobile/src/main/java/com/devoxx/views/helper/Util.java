@@ -126,19 +126,22 @@ public class Util {
     }
 
     public static FloatingActionButton createWebLaunchFAB(Supplier<String> urlSupplier) {
-        return createFAB(MaterialDesignIcon.LAUNCH, e -> {
-            Services.get(BrowserService.class).ifPresent(b -> {
-                try {
-                    String url = urlSupplier.get();
-                    if (!url.startsWith("http://") && !url.startsWith("https://")) {
-                        url = "http://".concat(url);
-                    }
-                    b.launchExternalBrowser(url);
-                } catch (IOException | URISyntaxException ex) {
-                    Toast toast = new Toast(DevoxxBundle.getString("OTN.VISUALS.CONNECTION_FAILED"));
-                    toast.show();
+        return createFAB(MaterialDesignIcon.LAUNCH, e -> launchExternalBrowser(urlSupplier));
+    }
+
+    public static void launchExternalBrowser(Supplier<String> urlSupplier)
+    {
+        Services.get(BrowserService.class).ifPresent(b -> {
+            try {
+                String url = urlSupplier.get();
+                if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                    url = "http://".concat(url);
                 }
-            });
+                b.launchExternalBrowser(url);
+            } catch (IOException | URISyntaxException ex) {
+                Toast toast = new Toast(DevoxxBundle.getString("OTN.VISUALS.CONNECTION_FAILED"));
+                toast.show();
+            }
         });
     }
     
