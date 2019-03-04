@@ -25,7 +25,6 @@
  */
 package com.devoxx.views.cell;
 
-import com.devoxx.model.Level;
 import com.devoxx.model.Sponsor;
 import com.devoxx.util.ImageCache;
 import com.devoxx.views.helper.Util;
@@ -33,19 +32,15 @@ import com.gluonhq.charm.down.Services;
 import com.gluonhq.charm.down.plugins.DisplayService;
 import com.gluonhq.charm.glisten.application.MobileApplication;
 import com.gluonhq.charm.glisten.control.CharmListCell;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 
-public class SponsorsLogoCell extends CharmListCell<Object> {
+public class SponsorsLogoCell extends CharmListCell<Sponsor> {
 
     private final BorderPane root;
     private final BorderPane content;
     private final ImageView background;
-
-    private final BorderPane levelName;
-    private final Label levelNameLabel;
 
     private static final int PHONE_HEIGHT = 222;
     private static final int TABLET_HEIGHT = 333;
@@ -59,9 +54,6 @@ public class SponsorsLogoCell extends CharmListCell<Object> {
         root = new BorderPane(content);
         getStyleClass().add("sponsors-logo-cell");
 
-        levelNameLabel = new Label();
-        levelName = new BorderPane(levelNameLabel);
-
         MobileApplication.getInstance().getGlassPane().widthProperty().addListener((obs, ov, nv) -> fitImage());
 
         final boolean isTablet = Services.get(DisplayService.class)
@@ -72,30 +64,20 @@ public class SponsorsLogoCell extends CharmListCell<Object> {
     }
 
     @Override
-    public void updateItem(Object object, boolean empty) {
-        super.updateItem(object, empty);
-        if (object instanceof Sponsor) {
-            Sponsor sponsor = (Sponsor) object;
-            background.setImage(null);
+    public void updateItem(Sponsor sponsor, boolean empty) {
+        super.updateItem(sponsor, empty);
 
-            if (sponsor != null && !empty) {
-                if (sponsor.getImage() != null) {
-                    Image image = ImageCache.get(sponsor.getImage().getSrc(), () -> DEFAULT_BACKGROUND_IMAGE,
-                            downloadedImage -> background.setImage(downloadedImage));
-                    background.setImage(image);
-                    background.setCache(true);
-                    fitImage();
-                }
-                background.setOnMouseReleased(e -> Util.launchExternalBrowser(() -> sponsor.getHref()));
+        if (sponsor != null && !empty) {
+            if (sponsor.getImage() != null) {
+                Image image = ImageCache.get(sponsor.getImage().getSrc(), () -> DEFAULT_BACKGROUND_IMAGE,
+                        downloadedImage -> background.setImage(downloadedImage));
+                background.setImage(image);
+                background.setCache(true);
+                fitImage();
             }
-            setGraphic(root);
-        } else if (object instanceof Level) {
-            getStyleClass().add("sponsors-logo-cell-header");
-            Level level = (Level) object;
-            levelNameLabel.setText(level.getName());
-            levelName.getStyleClass().add("level-name-"+level.getPriority());
-            setGraphic(levelName);
+            background.setOnMouseReleased(e -> Util.launchExternalBrowser(() -> sponsor.getHref()));
         }
+        setGraphic(root);
     }
 
     private void fitImage() {

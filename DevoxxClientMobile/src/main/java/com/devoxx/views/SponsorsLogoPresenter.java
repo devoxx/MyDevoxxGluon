@@ -27,10 +27,10 @@ package com.devoxx.views;
 
 import com.devoxx.DevoxxApplication;
 import com.devoxx.DevoxxView;
-import com.devoxx.model.Level;
 import com.devoxx.model.Sponsor;
 import com.devoxx.service.Service;
 import com.devoxx.util.DevoxxBundle;
+import com.devoxx.views.cell.SponsorLogoHeaderCell;
 import com.devoxx.views.cell.SponsorsLogoCell;
 import com.devoxx.views.helper.Placeholder;
 import com.gluonhq.charm.glisten.afterburner.GluonPresenter;
@@ -39,7 +39,6 @@ import com.gluonhq.charm.glisten.control.CharmListView;
 import com.gluonhq.charm.glisten.control.ProgressIndicator;
 import com.gluonhq.charm.glisten.mvc.View;
 import com.gluonhq.connect.GluonObservableList;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
@@ -51,11 +50,12 @@ public class SponsorsLogoPresenter extends GluonPresenter<DevoxxApplication> {
     private static final String PLACEHOLDER_MESSAGE = DevoxxBundle.getString("OTN.PLACEHOLDER.MESSAGE");
     private boolean loadDataFromService = true;
 
+
     @FXML
     private View sponsors;
 
     @FXML
-    private CharmListView<Object, String> sponsorListView;
+    private CharmListView<Sponsor, Integer> sponsorListView;
 
     @Inject
     private Service service;
@@ -72,15 +72,11 @@ public class SponsorsLogoPresenter extends GluonPresenter<DevoxxApplication> {
             }
         });
 
-        //sponsorListView.getStyleClass().add("sponsors-logo-list-view");
+        sponsorListView.getStyleClass().add("sponsor-logo-list-view");
         sponsorListView.setPlaceholder(new Placeholder(PLACEHOLDER_TITLE, PLACEHOLDER_MESSAGE, DevoxxView.SPONSORS_LOGO.getMenuIcon()));
+        sponsorListView.setHeadersFunction(s -> s.getLevel().getPriority());
+        sponsorListView.setHeaderCellFactory(p -> new SponsorLogoHeaderCell());
         sponsorListView.setCellFactory(p -> new SponsorsLogoCell());
-        //sponsorListView.setComparator((s1, s2) -> s1.getName().compareToIgnoreCase(s2.getName()));
-
-        //service.conferenceProperty().addListener(o -> {
-        //    sponsorListView.setItems(FXCollections.emptyObservableList());
-        //    loadDataFromService = true;
-        //});
     }
 
     private void retrieveSponsorList() {
@@ -93,7 +89,7 @@ public class SponsorsLogoPresenter extends GluonPresenter<DevoxxApplication> {
         GluonObservableList<Sponsor> sponsorsList = service.retrieveSponsors();
         sponsorsList.setOnSucceeded(e -> {
             appBar.setProgressBarVisible(false);
-            sponsorListView.setItems(addLevelsTo(sponsorsList));
+            sponsorListView.setItems(sponsorsList);
             if (sponsorsList.isEmpty()) {
                 sponsorListView.setPlaceholder(Placeholder.empty("sponsors", service.getConference().getName()));
             }
@@ -105,19 +101,4 @@ public class SponsorsLogoPresenter extends GluonPresenter<DevoxxApplication> {
             sponsorListView.setPlaceholder(Placeholder.failure("Sponsors", retry));
         });
     }
-
-    private ObservableList<Object> addLevelsTo(GluonObservableList<Sponsor> sponsorsList) {
-        GluonObservableList<Object> sponsorsListWithLevelHeaders = new GluonObservableList<>();
-        Level currentLevel = null;
-        for (Sponsor sponsor : sponsorsList) {
-            System.out.println(sponsor.toCSV());
-            if ((currentLevel == null) || (currentLevel.getPriority() != sponsor.getLevel().getPriority())) {
-                currentLevel = sponsor.getLevel();
-                sponsorsListWithLevelHeaders.add(currentLevel);
-            }
-            sponsorsListWithLevelHeaders.add(sponsor);
-        }
-        return sponsorsListWithLevelHeaders;
-    }
-
 }
