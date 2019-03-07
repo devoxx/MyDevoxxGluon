@@ -11,10 +11,12 @@
                 <Icon content="CARD_MEMBERSHIP"/>
             </graphic>
         </Button>
+        <!-- 
         <Button fx:id="attendee" text="%OTN.BADGES.BUTTON.ATTENDEE">
             <graphic>
                 <Icon content="EVENT_SEAT"/>
             </graphic>
         </Button>
+         -->
     </VBox>
 </View>
