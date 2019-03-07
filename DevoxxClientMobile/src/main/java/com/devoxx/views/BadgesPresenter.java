@@ -57,8 +57,8 @@ public class BadgesPresenter extends GluonPresenter<DevoxxApplication> {
     @FXML
     private Button sponsor;
 
-    @FXML
-    private Button attendee;
+//    @FXML
+//    private Button attendee;
 
     @Inject
     private Service service;
@@ -71,7 +71,7 @@ public class BadgesPresenter extends GluonPresenter<DevoxxApplication> {
             appBar.setTitleText(DevoxxView.BADGES.getTitle());
             
             sponsor.setOnAction(e -> showSponsor());
-            attendee.setOnAction(e -> showAttendee());
+//            attendee.setOnAction(e -> showAttendee());
 
             loadContent();
         });
