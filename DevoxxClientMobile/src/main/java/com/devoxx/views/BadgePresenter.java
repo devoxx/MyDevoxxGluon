@@ -25,6 +25,10 @@
  */
 package com.devoxx.views;
 
+import java.util.Objects;
+
+import javax.inject.Inject;
+
 import com.devoxx.DevoxxApplication;
 import com.devoxx.DevoxxView;
 import com.devoxx.model.Badge;
@@ -40,6 +44,7 @@ import com.gluonhq.charm.glisten.control.AppBar;
 import com.gluonhq.charm.glisten.control.Dialog;
 import com.gluonhq.charm.glisten.mvc.View;
 import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
@@ -48,9 +53,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.util.Duration;
-
-import javax.inject.Inject;
-import java.util.Objects;
 
 public class BadgePresenter extends GluonPresenter<DevoxxApplication> {
     private static final int WAIT_TIME = 3000; // In milliseconds
@@ -62,16 +64,36 @@ public class BadgePresenter extends GluonPresenter<DevoxxApplication> {
     private Service service;
     
     @FXML
-    private TextField firstName;
-
-    @FXML
-    private TextField lastName;
-
-    @FXML
-    private TextField company;
+    private TextField name;
 
     @FXML
     private TextField email;
+
+    @FXML
+    private TextField language;
+    
+    @FXML
+    private TextField age;
+
+    @FXML
+    private TextField gender;
+
+    @FXML
+    private TextField company;    
+    
+    @FXML
+    private TextField city;
+    
+    @FXML
+    private TextField country;
+
+    @FXML
+    private TextField programmingLanguages;
+
+    @FXML
+    private TextField jobTitle;
+
+
     
     @FXML
     private TextArea details;
@@ -147,7 +169,7 @@ public class BadgePresenter extends GluonPresenter<DevoxxApplication> {
 
     public void setBadge(Badge badge, BadgeType badgeType) {
         Objects.requireNonNull(badge);
-        Objects.requireNonNull(badge.getBadgeId());
+        Objects.requireNonNull(badge.getEmail());
 
         this.badge = badge;
         this.badgeType = badgeType;
@@ -167,10 +189,16 @@ public class BadgePresenter extends GluonPresenter<DevoxxApplication> {
             }
         }
         if (this.badge != null) {
-            firstName.setText(badge.getFirstName());
-            lastName.setText(badge.getLastName());
-            company.setText(badge.getCompany());
+            name.setText(badge.getName());            
             email.setText(badge.getEmail());
+            language.setText(badge.getLanguage());
+            age.setText(badge.getAge()+"");
+            gender.setText(badge.getGender());
+            company.setText(badge.getCompany());
+            city.setText(badge.getCity());
+            country.setText(badge.getCountry());
+            programmingLanguages.setText(badge.getProgrammingLanguages());
+            jobTitle.setText(badge.getJobTitle());
             details.setText(badge.getDetails());
         }
     }
@@ -180,10 +208,17 @@ public class BadgePresenter extends GluonPresenter<DevoxxApplication> {
             return;
         }
 
-        badge.setFirstName(firstName.getText());
-        badge.setLastName(lastName.getText());
-        badge.setCompany(company.getText());
+        badge.setName(name.getText());
         badge.setEmail(email.getText());
+        badge.setLanguage(language.getText());
+        badge.setAge(Integer.parseInt(age.getText()));
+        badge.setGender(gender.getText());
+        badge.setCompany(company.getText());
+        badge.setCity(city.getText());
+        badge.setCountry(country.getText());
+        badge.setProgrammingLanguages(programmingLanguages.getText());
+        badge.setJobTitle(jobTitle.getText());
+        
         badge.setDetails(details.getText());
         
         if (badge instanceof SponsorBadge) {

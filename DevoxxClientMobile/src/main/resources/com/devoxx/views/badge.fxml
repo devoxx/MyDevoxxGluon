@@ -22,20 +22,39 @@
             <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES"/>
             <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES"/>
             <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES"/>
             <RowConstraints maxHeight="200.0" minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES"/>
             <RowConstraints minHeight="10.0" prefHeight="100.0" vgrow="ALWAYS"/>
         </rowConstraints>
-        <Label text="%OTN.BADGE.FIRST_NAME"/>
-        <TextField fx:id="firstName" disable="true" GridPane.columnIndex="1"/>
-        <Label text="%OTN.BADGE.LAST_NAME" GridPane.rowIndex="1"/>
-        <TextField fx:id="lastName" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-        <Label text="%OTN.BADGE.COMPANY" GridPane.rowIndex="2"/>
-        <TextField fx:id="company" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-        <Label text="%OTN.BADGE.EMAIL" GridPane.rowIndex="3"/>
-        <TextField fx:id="email" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+        <Label text="%OTN.BADGE.NAME"/>
+        <TextField fx:id="name" disable="true" GridPane.columnIndex="1"/>
+        <Label text="%OTN.BADGE.EMAIL" GridPane.rowIndex="1"/>
+        <TextField fx:id="email" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        <Label text="%OTN.BADGE.LANGUAGE" GridPane.rowIndex="2"/>
+        <TextField fx:id="language" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        <Label text="%OTN.BADGE.AGE" GridPane.rowIndex="3"/>
+        <TextField fx:id="age" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+        <Label text="%OTN.BADGE.GENDER" GridPane.rowIndex="4"/>
+        <TextField fx:id="gender" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+        <Label text="%OTN.BADGE.COMPANY" GridPane.rowIndex="5"/>
+        <TextField fx:id="company" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+        <Label text="%OTN.BADGE.CITY" GridPane.rowIndex="6"/>
+        <TextField fx:id="city" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+        <Label text="%OTN.BADGE.COUNTRY" GridPane.rowIndex="7"/>
+        <TextField fx:id="country" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+        <Label text="%OTN.BADGE.PROGRAMMING_LANGUAGES" GridPane.rowIndex="8"/>
+        <TextField fx:id="programmingLanguages" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
+        
+        <Label text="%OTN.BADGE.JOB_TITLE" GridPane.rowIndex="9"/>
+        <TextField fx:id="jobTitle" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
+                
+        <Label text="%OTN.BADGE.DETAILS" GridPane.columnSpan="2" GridPane.rowIndex="10"/>
         <TextArea fx:id="details" prefHeight="80.0" promptText="%OTN.BADGE.DETAILS.PROMPT" GridPane.columnSpan="2"
-                  GridPane.rowIndex="5"/>
-        <Label text="%OTN.BADGE.DETAILS" GridPane.columnSpan="2" GridPane.rowIndex="4"/>
-        <Pane GridPane.columnSpan="2" GridPane.rowIndex="6" GridPane.vgrow="ALWAYS"/>
+                  GridPane.rowIndex="11"/>
+        <Pane GridPane.columnSpan="2" GridPane.rowIndex="12" GridPane.vgrow="ALWAYS"/>
     </GridPane>
 </View>

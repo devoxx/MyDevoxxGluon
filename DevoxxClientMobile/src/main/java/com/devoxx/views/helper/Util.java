@@ -324,10 +324,7 @@ public class Util {
 
     public static String getDummyQR() {
         List<String> qrs = Arrays.asList(
-                "1::Smith::John::Devoxx::john.smith@devoxx.com",
-                "2::Doe::Stacey::Devoxx::stacey.doe@devoxx.com",
-                "3::Gates::Paul::Devoxx::paul.gates@devoxx.com",
-                "4::Bisl::Elon::Devoxx::elon.bisl@devoxx.com"
+                "UhtlAZptvulfThzvupBfLthpsAzthzvupGtvsvtpjz5jvtBfShun|hnlAluBfHnlA:?BfNluklyATBfJvtwhuAfTvsvtpjzfZSBfJp{AfIhyjlsvuhBfJv|u{yALZBfWyvnShunAfQh}h3fNyvv}3fZjhshBfQvi[p{slAJ[V"
         );
         return qrs.get(new Random().nextInt(qrs.size()));
     }

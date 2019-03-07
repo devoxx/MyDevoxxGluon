@@ -52,8 +52,8 @@ public class BadgeCell<T extends Badge> extends CharmListCell<T> {
         super.updateItem(badge, empty);
 
         if (badge != null && !empty) {
-            tile.textProperty().setAll(badge.getFirstName() + " " + badge.getLastName(), 
-                        badge.getCompany() + " - " + badge.getEmail(), 
+            tile.textProperty().setAll(badge.getName(), 
+                        badge.getEmail(),
                         truncateText(badge.getDetails()));
             setGraphic(tile);
 

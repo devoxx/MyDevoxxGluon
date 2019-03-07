@@ -25,6 +25,11 @@
  */
 package com.devoxx.views;
 
+import java.util.Optional;
+import java.util.logging.Logger;
+
+import javax.inject.Inject;
+
 import com.devoxx.DevoxxApplication;
 import com.devoxx.DevoxxView;
 import com.devoxx.model.Badge;
@@ -32,6 +37,7 @@ import com.devoxx.model.BadgeType;
 import com.devoxx.model.Sponsor;
 import com.devoxx.model.SponsorBadge;
 import com.devoxx.service.Service;
+import com.devoxx.util.BasicSecureFilter;
 import com.devoxx.util.DevoxxBundle;
 import com.devoxx.util.DevoxxSettings;
 import com.devoxx.views.cell.BadgeCell;
@@ -47,14 +53,12 @@ import com.gluonhq.charm.glisten.control.CharmListView;
 import com.gluonhq.charm.glisten.control.FloatingActionButton;
 import com.gluonhq.charm.glisten.control.Toast;
 import com.gluonhq.charm.glisten.mvc.View;
+
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
-
-import javax.inject.Inject;
-import java.util.Optional;
 
 public class SponsorBadgePresenter extends GluonPresenter<DevoxxApplication> {
 
@@ -125,11 +129,12 @@ public class SponsorBadgePresenter extends GluonPresenter<DevoxxApplication> {
     }
 
     private void addBadge(Sponsor sponsor, ObservableList<SponsorBadge> badges, String qr) {
-        SponsorBadge badge = new SponsorBadge(qr);
-        if (badge.getBadgeId() != null) {
+    	BasicSecureFilter filter = new BasicSecureFilter();
+        SponsorBadge badge = SponsorBadge.parseBadge(filter.decrypt(qr));
+        if (badge.getEmail() != null) {
             boolean exists = false;
             for (Badge b : badges) {
-                if (b != null && b.getBadgeId() != null && b.getBadgeId().equals(badge.getBadgeId())) {
+                if (b != null && b.getEmail() != null && b.getEmail().equals(badge.getEmail())) {
                     Toast toast = new Toast(DevoxxBundle.getString("OTN.BADGES.QR.EXISTS"));
                     toast.show();
                     exists = true;

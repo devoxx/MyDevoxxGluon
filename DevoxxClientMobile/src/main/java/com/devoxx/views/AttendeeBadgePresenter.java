@@ -25,11 +25,18 @@
  */
 package com.devoxx.views;
 
+import static com.devoxx.model.BadgeType.ATTENDEE;
+
+import java.util.Optional;
+
+import javax.inject.Inject;
+
 import com.devoxx.DevoxxApplication;
 import com.devoxx.DevoxxView;
 import com.devoxx.model.Badge;
 import com.devoxx.model.BadgeType;
 import com.devoxx.service.Service;
+import com.devoxx.util.BasicSecureFilter;
 import com.devoxx.util.DevoxxBundle;
 import com.devoxx.util.DevoxxSettings;
 import com.devoxx.views.cell.BadgeCell;
@@ -41,23 +48,19 @@ import com.gluonhq.charm.down.plugins.BarcodeScanService;
 import com.gluonhq.charm.down.plugins.SettingsService;
 import com.gluonhq.charm.glisten.afterburner.GluonPresenter;
 import com.gluonhq.charm.glisten.application.MobileApplication;
+import com.gluonhq.charm.glisten.application.ViewStackPolicy;
 import com.gluonhq.charm.glisten.control.AppBar;
 import com.gluonhq.charm.glisten.control.CharmListView;
 import com.gluonhq.charm.glisten.control.FloatingActionButton;
 import com.gluonhq.charm.glisten.control.Toast;
 import com.gluonhq.charm.glisten.mvc.View;
+
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.util.Duration;
-
-import javax.inject.Inject;
-import java.util.Optional;
-
-import static com.devoxx.model.BadgeType.ATTENDEE;
-import com.gluonhq.charm.glisten.application.ViewStackPolicy;
 
 public class AttendeeBadgePresenter extends GluonPresenter<DevoxxApplication> {
 
@@ -163,11 +166,12 @@ public class AttendeeBadgePresenter extends GluonPresenter<DevoxxApplication> {
     }
 
     private void addBadge(ObservableList<Badge> badges, String qr) {
-        Badge badge = new Badge(qr);
-        if (badge.getBadgeId() != null) {
+    	BasicSecureFilter filter = new BasicSecureFilter();
+        Badge badge = Badge.parseBadge(filter.decrypt(qr));
+        if (badge.getEmail() != null) {
             boolean exists = false;
             for (Badge b : badges) {
-                if (b.getBadgeId().equals(badge.getBadgeId())) {
+                if (b.getEmail().equals(badge.getEmail())) {
                     Toast toast = new Toast(DevoxxBundle.getString("OTN.BADGES.QR.EXISTS"));
                     toast.show();
                     exists = true;

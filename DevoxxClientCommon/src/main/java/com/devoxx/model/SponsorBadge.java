@@ -36,19 +36,22 @@ public class SponsorBadge extends Badge {
     public SponsorBadge() {
         
     }
-
-    // The following fields and methods has to be duplicated because 
-    // CloudlinkClient library doesn't support models with inheritance
-    public SponsorBadge(String qr) {
-        if (qr != null && ! qr.isEmpty() && qr.split("::").length == 5) {
-            String[] split = qr.split("::");
-            setBadgeId(split[0]);
-            setLastName(split[1]);
-            setFirstName(split[2]);
-            setCompany(split[3]);
-            setEmail(split[4]);
-        }
-    }
+//
+//    // The following fields and methods has to be duplicated because 
+//    // CloudlinkClient library doesn't support models with inheritance
+//    public SponsorBadge(String qr) {    	
+//        if (qr != null && ! qr.isEmpty() && qr.split("::").length == 8) {
+//            String[] split = qr.split("::");
+//            setBadgeId(split[0]);
+//            setName(split[1]);
+//            setLastName(split[2]);
+//            setRole(split[3]);
+//            setProgrammingLanguages(split[4].replaceAll("\\|", ", "));
+//            setCity(split[5]);
+//            setCountry(split[6]);
+//            setEmail(split[7]);        
+//        }
+//    }
 
     // sponsor
     private final ObjectProperty<Sponsor> sponsor = new SimpleObjectProperty<>(this, "sponsor");
@@ -66,15 +69,18 @@ public class SponsorBadge extends Badge {
     public boolean contains(String keyword) {
         if (keyword == null || keyword.isEmpty()) {
             return false;
-        }
+        } 
         final String lowerKeyword = keyword.toLowerCase(Locale.ROOT);
 
-        return containsKeyword(getFirstName(), lowerKeyword) || 
-                containsKeyword(getLastName(), lowerKeyword) ||
-                containsKeyword(getCompany(), lowerKeyword)  ||
-                containsKeyword(getEmail(), lowerKeyword)    ||
-                containsKeyword(getDetails(), lowerKeyword)  ||
-                containsKeyword(getSponsor(), lowerKeyword);
+        return containsKeyword(getName(), lowerKeyword) ||
+        	   containsKeyword(getEmail(), lowerKeyword) ||
+        	   containsKeyword(getCompany(), lowerKeyword) ||
+        	   containsKeyword(getCity(), lowerKeyword)   ||
+        	   containsKeyword(getCountry(), lowerKeyword)   ||
+        	   containsKeyword(getProgrammingLanguages(), lowerKeyword)   ||
+               containsKeyword(getJobTitle(), lowerKeyword)   ||
+               containsKeyword(getDetails(), lowerKeyword);
+
     }
 
     @Override
@@ -83,13 +89,13 @@ public class SponsorBadge extends Badge {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         SponsorBadge that = (SponsorBadge) o;
-        return Objects.equals(getBadgeId(), that.getBadgeId()) &&
+        return Objects.equals(getEmail(), that.getEmail()) &&
                 Objects.equals(getSponsor(), that.getSponsor());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getBadgeId(), sponsor);
+        return Objects.hash(super.hashCode(), getEmail(), sponsor);
     }
 
     @Override
@@ -98,4 +104,29 @@ public class SponsorBadge extends Badge {
         csv.append(",").append(safeStr(getSponsor().getName()));
         return csv.toString();
     }
+    
+    public static SponsorBadge parseBadge(String qrCode) {
+    	SponsorBadge badge = new SponsorBadge();
+    	if (qrCode != null && !qrCode.trim().isEmpty()) {
+    		String[] components = qrCode.split(";");
+    		for (String component : components) {
+				String[] keyValue = component.split(":");
+				String key = keyValue[0].trim();
+				String value = keyValue.length==2?keyValue[1].trim():"";
+				switch (key.toLowerCase()) {
+					case "name": badge.setName(value); break;
+					case "email": badge.setEmail(value); break;
+					case "language": badge.setLanguage(value); break;
+					case "age": badge.setAge(Integer.parseInt(value)); break;
+					case "gender": badge.setGender(value); break;
+					case "company": badge.setCompany(value); break;
+					case "city" : badge.setCity(value); break;
+					case "country": badge.setCountry(value); break;
+					case "proglang": badge.setProgrammingLanguages(value); break;
+					case "jobtitle": badge.setJobTitle(value); break;						
+				}
+			}
+    	}
+    	return badge;
+    }    
 }
