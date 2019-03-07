@@ -38,7 +38,7 @@
       "name": "N26",
       "href": "https://n26.com/en/careers",
       "image": {
-        "src": "/assets/img/sponsors/N26_Logo_Black_RGB_S.png",
+        "src": "/assets/img/sponsors/n26.png",
         "alt": "N26"
       }
     },
@@ -48,6 +48,14 @@
       "image": {
         "src": "/assets/img/sponsors/netcentric.jpg",
         "alt": "netcentric"
+      }
+    },
+    {
+      "name": "mytaxi",
+      "href": "https://mytaxi.com/uk/career/",
+      "image": {
+        "src": "/assets/img/sponsors/mytaxi.jpg",
+        "alt": "mytaxi"
       }
     }
   ],
