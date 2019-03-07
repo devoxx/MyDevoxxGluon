@@ -91,7 +91,7 @@ public class ConfSelectorPresenter extends GluonPresenter<DevoxxApplication> {
 
     public void initialize() {
         filteredList = new FilteredList<>(service.retrieveConferences());
-        filteredList.setPredicate(conference -> !isEmptyString(conference.getCfpURL()));
+        filteredList.setPredicate(conference -> !isEmptyString(conference.getApiURL()));
         selector.setItems(filteredList);
 
         ProgressIndicator placeholder = new ProgressIndicator();
@@ -163,10 +163,10 @@ public class ConfSelectorPresenter extends GluonPresenter<DevoxxApplication> {
         selector.setComparator(futureConferenceComparator);
         if (eventType != null) {
             header.setText(eventType.getDisplayName());
-            filteredList.setPredicate(conference -> !isEmptyString(conference.getCfpURL()) && conference.getEventType() == eventType);
+            filteredList.setPredicate(conference -> !isEmptyString(conference.getApiURL()) && conference.getEventCategory() == eventType);
         } else {
             header.setText(bundle.getString("OTN.CONFERENCE_SELECTOR.HEADER.DEVOXX_VOXXED"));
-            filteredList.setPredicate(conference -> !isEmptyString(conference.getCfpURL()));
+            filteredList.setPredicate(conference -> !isEmptyString(conference.getApiURL()));
         }
     }
 }

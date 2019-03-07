@@ -54,14 +54,14 @@ public class Conference {
     private String eventImagesURL;
     private String youTubeURL;
     private String fromDate;
-    private String endDate;
+    private String toDate;
     private ZonedDateTime fromDateTime;
     private ZonedDateTime endDateTime;
     private ZonedDateTime[] days;
     private String cfpFromDate;
     private String cfpEndDate;
-    private Type eventType;
-    private String cfpURL;
+    private Type eventCategory;
+    private String apiURL;
     private String cfpVersion;
     private boolean archived;
     private boolean cfpActive;
@@ -165,19 +165,19 @@ public class Conference {
     public void setFromDate(String fromDate) {
         this.fromDate = fromDate;
 
-        if (this.fromDate != null && this.endDate != null && this.timezoneId != null) {
+        if (this.fromDate != null && this.toDate != null && this.timezoneId != null) {
             calculateConferenceDays();
         }
     }
 
-    public String getEndDate() {
-        return endDate;
+    public String getToDate() {
+        return toDate;
     }
 
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
+    public void setToDate(String toDate) {
+        this.toDate = toDate;
 
-        if (this.fromDate != null && this.endDate != null && this.timezoneId != null) {
+        if (this.fromDate != null && this.toDate != null && this.timezoneId != null) {
             calculateConferenceDays();
         }
     }
@@ -198,20 +198,20 @@ public class Conference {
         this.cfpEndDate = cfpEndDate;
     }
 
-    public Type getEventType() {
-        return eventType;
+    public Type getEventCategory() {
+        return eventCategory;
     }
 
-    public void setEventType(String eventType) {
-        this.eventType = Type.valueOf(eventType);
+    public void setEventCategory(String eventCategory) {
+        this.eventCategory = Type.valueOf(eventCategory);
     }
 
-    public String getCfpURL() {
-        return cfpURL;
+    public String getApiURL() {
+        return apiURL;
     }
 
-    public void setCfpURL(String cfpURL) {
-        this.cfpURL = cfpURL;
+    public void setApiURL(String apiURL) {
+        this.apiURL = apiURL;
     }
 
     public String getCfpVersion() {
@@ -283,7 +283,7 @@ public class Conference {
             this.timezoneId = DEFAULT_CONFERENCE_ZONE_ID;
         }
 
-        if (this.fromDate != null && this.endDate != null && this.timezoneId != null) {
+        if (this.fromDate != null && this.toDate != null && this.timezoneId != null) {
             calculateConferenceDays();
         }
     }
@@ -448,7 +448,7 @@ public class Conference {
 
     private void calculateConferenceDays() {
         this.fromDateTime = LocalDate.parse(fromDate, DATE_FORMATTER).atStartOfDay(timezoneId);
-        this.endDateTime = LocalDate.parse(endDate, DATE_FORMATTER).atStartOfDay(timezoneId);
+        this.endDateTime = LocalDate.parse(toDate, DATE_FORMATTER).atStartOfDay(timezoneId);
         long numberOfDays = DAYS.between(fromDateTime, endDateTime) + 1;
         days = new ZonedDateTime[(int) numberOfDays];
         days[0] = dayOnly(fromDateTime, timezoneId);
@@ -481,7 +481,7 @@ public class Conference {
 
     public String getCountry() {
         String[] split = name.split(" ");
-        switch (getEventType()) {
+        switch (getEventCategory()) {
             case DEVOXX:
                 // Devoxx Belgium 2018
                 // Devoxx UK 2018

@@ -127,7 +127,7 @@ public class DevoxxApplication extends MobileApplication {
                 Conference conference = new Conference();
                 conference.setId(conferenceId);
                 conference.setName(conferenceName);
-                conference.setEventType(conferenceType);
+                conference.setEventCategory(conferenceType);
                 ConferenceLoadingLayer.show(service, conference);
             }
         });
@@ -187,7 +187,7 @@ public class DevoxxApplication extends MobileApplication {
     }
 
     private void addOrRemoveVoxxedStylesheet(Scene scene, Conference conference, String voxxedStylesheet) {
-        if (conference != null && conference.getEventType() == Conference.Type.VOXXED) {
+        if (conference != null && conference.getEventCategory() == Conference.Type.VOXXED) {
             if(!scene.getStylesheets().contains(voxxedStylesheet)) {
                 scene.getStylesheets().add(voxxedStylesheet);
             }

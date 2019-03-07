@@ -76,7 +76,7 @@ public class ConferenceLoadingLayer extends Layer {
         displayService = Services.get(DisplayService.class).orElse(null);
 
         progressIndicator = new ProgressIndicator();
-        progressIndicator.pseudoClassStateChanged(PSEUDO_CLASS_VOXXED, Conference.Type.VOXXED == conference.getEventType());
+        progressIndicator.pseudoClassStateChanged(PSEUDO_CLASS_VOXXED, Conference.Type.VOXXED == conference.getEventCategory());
 
         conferenceLabel = new Label(conference.getName());
 

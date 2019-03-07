@@ -123,7 +123,7 @@ public class AboutPresenter extends GluonPresenter<DevoxxApplication> {
         }
         if (service.getConference() != null) {
             debug.append(service.getConference().getCfpVersion()).append(" - ").append(service.getConference().getId()).append("\n");
-            debug.append(service.getConference().getCfpURL()).append("\n");
+            debug.append(service.getConference().getApiURL()).append("\n");
         }
 
 

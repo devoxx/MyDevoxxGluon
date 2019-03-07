@@ -130,19 +130,19 @@ public class ConferenceCell extends CharmListCell<Conference> {
         
         background.setImage(null);
         if (item != null && !empty) {
-            eventType.setText(item.getEventType().name());
-            if (item.getEventType().name().equals(Conference.Type.VOXXED.name())) {
+            eventType.setText(item.getEventCategory().name());
+            if (item.getEventCategory().name().equals(Conference.Type.VOXXED.name())) {
                 pseudoClassStateChanged(PSEUDO_CLASS_VOXXED, true);
             } else {
                 pseudoClassStateChanged(PSEUDO_CLASS_VOXXED, false);
             }
             
             name.setText(item.getName());
-            if (item.getFromDate().equals(item.getEndDate())) {
+            if (item.getFromDate().equals(item.getToDate())) {
                 dateLabel.setText(LocalDate.parse(item.getFromDate()).format(DATE_TIME_FORMATTER));
             } else {
                 dateLabel.setText(LocalDate.parse(item.getFromDate()).getDayOfMonth() + " - " +
-                        LocalDate.parse(item.getEndDate()).format(DATE_TIME_FORMATTER));
+                        LocalDate.parse(item.getToDate()).format(DATE_TIME_FORMATTER));
             }
 
             if (imageTask != null) {
@@ -178,7 +178,7 @@ public class ConferenceCell extends CharmListCell<Conference> {
                     ConferenceLoadingLayer.show(service, item);
                     service.retrieveConference(item.getId());
                     Services.get(SettingsService.class).ifPresent(settingsService -> {
-                        settingsService.store(DevoxxSettings.SAVED_CONFERENCE_TYPE, item.getEventType().name());
+                        settingsService.store(DevoxxSettings.SAVED_CONFERENCE_TYPE, item.getEventCategory().name());
                         settingsService.store(DevoxxSettings.SAVED_CONFERENCE_ID, String.valueOf(item.getId()));
                         settingsService.store(DevoxxSettings.SAVED_CONFERENCE_NAME, String.valueOf(item.getName()));
                     });

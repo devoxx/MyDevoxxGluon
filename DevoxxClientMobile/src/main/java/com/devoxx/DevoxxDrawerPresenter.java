@@ -107,7 +107,7 @@ public class DevoxxDrawerPresenter extends GluonPresenter<DevoxxApplication> {
         });
         checkAndAddBadgesItem(service.getConference());
         service.conferenceProperty().addListener((obs, ov, nv) -> {
-            header.text.pseudoClassStateChanged(PSEUDO_CLASS_VOXXED, nv.getEventType() == Conference.Type.VOXXED);
+            header.text.pseudoClassStateChanged(PSEUDO_CLASS_VOXXED, nv.getEventCategory() == Conference.Type.VOXXED);
             header.text.setText(conferenceNameWithCountry(nv));
             checkAndAddBadgesItem(nv);
         });
@@ -147,11 +147,11 @@ public class DevoxxDrawerPresenter extends GluonPresenter<DevoxxApplication> {
 
     private String conferenceNameWithCountry(Conference conference) {
         if (conference != null) {
-            switch (conference.getEventType()) {
+            switch (conference.getEventCategory()) {
                 case DEVOXX:
-                    return conference.getEventType().getDisplayName() + " " + DevoxxCountry.getConfShortName(conference.getCountry());
+                    return conference.getEventCategory().getDisplayName() + " " + DevoxxCountry.getConfShortName(conference.getCountry());
                 case VOXXED:
-                    return conference.getEventType().getDisplayName() + " " + conference.getCountry();
+                    return conference.getEventCategory().getDisplayName() + " " + conference.getCountry();
             }
         }
         return "";

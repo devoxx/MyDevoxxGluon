@@ -54,8 +54,6 @@ import com.gluonhq.connect.GluonObservableObject;
 import com.gluonhq.connect.converter.JsonInputConverter;
 import com.gluonhq.connect.converter.JsonIterableInputConverter;
 import com.gluonhq.connect.provider.DataProvider;
-import javafx.beans.Observable;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -340,9 +338,8 @@ public class DevoxxService implements Service {
 
     @Override
     public GluonObservableList<Conference> retrievePastConferences() {
-        RemoteFunctionList fnConferences = RemoteFunctionBuilder.create("conferences")
-                .param("time", "past")
-                .param("type", "")
+        RemoteFunctionList fnConferences = RemoteFunctionBuilder.create("allConferencesV2")
+                .param("type", "past")
                 .list();
         final GluonObservableList<Conference> conferences = fnConferences.call(Conference.class);
         conferences.setOnFailed(e -> LOG.log(
@@ -354,7 +351,8 @@ public class DevoxxService implements Service {
     
     @Override
     public GluonObservableList<Conference> retrieveConferences() {
-        RemoteFunctionList fnConferences = RemoteFunctionBuilder.create("allConferences")
+        RemoteFunctionList fnConferences = RemoteFunctionBuilder.create("allConferencesV2")
+                .param("type", "upcoming")
                 .list();
         final GluonObservableList<Conference> conferences = fnConferences.call(new JsonIterableInputConverter<>(Conference.class));
         conferences.setOnFailed(e -> LOG.log(Level.WARNING,
@@ -365,7 +363,7 @@ public class DevoxxService implements Service {
 
     @Override
     public GluonObservableObject<Conference> retrieveConference(String conferenceId) {
-        RemoteFunctionObject fnConference = RemoteFunctionBuilder.create("conference")
+        RemoteFunctionObject fnConference = RemoteFunctionBuilder.create("conferenceV2")
                 .param("id", conferenceId)
                 .object();
         GluonObservableObject<Conference> conference = fnConference.call(Conference.class);
@@ -459,7 +457,7 @@ public class DevoxxService implements Service {
 
         RemoteFunctionList fnSessions = RemoteFunctionBuilder.create("sessionsV2")
                 .param("cfpEndpoint", getCfpURL())
-                .param("conferenceId", getConference().getCfpVersion())
+                .param("conferenceId", getConference().getId())
                 .list();
 
         GluonObservableList<Session> sessionsList = fnSessions.call(Session.class);
@@ -511,7 +509,7 @@ public class DevoxxService implements Service {
 
         RemoteFunctionList fnSpeakers = RemoteFunctionBuilder.create("speakers")
                 .param("cfpEndpoint", getCfpURL())
-                .param("conferenceId", getConference().getCfpVersion())
+                .param("conferenceId", getConference().getId())
                 .list();
 
         GluonObservableList<Speaker> speakersList = fnSpeakers.call(Speaker.class);
@@ -541,7 +539,7 @@ public class DevoxxService implements Service {
             } else {
                 RemoteFunctionObject fnSpeaker = RemoteFunctionBuilder.create("speaker")
                         .param("cfpEndpoint", getCfpURL())
-                        .param("conferenceId", getConference().getCfpVersion())
+                        .param("conferenceId", getConference().getId())
                         .param("uuid", uuid)
                         .object();
 
@@ -558,7 +556,7 @@ public class DevoxxService implements Service {
     }
 
     private String getCfpURL() {
-        final String cfpURL = getConference().getCfpURL();
+        final String cfpURL = getConference().getApiURL();
         if (cfpURL == null) return "";
         if (cfpURL.endsWith("/api/")) {
             return cfpURL.substring(0, cfpURL.length() - 1);
@@ -823,7 +821,7 @@ public class DevoxxService implements Service {
         // This RF uses https://api.voxxed.com/api/voxxeddays/location/$locationId
         // instead of cfpEndpoint
         RemoteFunctionObject fnLocation = RemoteFunctionBuilder.create("location")
-                // .param("cfpEndpoint", getCfpURL())
+                // .param("cfpEndpoint", getApiURL())
                 .param("locationId", String.valueOf(getConference().getLocationId()))
                 .object();
         return fnLocation.call(Location.class);
