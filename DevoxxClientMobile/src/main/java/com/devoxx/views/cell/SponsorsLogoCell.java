@@ -70,9 +70,10 @@ public class SponsorsLogoCell extends CharmListCell<Sponsor> {
         if (sponsor != null && !empty) {
             if (sponsor.getImage() != null) {
                 Image image = ImageCache.get(sponsor.getImage().getSrc(), () -> DEFAULT_BACKGROUND_IMAGE,
-                        downloadedImage -> background.setImage(downloadedImage));
+                        downloadedImage -> background.setImage(downloadedImage));                
                 background.setImage(image);
                 background.setCache(true);
+                background.setUserData(sponsor);
                 fitImage();
             }
             background.setOnMouseReleased(e -> Util.launchExternalBrowser(() -> sponsor.getHref()));
@@ -82,19 +83,24 @@ public class SponsorsLogoCell extends CharmListCell<Sponsor> {
 
     private void fitImage() {
         Image image = background.getImage();
+        Sponsor sponsor = (Sponsor) background.getUserData();
         if (image != null) {
             double factor = image.getHeight() / image.getWidth();
             final double maxW = MobileApplication.getInstance().getGlassPane().getWidth() - padding;
-            System.out.println(maxH / maxW);
-            if (factor < maxH / maxW) {
+            double fitHeight = maxH;
+            if (sponsor != null) {
+            	fitHeight = maxH / sponsor.getLevel().getPriority();
+            }
+            
+            if (factor < fitHeight / maxW) {
                 background.setFitWidth(10000);
-                background.setFitHeight(maxH);
+                background.setFitHeight(fitHeight);
             } else {
                 background.setFitWidth(maxW);
                 background.setFitHeight(10000);
             }
             background.setFitWidth(maxW);
-            background.setFitHeight(maxH);
+            background.setFitHeight(fitHeight);
         }
     }
 }
