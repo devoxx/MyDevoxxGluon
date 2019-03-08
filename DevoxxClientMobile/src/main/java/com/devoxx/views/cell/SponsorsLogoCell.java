@@ -60,7 +60,7 @@ public class SponsorsLogoCell extends CharmListCell<Sponsor> {
                 .map(DisplayService::isTablet)
                 .orElse(false);
         maxH = isTablet ? TABLET_HEIGHT : PHONE_HEIGHT;
-        padding = isTablet ? 30 : 20;
+        padding = isTablet ? 50 : 40;
     }
 
     @Override
