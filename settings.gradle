@@ -5,4 +5,4 @@ include 'JBCNConfRemoteFunctions'
 
 rootProject.name = 'JBCNConf_Mobile_App'
 
-project(':DevoxxClientMobile').name = 'DevoxxClient'
+project(':DevoxxClientMobile').name = 'JBCNConfClient'
