@@ -137,7 +137,8 @@ public class DevoxxSettings {
     public static final DateTimeFormatter NEWS_FORMATTER = DateTimeFormatter.ofPattern(NEWS_PATTERN, LOCALE);
 
     public static final String TWITTER_URL = "https://www.twitter.com/";
-    
+    public static final String ANDROID_NOTIFICATION_SENDER_ID = "456215689738";
+
     /**
      * List of devices that don't support Roboto Medium font, and will use OpenSans instead
      */

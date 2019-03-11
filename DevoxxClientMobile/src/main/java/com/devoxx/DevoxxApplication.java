@@ -45,6 +45,7 @@ import com.gluonhq.charm.glisten.afterburner.AppView;
 import com.gluonhq.charm.glisten.afterburner.GluonInstanceProvider;
 import com.gluonhq.charm.glisten.application.MobileApplication;
 import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
+import com.gluonhq.cloudlink.client.push.PushClient;
 import com.gluonhq.cloudlink.client.usage.UsageClient;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -97,6 +98,10 @@ public class DevoxxApplication extends MobileApplication {
         DevoxxLogging.config();
 
         new UsageClient().enable();
+
+        // Enable notifications
+        PushClient pushClient = new PushClient();
+        pushClient.enable(DevoxxSettings.ANDROID_NOTIFICATION_SENDER_ID);
 
         // start service data preloading as soon as possible
         service = Injector.instantiateModelOrService(Service.class);
