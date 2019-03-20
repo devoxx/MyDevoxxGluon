@@ -39,6 +39,7 @@ import com.gluonhq.charm.glisten.control.AppBar;
 import com.gluonhq.charm.glisten.mvc.View;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
@@ -54,6 +55,8 @@ public class BadgesPresenter extends GluonPresenter<DevoxxApplication> {
     @FXML
     private VBox content;
 
+    @FXML
+    private TextField code;
     @FXML
     private Button sponsor;
 
@@ -121,11 +124,13 @@ public class BadgesPresenter extends GluonPresenter<DevoxxApplication> {
     }
 
     private void showSponsor() {
+        // System.out.println(code.getText());
+        // Load sponsor from service
+        // Save sponsor and launch SPONSOR_BADGE view
+
         Optional<Sponsor> savedSponsor = fetchSavedSponsor();
         if (savedSponsor.isPresent()){
             DevoxxView.SPONSOR_BADGE.switchView().ifPresent(presenter -> ((SponsorBadgePresenter) presenter).setSponsor(savedSponsor.get()));
-        } else {
-            DevoxxView.SPONSORS.switchView(ViewStackPolicy.USE);
         }
     }
 

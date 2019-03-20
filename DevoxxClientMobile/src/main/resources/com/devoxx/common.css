@@ -683,6 +683,14 @@
     -fx-text-fill: -primary-swatch-500;
 }
 
+.badges-view > .content > .label {
+    -fx-font-size: 1.5em;
+}
+
+.badge-text-input {
+    -fx-font-size: 3em;
+}
+
 .badge-view {
     -fx-padding: 0.910488em;
 }

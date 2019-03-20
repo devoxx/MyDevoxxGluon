@@ -4,12 +4,19 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Button?>
 <?import com.gluonhq.charm.glisten.control.Icon?>
-<View fx:id="badgesView" styleClass="badges-view" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.devoxx.views.BadgesPresenter">
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Label?>
+<View fx:id="badgesView" styleClass="badges-view"
+      xmlns="http://javafx.com/javafx/8"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.devoxx.views.BadgesPresenter">
     <VBox fx:id="content" styleClass="content">
-        <Button fx:id="sponsor" text="%OTN.BADGES.BUTTON.SPONSOR">
-            <graphic>
+        <Label text="%OTN.BADGES.LABEL.SPONSOR" styleClass="label"/>
+        <TextField fx:id="code" maxWidth="250" styleClass="badge-text-input"/>
+        <Button fx:id="sponsor" text="%OTN.BADGES.BUTTON.SPONSOR" styleClass="button" >
+            <!--graphic>
                 <Icon content="CARD_MEMBERSHIP"/>
-            </graphic>
+            </graphic-->
         </Button>
         <!-- 
         <Button fx:id="attendee" text="%OTN.BADGES.BUTTON.ATTENDEE">
