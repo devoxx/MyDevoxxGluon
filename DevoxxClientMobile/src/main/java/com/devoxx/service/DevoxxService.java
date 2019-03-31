@@ -716,6 +716,17 @@ public class DevoxxService implements Service {
     }
 
     @Override
+	public GluonObservableObject<Sponsor> retrieveSponsorByCode(String sponsorCode) {
+    	RemoteFunctionObject fnSponsorByCode = RemoteFunctionBuilder.create("sponsor")
+    			.param("conferenceId", getConference().getId())
+    			.param("sponsorCode", sponsorCode)
+    			.object();
+    	GluonObservableObject<Sponsor> sponsor = fnSponsorByCode.call(Sponsor.class);
+    	sponsor.setOnFailed(e -> LOG.log(Level.WARNING, String.format(REMOTE_FUNCTION_FAILED_MSG, "sponsor"), e.getSource().getException()));
+		return sponsor;
+	}
+
+	@Override
     public ObservableList<Session> retrieveFavoredSessions() {
         if (!isAuthenticated()) {
             throw new IllegalStateException("An authenticated user must be available when calling this method.");

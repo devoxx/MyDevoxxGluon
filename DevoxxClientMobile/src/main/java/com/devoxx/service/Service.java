@@ -172,6 +172,16 @@ public interface Service {
      * @return
      */
     GluonObservableList<Sponsor> retrieveSponsors();
+    
+    
+    /**
+     * Returns a sponsor given his secret code
+     * 
+     * @param sponsorCode sponsor secret code given by the organization
+     * @return a sponsor given his secret code or an exception if not found
+     */
+    GluonObservableObject<Sponsor> retrieveSponsorByCode(String sponsorCode);
+
 
     /**
      * Starts the authentication process. This will show a View in which the user can authenticate
