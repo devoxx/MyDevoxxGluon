@@ -32,15 +32,21 @@ import com.gluonhq.charm.down.Services;
 import com.gluonhq.charm.down.plugins.DisplayService;
 import com.gluonhq.charm.glisten.application.MobileApplication;
 import com.gluonhq.charm.glisten.control.CharmListCell;
+import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 public class TeamCell extends CharmListCell<TeamMember> {
 
     private final BorderPane root;
     private final BorderPane content;
     private final ImageView background;
+    private final Text textName;
+    private final Text textPosition;
 
     private static final int PHONE_HEIGHT = 222;
     private static final int TABLET_HEIGHT = 333;
@@ -48,9 +54,43 @@ public class TeamCell extends CharmListCell<TeamMember> {
     private static final Image DEFAULT_BACKGROUND_IMAGE = new Image(Util.class.getResource("backgroundImage.png").toString());
 
     public TeamCell() {
-        background = new ImageView();
-        background.setPreserveRatio(true);
-        content = new BorderPane(background);
+
+        StackPane panePicture = new StackPane();
+        {
+            background = new ImageView();
+            background.setPreserveRatio(true);
+
+            VBox paneBottomTeamMemberInformation = new VBox();
+            {
+                textName = new Text();
+                {
+                    textName.setStyle("-fx-font: 24px Tahoma; " +
+                            "-fx-font-weight: bold;"+
+                            //"-fx-fill: linear-gradient(white, gray);"+
+                            "-fx-fill: white;"+
+                            "-fx-stroke: #10416c;" +
+                            "-fx-stroke-width: 0.8;");
+                }
+                textPosition = new Text();
+                {
+                    textPosition.setStyle("-fx-font: 18px Tahoma; " +
+                            "-fx-font-weight: bold;"+
+                            "-fx-fill: white;"+
+                            "-fx-stroke: #10416c;" +
+                            "-fx-stroke-width: 0.8;");
+                }
+                paneBottomTeamMemberInformation.getChildren().add(textName);
+                paneBottomTeamMemberInformation.getChildren().add(textPosition);
+                paneBottomTeamMemberInformation.setAlignment(Pos.BOTTOM_LEFT);
+                panePicture.setAlignment(Pos.BOTTOM_LEFT);
+            }
+            panePicture.getChildren().add(background);
+            panePicture.getChildren().add(paneBottomTeamMemberInformation);
+        }
+
+
+
+        content = new BorderPane(panePicture);
         root = new BorderPane(content);
         getStyleClass().add("sponsors-logo-cell");
 
@@ -75,10 +115,25 @@ public class TeamCell extends CharmListCell<TeamMember> {
                 background.setCache(true);
                 background.setUserData(teamMember);
                 fitImage();
+                setTeamMember(teamMember);
             }
             //background.setOnMouseReleased(e -> Util.launchExternalBrowser(() -> teamMember.getHref()));
         }
         setGraphic(root);
+    }
+
+    private void setTeamMember(TeamMember teamMember) {
+        String output="";
+        output += teamMember.getName() + " ";
+        output += teamMember.getBio() + " ";
+        output += teamMember.getLinkedin() + " ";
+        output += teamMember.getTwitter() + " ";
+        output += teamMember.getPosition() + " ";
+        output += teamMember.getRole() + " ";
+        System.out.println(output);
+
+        textName.setText(teamMember.getName());
+        textPosition.setText(teamMember.getPosition());
     }
 
     private void fitImage() {
