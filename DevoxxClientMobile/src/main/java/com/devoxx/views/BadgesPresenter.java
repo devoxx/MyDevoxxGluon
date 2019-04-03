@@ -37,6 +37,7 @@ import com.gluonhq.charm.glisten.afterburner.GluonPresenter;
 import com.gluonhq.charm.glisten.application.ViewStackPolicy;
 import com.gluonhq.charm.glisten.control.AppBar;
 import com.gluonhq.charm.glisten.mvc.View;
+import com.gluonhq.connect.GluonObservableObject;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -124,13 +125,14 @@ public class BadgesPresenter extends GluonPresenter<DevoxxApplication> {
     }
 
     private void showSponsor() {
-        // System.out.println(code.getText());
-        // Load sponsor from service
-        // Save sponsor and launch SPONSOR_BADGE view
-
         Optional<Sponsor> savedSponsor = fetchSavedSponsor();
-        if (savedSponsor.isPresent()){
+        if (savedSponsor.isPresent()) {
             DevoxxView.SPONSOR_BADGE.switchView().ifPresent(presenter -> ((SponsorBadgePresenter) presenter).setSponsor(savedSponsor.get()));
+        } else {
+            GluonObservableObject<Sponsor> sponsor = service.retrieveSponsorByCode(code.getText());
+            if (sponsor.isNotNull().getValue()) {
+                DevoxxView.SPONSOR_BADGE.switchView().ifPresent(presenter -> ((SponsorBadgePresenter) presenter).setSponsor(sponsor.get()));
+            }
         }
     }
 
