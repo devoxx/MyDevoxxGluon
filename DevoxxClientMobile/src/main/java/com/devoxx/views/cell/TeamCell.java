@@ -122,16 +122,7 @@ public class TeamCell extends CharmListCell<TeamMember> {
         setGraphic(root);
     }
 
-    private void setTeamMember(TeamMember teamMember) {
-        String output="";
-        output += teamMember.getName() + " ";
-        output += teamMember.getBio() + " ";
-        output += teamMember.getLinkedin() + " ";
-        output += teamMember.getTwitter() + " ";
-        output += teamMember.getPosition() + " ";
-        output += teamMember.getRole() + " ";
-        System.out.println(output);
-
+    private void setTeamMember(TeamMember teamMember){
         textName.setText(teamMember.getName());
         textPosition.setText(teamMember.getPosition());
     }
