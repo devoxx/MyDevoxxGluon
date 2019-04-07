@@ -861,19 +861,19 @@ public class DevoxxService implements Service {
     public void saveSponsorBadge(SponsorBadge sponsorBadge) {
     	System.out.println("Going to save sponsor badge...");
         RemoteFunctionObject fnSponsorBadge = RemoteFunctionBuilder.create("saveSponsorBadge")
-                .param("0", safeStr(sponsorBadge.getSponsor().getSlug()))
-                .param("1", safeStr(sponsorBadge.getName()))
-                .param("2", safeStr(sponsorBadge.getEmail()))
-                .param("3", safeStr(sponsorBadge.getLanguage()))
-                .param("4", safeStr(sponsorBadge.getAge()+""))
-                .param("5", safeStr(sponsorBadge.getGender()))
-                .param("6", safeStr(sponsorBadge.getCompany()))
-                .param("7", safeStr(sponsorBadge.getCity()))
-                .param("8", safeStr(sponsorBadge.getCountry()))
-                .param("9", safeStr(sponsorBadge.getProgrammingLanguages()))
-                .param("10", safeStr(sponsorBadge.getJobTitle()))
-                .param("11", safeStr(sponsorBadge.getDetails()))
-                .param("12", ZonedDateTime.now().format(DateTimeFormatter.ISO_INSTANT))
+                .param("sponsorId", safeStr(sponsorBadge.getSponsor().getId()))
+                .param("name", safeStr(sponsorBadge.getName()))
+                .param("email", safeStr(sponsorBadge.getEmail()))
+                .param("language", safeStr(sponsorBadge.getLanguage()))
+                .param("age", safeStr(sponsorBadge.getAge()+""))
+                .param("gender", safeStr(sponsorBadge.getGender()))
+                .param("company", safeStr(sponsorBadge.getCompany()))
+                .param("city", safeStr(sponsorBadge.getCity()))
+                .param("country", safeStr(sponsorBadge.getCountry()))
+                .param("programmingLanguages", safeStr(sponsorBadge.getProgrammingLanguages()))
+                .param("jobTitle", safeStr(sponsorBadge.getJobTitle()))
+                .param("details", safeStr(sponsorBadge.getDetails()))
+                .param("timestamp", ZonedDateTime.now().format(DateTimeFormatter.ISO_INSTANT))
                 .object();
         GluonObservableObject<String> sponsorBadgeResult = fnSponsorBadge.call(String.class);
         sponsorBadgeResult.initializedProperty().addListener((obs, ov, nv) -> {
