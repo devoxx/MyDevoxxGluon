@@ -171,9 +171,9 @@ public class ScheduleCell extends CharmListCell<Session> {
     private void updateListTile() {
         if (session.getTalk() != null) {
             if (session.getTalk().getTrack() != null) {
-                final String trackId = session.getTalk().getTrackId().toUpperCase();
-                trackLabel.setText(trackId);
-                changePseudoClass(fetchPseudoClassForTrack(trackId));
+                final String trackName = session.getTalk().getTrack().toUpperCase();
+                trackLabel.setText(trackName);
+                changePseudoClass(fetchPseudoClassForTrack(trackName));
             }
             
             if (session.getTalk().getTitle() != null) {
