@@ -58,6 +58,7 @@ public class TeamCell extends CharmListCell<TeamMember> {
     private static final int TABLET_HEIGHT = 333;
     private final double maxH, padding;
     private static final Image DEFAULT_BACKGROUND_IMAGE = new Image(Util.class.getResource("backgroundImage.png").toString());
+    private final HBox hboxButtons;
 
     public TeamCell() {
 
@@ -93,7 +94,7 @@ public class TeamCell extends CharmListCell<TeamMember> {
             panePicture.getChildren().add(paneVBoxInformation);
         }
 
-        HBox hboxButtons = new HBox();
+        hboxButtons = new HBox();
         {
             buttonLinkedIn = new Button();
             {
@@ -118,6 +119,7 @@ public class TeamCell extends CharmListCell<TeamMember> {
             hboxButtons.setPadding(new Insets(5, 10, 0, 10));
             hboxButtons.setSpacing(5);
             hboxButtons.setAlignment(Pos.CENTER_RIGHT);
+            hboxButtons.setMaxWidth(300);
         }
 
         content = new BorderPane();
