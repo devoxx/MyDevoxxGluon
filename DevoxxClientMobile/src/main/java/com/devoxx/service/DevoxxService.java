@@ -931,12 +931,12 @@ public class DevoxxService implements Service {
         } else {
             RemoteFunctionObject fnVoteTalk = RemoteFunctionBuilder.create("voteTalk")
                     .param("0", getCfpURL())
-                    .param("1", String.valueOf(vote.getValue()))
-                    .param("2", authenticatedUser.getEmail())
-                    .param("3", vote.getTalkId())
-                    .param("4", vote.getDelivery())
-                    .param("5", vote.getContent())
-                    .param("6", vote.getOther())
+                    .param("value", String.valueOf(vote.getValue()))
+                    .param("email", authenticatedUser.getEmail())
+                    .param("talkId", vote.getTalkId())
+                    .param("delivery", vote.getDelivery())
+                    .param("content", vote.getContent())
+                    .param("other", vote.getOther())
                     .object();
             GluonObservableObject<String> voteResult = fnVoteTalk.call(String.class);
             voteResult.initializedProperty().addListener((obs, ov, nv) -> {
