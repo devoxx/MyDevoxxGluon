@@ -39,6 +39,7 @@ public class Location {
     private double latitude;
     private double longitude;
     private String timezone;
+    private String googleMapsUrl;
 
     public long getId() {
         return id;
@@ -119,8 +120,16 @@ public class Location {
     public void setTimezone(String timezone) {
         this.timezone = timezone;
     }
+    
+    public String getGoogleMapsUrl() {
+		return googleMapsUrl;
+	}
 
-    @Override
+	public void setGoogleMapsUrl(String googleMapsUrl) {
+		this.googleMapsUrl = googleMapsUrl;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

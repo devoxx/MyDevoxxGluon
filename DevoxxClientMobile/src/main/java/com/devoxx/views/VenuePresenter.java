@@ -145,9 +145,11 @@ public class VenuePresenter extends GluonPresenter<DevoxxApplication> {
         venueMarker = createVenueMarker(venuePoint);
         mapView.addLayer(venueMarker);
 
-        String url = conference.getWebsite();
+        String url = location.getGoogleMapsUrl();
         if (url == null || url.isEmpty()) {
             webActionButton.hide();
+        } else {
+        	webActionButton.setOnAction(e -> Util.launchExternalBrowser(() -> url));
         }
 
         resizeImages();
