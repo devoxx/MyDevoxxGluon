@@ -23,5 +23,5 @@ allprojects {
         skipExistingHeaders true
         excludes(['**/*.json'])
     }
+
 }
-    

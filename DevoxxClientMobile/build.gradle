@@ -43,6 +43,8 @@ configurations.all {
     }
 }
 
+def certificatePath = System.getProperty("user.home")+"/.android/upload-certificate-keystore"
+
 jfxmobile {
     javafxportsVersion = '8.60.11'
     downConfig {
@@ -53,17 +55,19 @@ jfxmobile {
     android {
         manifest = 'src/android/AndroidManifest.xml'
         signingConfig {
-            storeFile project.hasProperty('DEVOXX_APK_SIGN_KEYSTORE') ? file(DEVOXX_APK_SIGN_KEYSTORE) : null
-            storePassword project.hasProperty('DEVOXX_APK_SIGN_STOREPASSWORD') ? DEVOXX_APK_SIGN_STOREPASSWORD : ''
-            keyAlias project.hasProperty('DEVOXX_APK_SIGN_KEYALIAS') ? DEVOXX_APK_SIGN_KEYALIAS : ''
-            keyPassword project.hasProperty('DEVOXX_APK_SIGN_KEYPASSWORD') ? DEVOXX_APK_SIGN_KEYPASSWORD : ''
+            storeFile = file(certificatePath)
+            storePassword = "jbcn2019"
+            keyAlias = "jbcnGluonApp"
+            keyPassword = "jbcnGluon2019"
         }
     }
+
     ios {
         arch = 'arm64'
         infoPList = file('src/ios/Default-Info.plist')
-        forceLinkClasses = [
+        /*forceLinkClasses = [
                 'com.devoxx.**.*',
+                'com.jbcn.**.*',
                 'com.gluonhq.**.*',
                 'javax.xml.stream.*.',
                 'io.datafx.**.*',
@@ -71,7 +75,7 @@ jfxmobile {
                 'javax.inject.**.*',
                 'javax.json.**.*',
                 'org.glassfish.json.**.*'
-        ]
+        ]*/
     }
 }
 
