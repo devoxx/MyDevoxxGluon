@@ -688,7 +688,8 @@
 }
 
 .badge-text-input {
-    -fx-font-size: 3em;
+    -fx-font-size: 4em !important;
+    -fx-font-weight: bold !important;
 }
 
 .badge-view {

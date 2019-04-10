@@ -38,10 +38,14 @@ import com.gluonhq.charm.glisten.application.ViewStackPolicy;
 import com.gluonhq.charm.glisten.control.AppBar;
 import com.gluonhq.charm.glisten.mvc.View;
 import com.gluonhq.connect.GluonObservableObject;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 import javax.inject.Inject;
 import java.util.Optional;
@@ -49,7 +53,7 @@ import java.util.Optional;
 import static com.devoxx.model.BadgeType.valueOf;
 
 public class BadgesPresenter extends GluonPresenter<DevoxxApplication> {
-    
+
     @FXML
     private View badgesView;
 
@@ -66,14 +70,23 @@ public class BadgesPresenter extends GluonPresenter<DevoxxApplication> {
 
     @Inject
     private Service service;
-    
+
     public void initialize() {
-        
+
+        code.setMaxWidth(140);
+        code.textProperty().addListener((final ObservableValue<? extends String> ov, final String oldValue, final String newValue) -> {
+                    if (code.getText().length() > 4) {
+                        String s = code.getText().substring(0, 4);
+                        code.setText(s);
+                    }
+                }
+        );
+
         badgesView.setOnShowing(event -> {
             AppBar appBar = getApp().getAppBar();
             appBar.setNavIcon(getApp().getNavMenuButton());
             appBar.setTitleText(DevoxxView.BADGES.getTitle());
-            
+
             sponsor.setOnAction(e -> showSponsor());
 //            attendee.setOnAction(e -> showAttendee());
 

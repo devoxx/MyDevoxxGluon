@@ -12,7 +12,7 @@
       fx:controller="com.devoxx.views.BadgesPresenter">
     <VBox fx:id="content" styleClass="content">
         <Label text="%OTN.BADGES.LABEL.SPONSOR" styleClass="label"/>
-        <TextField fx:id="code" maxWidth="250" styleClass="badge-text-input"/>
+        <TextField fx:id="code" styleClass="badge-text-input"/>
         <Button fx:id="sponsor" text="%OTN.BADGES.BUTTON.SPONSOR" styleClass="button" >
             <!--graphic>
                 <Icon content="CARD_MEMBERSHIP"/>
