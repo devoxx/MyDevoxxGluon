@@ -1015,11 +1015,13 @@ public class DevoxxService implements Service {
     }
 
     private GluonObservableList<SponsorBadge> internalRetrieveSponsorBadges(Sponsor sponsor) {
-        GluonObservableList<SponsorBadge> localSponsorBadges = DataProvider.retrieveList(localDataClient.createListDataReader(getConference().getId() + "_" + sponsor.getSlug() + "_sponsor_badges_" +
-                Services.get(DeviceService.class).map(DeviceService::getUuid).orElse(System.getProperty("user.name")),
-                SponsorBadge.class, SyncFlag.LIST_WRITE_THROUGH, SyncFlag.OBJECT_WRITE_THROUGH));
-
-        return localSponsorBadges;
+        RemoteFunctionList fnSponsorBadges = RemoteFunctionBuilder.create("sponsorBadges")
+                .param("conferenceId", getConference().getId())
+                .param("sponsorId", sponsor.getId())
+                .list();
+        GluonObservableList<SponsorBadge> badgeSponsorsList = fnSponsorBadges.call(SponsorBadge.class);
+        badgeSponsorsList.setOnFailed(e -> LOG.log(Level.WARNING, String.format(REMOTE_FUNCTION_FAILED_MSG, "sponsorBadges"), e.getSource().getException()));
+        return badgeSponsorsList;
     }
 
     private void loadCfpAccount(User user, Runnable successRunnable) {
