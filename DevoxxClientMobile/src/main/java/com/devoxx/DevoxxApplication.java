@@ -47,6 +47,8 @@ import com.gluonhq.charm.glisten.application.MobileApplication;
 import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
 import com.gluonhq.cloudlink.client.push.PushClient;
 import com.gluonhq.cloudlink.client.usage.UsageClient;
+import com.gluonhq.connect.GluonObservableObject;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
@@ -123,7 +125,10 @@ public class DevoxxApplication extends MobileApplication {
     @Override
     public void postInit(Scene scene) {
 
-        service.retrieveConference("1");
+        GluonObservableObject<Conference> obConference = service.retrieveConference("1");
+        obConference.setOnSucceeded(outcome -> {
+        	service.setConference(obConference.get());
+        });
 
         // Check if conference is set and switch to Sessions view
         Services.get(SettingsService.class).ifPresent(settingsService -> {
