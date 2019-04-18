@@ -25,6 +25,7 @@
  */
 package org.jbcnconf.gluon;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -41,6 +42,7 @@ import com.devoxx.model.Level;
 import com.devoxx.model.Sponsor;
 
 import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
 
 
 public class SponsorTest {
@@ -57,7 +59,7 @@ public class SponsorTest {
 	}
 	
 	@Test
-	public void sponsor_cloud_link() throws IOException {
+	public void sponsors_cloud_link() throws IOException {
 		String json = new String(Files.readAllBytes(Paths.get("src/test/resources/cloudLinkSponsors.json")), StandardCharsets.UTF_8);
 		JsonArray jsonArray = new JsonArray(json);
 		for (int i=0; i<jsonArray.size(); i++) {
@@ -67,7 +69,18 @@ public class SponsorTest {
 			assertNotNull(sponsor.getLevel());
 			assertTrue(sponsor.getHref().startsWith("http"));
 			assertTrue(sponsor.getImage().getSrc().startsWith("http"));
-		}
-		 
+		}		 
+	}
+	
+	@Test
+	public void single_sponsor_cloud_link() throws IOException {
+		String json = new String(Files.readAllBytes(Paths.get("src/test/resources/cloudLinkMockSponsor.json")), StandardCharsets.UTF_8);
+		JsonObject jsonObj = new JsonObject(json);
+		Sponsor sponsor = jsonObj.mapTo(Sponsor.class);
+		assertEquals("1", sponsor.getId());
+		assertEquals("Red Hat", sponsor.getName());
+		assertEquals("https://developers.redhat.com", sponsor.getHref());
+		assertEquals("red-hat", sponsor.getSlug());
+		assertEquals("https://www.jbcnconf.com/2019/assets/img/sponsors/redhat_rgb.png", sponsor.getImage().getSrc());
 	}
 }

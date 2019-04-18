@@ -1,0 +1,14 @@
+{
+	"id": "1",
+	"name": "Red Hat",
+	"href": "https://developers.redhat.com",
+	"slug": "red-hat",
+	"image": {
+		"src": "https://www.jbcnconf.com/2019/assets/img/sponsors/redhat_rgb.png",
+		"alt": "Red Hat"
+	},
+	"level": {
+		"name": "cosmos",
+		"priority": 1
+	}
+}
