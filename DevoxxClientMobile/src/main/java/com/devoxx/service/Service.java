@@ -301,6 +301,13 @@ public interface Service {
      * @param sponsorBadge The sponsor badge to be send to the GCL remote function.
      */
     void saveSponsorBadge(SponsorBadge sponsorBadge);
+    
+    
+    /**
+     * Remove a sponsor badge
+     * @param sponsorBadge The sponsor badge to remove
+     */
+    void removeSponsorBadge(SponsorBadge sponsorBadge);
 
     /**
      * Returns the authenticated user, if present. Otherwise, returns null.
