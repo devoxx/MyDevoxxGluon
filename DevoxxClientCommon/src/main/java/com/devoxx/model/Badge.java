@@ -58,6 +58,10 @@ public class Badge extends Searchable {
 //    public String getBadgeId() { return badgeId.get(); }
 //    public void setBadgeId(String badgeId) { this.badgeId.set(badgeId); }
 
+    private StringProperty id = new SimpleStringProperty();
+    public String getId() { return id.get(); }
+    public void setId(String id) { this.id.set(id); }
+    
     private StringProperty name = new SimpleStringProperty();
     public StringProperty nameProperty() { return name; }
     public String getName() { return name.get(); }
