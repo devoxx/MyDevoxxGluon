@@ -163,7 +163,8 @@ public class BadgePresenter extends GluonPresenter<DevoxxApplication> {
         if (badgeType == BadgeType.ATTENDEE) {
             service.retrieveBadges().remove(badge);
         } else {
-            service.retrieveSponsorBadges(((SponsorBadge)badge).getSponsor()).remove(badge);
+        	service.removeSponsorBadge((SponsorBadge)badge);
+            // service.retrieveSponsorBadges(((SponsorBadge)badge).getSponsor()).remove(badge);
         }
     }
 
