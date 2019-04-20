@@ -844,12 +844,13 @@ public class DevoxxService implements Service {
 
     @Override
     public ObservableList<SponsorBadge> retrieveSponsorBadges(Sponsor sponsor) {
-        
-        if (sponsorBadges == null) {
-            sponsorBadges = internalRetrieveSponsorBadges(sponsor);
-        }
-
-        return sponsorBadges;
+        RemoteFunctionList fnSponsorBadges = RemoteFunctionBuilder.create("sponsorBadges")
+                .param("conferenceId", getConference().getId())
+                .param("sponsorId", sponsor.getId())
+                .list();
+        GluonObservableList<SponsorBadge> badgeSponsorsList = fnSponsorBadges.call(SponsorBadge.class);
+        badgeSponsorsList.setOnFailed(e -> LOG.log(Level.WARNING, String.format(REMOTE_FUNCTION_FAILED_MSG, "sponsorBadges"), e.getSource().getException()));
+        return badgeSponsorsList;
     }
 
     @Override
@@ -859,7 +860,6 @@ public class DevoxxService implements Service {
 
     @Override
     public void saveSponsorBadge(SponsorBadge sponsorBadge) {
-    	System.out.println("Going to save sponsor badge...");
         RemoteFunctionObject fnSponsorBadge = RemoteFunctionBuilder.create("saveSponsorBadge")
                 .param("sponsorId", safeStr(sponsorBadge.getSponsor().getId()))
                 .param("name", safeStr(sponsorBadge.getName()))
@@ -885,6 +885,20 @@ public class DevoxxService implements Service {
     }
 
     @Override
+	public void removeSponsorBadge(SponsorBadge sponsorBadge) {
+        RemoteFunctionObject fnRemoveSponsorBadge = RemoteFunctionBuilder.create("removeSponsorBadge")
+                .param("sponsorBadgeId", sponsorBadge.getId())
+                .object();
+        GluonObservableObject<String> removeSponsorBadgeResult = fnRemoveSponsorBadge.call(String.class);
+        removeSponsorBadgeResult.initializedProperty().addListener((obs, ov, nv) -> {
+            if (nv) {
+                LOG.log(Level.INFO, "Response from remove sponsor badge: " + removeSponsorBadgeResult.get());
+            }
+        });
+        removeSponsorBadgeResult.setOnFailed(e -> LOG.log(Level.WARNING, "Failed to call remove sponsor badge: ", e.getSource().getException()));
+	}
+
+	@Override
     public GluonObservableObject<Location> retrieveLocation() {
         // TODO: issue-56
         // This RF uses https://api.voxxed.com/api/voxxeddays/location/$locationId
@@ -1012,16 +1026,6 @@ public class DevoxxService implements Service {
             return DataProvider.retrieveList(localDataClient.createListDataReader(authenticationClient.getAuthenticatedUser().getKey() + "_badges",
                     Badge.class, SyncFlag.LIST_WRITE_THROUGH, SyncFlag.OBJECT_WRITE_THROUGH));
         }
-    }
-
-    private GluonObservableList<SponsorBadge> internalRetrieveSponsorBadges(Sponsor sponsor) {
-        RemoteFunctionList fnSponsorBadges = RemoteFunctionBuilder.create("sponsorBadges")
-                .param("conferenceId", getConference().getId())
-                .param("sponsorId", sponsor.getId())
-                .list();
-        GluonObservableList<SponsorBadge> badgeSponsorsList = fnSponsorBadges.call(SponsorBadge.class);
-        badgeSponsorsList.setOnFailed(e -> LOG.log(Level.WARNING, String.format(REMOTE_FUNCTION_FAILED_MSG, "sponsorBadges"), e.getSource().getException()));
-        return badgeSponsorsList;
     }
 
     private void loadCfpAccount(User user, Runnable successRunnable) {
