@@ -102,7 +102,8 @@ public class SponsorBadgePresenter extends GluonPresenter<DevoxxApplication> {
     private void loadSponsorBadges(Sponsor sponsor) {
         final ObservableList<SponsorBadge> badges = service.retrieveSponsorBadges(sponsor);
         final FilteredList<SponsorBadge> filteredBadges = new FilteredList<>(badges, badge -> {
-            return badge != null && badge.getSponsor() != null && badge.getSponsor().equals(sponsor);
+        	badge.setSponsor(sponsor);
+            return badge != null /*&& badge.getSponsor() != null && badge.getSponsor().equals(sponsor)*/;
         });
 
         CharmListView<SponsorBadge, String> sponsorBadges = new CharmListView<>(filteredBadges);
