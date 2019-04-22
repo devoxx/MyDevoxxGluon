@@ -3,7 +3,7 @@
           package="com.jbcn.app" 
           android:versionCode="9"
           android:versionName="0.1.8">
-    <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="26"/>
+    <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="28"/>
 
     <supports-screens android:xlargeScreens="true"/>
 
@@ -67,7 +67,7 @@
             <!-- <meta-data android:name="swipekeyboard" android:value="true"/> -->
             <meta-data android:name="java.args" android:value="notificationId"/>
             <meta-data android:name="restorekeyboard" android:value="true"/>
-            <meta-data android:name="main.class" android:value="com.jbcn.app.JBcnConfApplication"/>
+            <meta-data android:name="main.class" android:value="com.devoxx.DevoxxApplication"/>
             <meta-data android:name="preloader.class" android:value="com.devoxx.DevoxxPreloader"/>
             <meta-data android:name="debug.port" android:value="0"/>
             <intent-filter>
