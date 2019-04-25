@@ -76,6 +76,8 @@ jfxmobile {
                 'javax.json.**.*',
                 'org.glassfish.json.**.*'
         ]*/
+        iosProvisioningProfile = "JBCNConf 2019 Prod"
+        iosSignIdentity = "iPhone Distribution: Associacio Barcelona Java Users Group (82MRC458V5)"
     }
 }
 
