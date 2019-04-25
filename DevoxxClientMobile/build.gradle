@@ -16,7 +16,7 @@ repositories {
     }
 }
 
-mainClassName = 'com.jbcn.app.JBcnConfApplication'
+mainClassName = 'com.devoxx.DevoxxApplication'
 preloaderClassName = 'com.devoxx.DevoxxPreloader'
 
 // For desktop (for mobile check java.custom.properties)
