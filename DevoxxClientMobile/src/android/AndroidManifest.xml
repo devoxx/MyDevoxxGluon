@@ -103,7 +103,7 @@
         
         <provider
            android:name="android.support.v4.content.FileProvider"
-           android:authorities="com.devoxx.fileprovider"
+           android:authorities="com.jbcn.app.fileprovider"
            android:exported="false"
            android:grantUriPermissions="true">
            <meta-data
