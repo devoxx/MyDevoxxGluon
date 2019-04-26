@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" 
           package="com.jbcn.app" 
-          android:versionCode="9"
+          android:versionCode="26"
           android:versionName="0.1.8">
     <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="26"/>
 
     <supports-screens android:xlargeScreens="true"/>
 
-    <permission android:name="com.devoxx.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+    <permission android:name="com.jbcn.app.permission.C2D_MESSAGE" android:protectionLevel="signature" />
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -17,7 +17,7 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="com.devoxx.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.jbcn.app.permission.C2D_MESSAGE" />
     <uses-permission android:name="android.permission.CAMERA"/>
     
     <application android:label="JBCNConf"
@@ -34,7 +34,7 @@
                   android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="com.devoxx" />
+                <category android:name="com.jbcn.app" />
             </intent-filter>
         </receiver>
 
@@ -67,7 +67,7 @@
             <!-- <meta-data android:name="swipekeyboard" android:value="true"/> -->
             <meta-data android:name="java.args" android:value="notificationId"/>
             <meta-data android:name="restorekeyboard" android:value="true"/>
-            <meta-data android:name="main.class" android:value="com.jbcn.app.JBcnConfApplication"/>
+            <meta-data android:name="main.class" android:value="com.devoxx.DevoxxApplication"/>
             <meta-data android:name="preloader.class" android:value="com.devoxx.DevoxxPreloader"/>
             <meta-data android:name="debug.port" android:value="0"/>
             <intent-filter>
@@ -103,7 +103,7 @@
         
         <provider
            android:name="android.support.v4.content.FileProvider"
-           android:authorities="com.devoxx.fileprovider"
+           android:authorities="com.jbcn.app.fileprovider"
            android:exported="false"
            android:grantUriPermissions="true">
            <meta-data

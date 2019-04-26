@@ -16,7 +16,7 @@ repositories {
     }
 }
 
-mainClassName = 'com.jbcn.app.JBcnConfApplication'
+mainClassName = 'com.devoxx.DevoxxApplication'
 preloaderClassName = 'com.devoxx.DevoxxPreloader'
 
 // For desktop (for mobile check java.custom.properties)
@@ -76,7 +76,6 @@ jfxmobile {
                 'javax.json.**.*',
                 'org.glassfish.json.**.*'
         ]*/
-
         iosProvisioningProfile = "JBCNConf 2019 Prod"
         iosSignIdentity = "iPhone Distribution: Associacio Barcelona Java Users Group (82MRC458V5)"
     }

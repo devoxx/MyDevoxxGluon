@@ -143,9 +143,9 @@ public class BadgesPresenter extends GluonPresenter<DevoxxApplication> {
             DevoxxView.SPONSOR_BADGE.switchView().ifPresent(presenter -> ((SponsorBadgePresenter) presenter).setSponsor(savedSponsor.get()));
         } else {
             GluonObservableObject<Sponsor> sponsor = service.retrieveSponsorByCode(code.getText());
-            if (sponsor.isNotNull().getValue()) {
-                DevoxxView.SPONSOR_BADGE.switchView().ifPresent(presenter -> ((SponsorBadgePresenter) presenter).setSponsor(sponsor.get()));
-            }
+            sponsor.setOnSucceeded(event -> {
+            	DevoxxView.SPONSOR_BADGE.switchView().ifPresent(presenter -> ((SponsorBadgePresenter) presenter).setSponsor(sponsor.get()));
+            });
         }
     }
 
