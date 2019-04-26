@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
         <key>CFBundleIdentifier</key>
-        <string>com.devoxx.mydevoxx.swift</string>
+        <string>com.jbcn.app.com.jbcn.app.swift</string>
         <key>CFBundleVersion</key>
-        <!-- buildnumber --><string>356</string>
+        <!-- buildnumber --><string>25</string>
         <key>CFBundleShortVersionString</key>
-        <!-- versionnumber --><string>3.4.5</string>
+        <!-- versionnumber --><string>1.0.25</string>
         <key>CFBundleExecutable</key>
-        <string>DevoxxClient</string>
+        <string>JBCNConfClient</string>
         <key>CFBundleIconName</key>
         <string>AppIcon</string>
         <key>CFBundleName</key>
-        <string>Devoxx</string>
+        <string>JBCNConf</string>
         <key>CFBundlePackageType</key>
         <string>APPL</string>
         <key>LSRequiresIPhoneOS</key>
