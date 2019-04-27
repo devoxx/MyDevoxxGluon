@@ -25,6 +25,20 @@
  */
 package com.devoxx;
 
+import static com.devoxx.DevoxxView.SEARCH;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.airhacks.afterburner.injection.Injector;
 import com.devoxx.model.Badge;
 import com.devoxx.model.BadgeType;
@@ -33,20 +47,33 @@ import com.devoxx.model.Sponsor;
 import com.devoxx.model.SponsorBadge;
 import com.devoxx.service.DevoxxService;
 import com.devoxx.service.Service;
-import com.devoxx.util.*;
+import com.devoxx.util.DevoxxBundle;
+import com.devoxx.util.DevoxxCountry;
+import com.devoxx.util.DevoxxLogging;
+import com.devoxx.util.DevoxxNotifications;
+import com.devoxx.util.DevoxxSearch;
+import com.devoxx.util.DevoxxSettings;
+import com.devoxx.util.Strings;
 import com.devoxx.views.SessionsPresenter;
 import com.devoxx.views.helper.ConnectivityUtils;
 import com.devoxx.views.helper.SessionVisuals;
 import com.devoxx.views.layer.ConferenceLoadingLayer;
 import com.gluonhq.charm.down.Platform;
 import com.gluonhq.charm.down.Services;
-import com.gluonhq.charm.down.plugins.*;
+import com.gluonhq.charm.down.plugins.ConnectivityService;
+import com.gluonhq.charm.down.plugins.DeviceService;
+import com.gluonhq.charm.down.plugins.DisplayService;
+import com.gluonhq.charm.down.plugins.SettingsService;
+import com.gluonhq.charm.down.plugins.ShareService;
+import com.gluonhq.charm.down.plugins.StorageService;
 import com.gluonhq.charm.glisten.afterburner.AppView;
 import com.gluonhq.charm.glisten.afterburner.GluonInstanceProvider;
 import com.gluonhq.charm.glisten.application.MobileApplication;
 import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
 import com.gluonhq.cloudlink.client.push.PushClient;
 import com.gluonhq.cloudlink.client.usage.UsageClient;
+import com.gluonhq.connect.ConnectStateEvent;
+import com.gluonhq.connect.GluonObservableList;
 import com.gluonhq.connect.GluonObservableObject;
 
 import javafx.beans.value.ChangeListener;
@@ -56,19 +83,6 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import static com.devoxx.DevoxxView.SEARCH;
 
 public class DevoxxApplication extends MobileApplication {
 
@@ -244,34 +258,31 @@ public class DevoxxApplication extends MobileApplication {
                     if (!root.exists()) {
                         root.mkdirs();
                     }
-                    File file = new File(root, "Devoxx" + DevoxxCountry.getConfShortName(service.getConference().getCountry()) + "-badges.csv");
+                    File file = new File(root, "JBCNConf2019-badges.csv");
                     if (file.exists()) {
                         file.delete();
                     }
-                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-                        if (BadgeType.ATTENDEE == badgeType) {
-                            writer.write("ID,First Name,Last Name,Company,Email,Details");
+
+                    GluonObservableList<SponsorBadge> sponsorBadges = service.retrieveSponsorBadges(sponsor);
+                    sponsorBadges.setOnSucceeded(state -> {
+                        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+                            writer.write(Badge.getCSVHeader());
                             writer.newLine();
-                            for (Badge badge : service.retrieveBadges()) {
-                                writer.write(badge.toCSV());
-                                writer.newLine();
-                            }
-                        } else if (BadgeType.SPONSOR == badgeType) {
-                            writer.write("ID,First Name,Last Name,Company,Email,Details,Slug");
-                            writer.newLine();
-                            for (SponsorBadge badge : service.retrieveSponsorBadges(sponsor)) {
-                                writer.write(badge.toCSV());
-                                writer.newLine();
-                            }
-                        } else {
-                            LOG.log(Level.WARNING, "Error invalid badgeType: " + badgeType);
-                        }
-                    } catch (IOException ex) {
-                        LOG.log(Level.WARNING, "Error writing csv file ", ex);
-                    }
-                    s.share(DevoxxBundle.getString("OTN.BADGES.SHARE.SUBJECT", service.getConference().getName()),
-                            DevoxxBundle.getString("OTN.BADGES.SHARE.MESSAGE", service.getConference().getName(), DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).format(LocalDate.now())),
-                            "text/plain", file);
+						    for (SponsorBadge badge : sponsorBadges) {
+						        writer.write(badge.toCSV());
+						        writer.newLine();
+						    }
+						    writer.flush();
+						    writer.close();
+						    
+		                    String conferenceName = service.getConference().getName();
+							s.share(DevoxxBundle.getString("OTN.BADGES.SHARE.SUBJECT", conferenceName),
+		                            DevoxxBundle.getString("OTN.BADGES.SHARE.MESSAGE", conferenceName, DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).format(LocalDate.now())),
+		                            "text/csv", file);		
+						} catch (IOException e1) {
+	                        LOG.log(Level.WARNING, "Error writing csv file ", e1);
+						}
+                    });                       
                 } else {
                     LOG.log(Level.WARNING, "Error accessing local storage");
                 }
