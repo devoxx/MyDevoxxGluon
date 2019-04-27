@@ -68,7 +68,7 @@ public class NotesPresenter extends GluonPresenter<DevoxxApplication> {
             AppBar appBar = getApp().getAppBar();
             appBar.setNavIcon(getApp().getNavMenuButton());
             appBar.setTitleText(DevoxxView.NOTES.getTitle());
-            appBar.getActionItems().add(getApp().getSearchButton());
+//            appBar.getActionItems().add(getApp().getSearchButton());
             lvNotes.setSelectedItem(null);
             
             if (service.isAuthenticated() || !DevoxxSettings.USE_REMOTE_NOTES) {
