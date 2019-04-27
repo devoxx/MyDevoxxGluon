@@ -101,7 +101,6 @@ public class SponsorBadge extends Badge {
     @Override
     public String toCSV() {
         StringBuilder csv = new StringBuilder(super.toCSV());
-        csv.append(",").append(safeStr(getSponsor().getName()));
         return csv.toString();
     }
     

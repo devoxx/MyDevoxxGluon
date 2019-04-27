@@ -156,20 +156,29 @@ public class Badge extends Searchable {
         return s == null? "": s.trim();
     }
     
+    private String escapeString(String string) {
+		return "\"" + string + "\"";
+	}    
+    
     public String toCSV() {
         StringBuilder csv = new StringBuilder();
-        csv.append(safeStr(getName()));
-        csv.append(",").append(safeStr(getEmail()));
-        csv.append(",").append(safeStr(getLanguage()));
+        csv.append(escapeString(safeStr(getName())));
+        csv.append(",").append(escapeString(safeStr(getEmail())));
+        csv.append(",").append(escapeString(safeStr(getLanguage())));
         csv.append(",").append(safeStr(getAge()+""));
-        csv.append(",").append(safeStr(getGender()));
-        csv.append(",").append(safeStr(getCompany()));
-        csv.append(",").append(safeStr(getCity()));        
-        csv.append(",").append(safeStr(getCountry()));        
-        csv.append(",").append(safeStr(getProgrammingLanguages().replaceAll(", ", "\\|")));
-        csv.append(",").append(safeStr(getJobTitle()));
-        csv.append(",").append(safeStr(getDetails()));
+        csv.append(",").append(escapeString(safeStr(getGender())));
+        csv.append(",").append(escapeString(safeStr(getCompany())));
+        csv.append(",").append(escapeString(safeStr(getCity())));        
+        csv.append(",").append(escapeString(safeStr(getCountry())));        
+        csv.append(",").append(escapeString(safeStr(getProgrammingLanguages().replaceAll(", ", "\\|"))));
+        csv.append(",").append(escapeString(safeStr(getJobTitle())));
+        csv.append(",").append(escapeString(safeStr(getDetails())));
         return csv.toString();
+    }
+    
+
+	public static String getCSVHeader() {
+    	return "\"name\",\"email\",\"language\",\"age\",\"gender\",\"company\",\"city\",\"country\",\"proglang\",\"jobtitle\"";
     }
 
     public static Badge parseBadge(String qrCode) {

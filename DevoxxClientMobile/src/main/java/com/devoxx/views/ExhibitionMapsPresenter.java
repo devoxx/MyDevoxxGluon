@@ -60,7 +60,6 @@ public class ExhibitionMapsPresenter extends GluonPresenter<DevoxxApplication> {
             AppBar appBar = getApp().getAppBar();
             appBar.setNavIcon(getApp().getNavMenuButton());
             appBar.setTitleText(DevoxxView.EXHIBITION_MAPS.getTitle());
-            appBar.getActionItems().add(getApp().getSearchButton());
             exhibitionMapsListView.setSelectedItem(null);
             exhibitionMapsListView.setComparator((f1, f2) -> Integer.compare(Integer.parseInt(f1.getId()), Integer.parseInt(f2.getId())));
 
