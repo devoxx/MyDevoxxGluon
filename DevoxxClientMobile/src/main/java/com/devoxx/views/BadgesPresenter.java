@@ -27,30 +27,23 @@ package com.devoxx.views;
 
 import com.devoxx.DevoxxApplication;
 import com.devoxx.DevoxxView;
-import com.devoxx.model.BadgeType;
 import com.devoxx.model.Sponsor;
 import com.devoxx.service.Service;
 import com.devoxx.util.DevoxxSettings;
 import com.gluonhq.charm.down.Services;
 import com.gluonhq.charm.down.plugins.SettingsService;
 import com.gluonhq.charm.glisten.afterburner.GluonPresenter;
-import com.gluonhq.charm.glisten.application.ViewStackPolicy;
 import com.gluonhq.charm.glisten.control.AppBar;
 import com.gluonhq.charm.glisten.mvc.View;
 import com.gluonhq.connect.GluonObservableObject;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 
 import javax.inject.Inject;
 import java.util.Optional;
-
-import static com.devoxx.model.BadgeType.valueOf;
 
 public class BadgesPresenter extends GluonPresenter<DevoxxApplication> {
 
@@ -63,10 +56,7 @@ public class BadgesPresenter extends GluonPresenter<DevoxxApplication> {
     @FXML
     private TextField code;
     @FXML
-    private Button sponsor;
-
-//    @FXML
-//    private Button attendee;
+    private Button btnAccess;
 
     @Inject
     private Service service;
@@ -82,71 +72,36 @@ public class BadgesPresenter extends GluonPresenter<DevoxxApplication> {
                 }
         );
 
+        btnAccess.setOnAction(e -> showSponsor());
+
         badgesView.setOnShowing(event -> {
             AppBar appBar = getApp().getAppBar();
             appBar.setNavIcon(getApp().getNavMenuButton());
             appBar.setTitleText(DevoxxView.BADGES.getTitle());
-
-            sponsor.setOnAction(e -> showSponsor());
-//            attendee.setOnAction(e -> showAttendee());
 
             loadContent();
         });
     }
 
     private void loadContent() {
-        final BadgeType badgeType = loadPreviousSelection();
-        if (badgeType == null) {
-            badgesView.setCenter(content);
-        } else {
-            switch (badgeType) {
-                case SPONSOR:
-                    // BadgeType is Sponsor but sponsor details are incomplete
-                    // we should show sponsor/attendee selection
-                    Optional<Sponsor> savedSponsor = fetchSavedSponsor();
-                    if (savedSponsor.isPresent()) {
-                        showSponsor();
-                    } else {
-                        badgesView.setCenter(content);
-                    }
-                    break;
-                case ATTENDEE:
-                    showAttendee();
-                    break;
-            }
-        }
-    }
-
-    private BadgeType loadPreviousSelection() {
-        final Optional<SettingsService> settingsService = Services.get(SettingsService.class);
-        if (settingsService.isPresent()) {
-            final SettingsService service = settingsService.get();
-            final String badgeType = service.retrieve(DevoxxSettings.BADGE_TYPE);
-            if (badgeType != null) {
-                return valueOf(badgeType);
-            }
-        }
-        return null;
-    }
-
-    private void showAttendee() {
-        if (service.isAuthenticated()) {
-            DevoxxView.ATTENDEE_BADGE.switchView();
-        } else {
-            DevoxxView.ATTENDEE_BADGE.switchView(ViewStackPolicy.USE).ifPresent(presenter -> ((AttendeeBadgePresenter)presenter).addToStack());
-        }
-    }
-
-    private void showSponsor() {
         Optional<Sponsor> savedSponsor = fetchSavedSponsor();
         if (savedSponsor.isPresent()) {
             DevoxxView.SPONSOR_BADGE.switchView().ifPresent(presenter -> ((SponsorBadgePresenter) presenter).setSponsor(savedSponsor.get()));
         } else {
-            GluonObservableObject<Sponsor> sponsor = service.retrieveSponsorByCode(code.getText());
-            sponsor.setOnSucceeded(event -> {
-            	DevoxxView.SPONSOR_BADGE.switchView().ifPresent(presenter -> ((SponsorBadgePresenter) presenter).setSponsor(sponsor.get()));
-            });
+            badgesView.setCenter(content);
         }
+    }
+
+    private void showSponsor() {
+        GluonObservableObject<Sponsor> sponsor = service.retrieveSponsorByCode(code.getText());
+        sponsor.setOnSucceeded(event -> {
+            final Optional<SettingsService> settingsService = Services.get(SettingsService.class);
+            if (settingsService.isPresent()) {
+                SettingsService service = settingsService.get();
+                service.store(DevoxxSettings.BADGE_SPONSOR, sponsor.get().toCSV());
+            }
+            DevoxxView.SPONSOR_BADGE.switchView();
+        });
     }
 
     private Optional<Sponsor> fetchSavedSponsor() {
