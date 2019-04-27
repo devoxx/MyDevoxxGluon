@@ -83,7 +83,6 @@ import com.devoxx.views.helper.SessionVisuals.SessionListType;
 import com.devoxx.views.helper.Util;
 import com.devoxx.views.layer.ConferenceLoadingLayer;
 import com.gluonhq.charm.down.Services;
-import com.gluonhq.charm.down.plugins.DeviceService;
 import com.gluonhq.charm.down.plugins.RuntimeArgsService;
 import com.gluonhq.charm.down.plugins.SettingsService;
 import com.gluonhq.charm.down.plugins.StorageService;
@@ -843,7 +842,7 @@ public class DevoxxService implements Service {
     }
 
     @Override
-    public ObservableList<SponsorBadge> retrieveSponsorBadges(Sponsor sponsor) {
+    public GluonObservableList<SponsorBadge> retrieveSponsorBadges(Sponsor sponsor) {
         RemoteFunctionList fnSponsorBadges = RemoteFunctionBuilder.create("sponsorBadges")
                 .param("conferenceId", getConference().getId())
                 .param("sponsorId", sponsor.getId())

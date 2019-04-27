@@ -256,7 +256,7 @@ public interface Service {
      * @throws IllegalStateException when no user is currently authenticated
      * @param sponsor The sponsor for which badges are to be retrieved
      */
-    ObservableList<SponsorBadge> retrieveSponsorBadges(Sponsor sponsor);
+    GluonObservableList<SponsorBadge> retrieveSponsorBadges(Sponsor sponsor);
 
     /**
      * Logs out the currently logged in sponsor
