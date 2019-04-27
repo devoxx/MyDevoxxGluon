@@ -76,7 +76,7 @@ public class SponsorsLogoCell extends CharmListCell<Sponsor> {
                 background.setUserData(sponsor);
                 fitImage();
             }
-            background.setOnMouseReleased(e -> Util.launchExternalBrowser(() -> sponsor.getHref()));
+            root.setOnMouseReleased(e -> Util.launchExternalBrowser(() -> sponsor.getHref()));
         }
         setGraphic(root);
     }
