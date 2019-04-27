@@ -86,9 +86,13 @@ public class SponsorBadgePresenter extends GluonPresenter<DevoxxApplication> {
             appBar.getMenuItems().setAll(getBadgeChangeMenuItem("Logout"));
 
             Services.get(SettingsService.class).ifPresent(service -> {
-                final Sponsor sponsor = Sponsor.fromCSV(service.retrieve(DevoxxSettings.BADGE_SPONSOR));
-                if (this.sponsor != null && this.sponsor.equals(sponsor)) {
-                    appBar.setTitleText(DevoxxBundle.getString("OTN.SPONSOR.BADGES.FOR", sponsor.getName()));
+                if (this.sponsor != null){
+                    setSponsor(this.sponsor);
+                }else{
+                    final Sponsor sponsor = Sponsor.fromCSV(service.retrieve(DevoxxSettings.BADGE_SPONSOR));
+                    if (sponsor != null){
+                        setSponsor(sponsor);
+                    }
                 }
             });
         });
@@ -158,6 +162,7 @@ public class SponsorBadgePresenter extends GluonPresenter<DevoxxApplication> {
         final MenuItem scanAsDifferentUser = new MenuItem(text);
         scanAsDifferentUser.setOnAction(e -> {
             Util.removeKeysFromSettings(DevoxxSettings.BADGE_TYPE, DevoxxSettings.BADGE_SPONSOR);
+            this.sponsor = null;
             service.logoutSponsor();
             DevoxxView.BADGES.switchView();
         });

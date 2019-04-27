@@ -3,7 +3,6 @@
 <?import com.gluonhq.charm.glisten.mvc.View?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Button?>
-<?import com.gluonhq.charm.glisten.control.Icon?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Label?>
 <View fx:id="badgesView" styleClass="badges-view"
@@ -13,17 +12,7 @@
     <VBox fx:id="content" styleClass="content">
         <Label text="%OTN.BADGES.LABEL.SPONSOR" styleClass="label"/>
         <TextField fx:id="code" styleClass="badge-text-input"/>
-        <Button fx:id="sponsor" text="%OTN.BADGES.BUTTON.SPONSOR" styleClass="button" >
-            <!--graphic>
-                <Icon content="CARD_MEMBERSHIP"/>
-            </graphic-->
+        <Button fx:id="btnAccess" text="%OTN.BADGES.BUTTON.SPONSOR" styleClass="button" >
         </Button>
-        <!-- 
-        <Button fx:id="attendee" text="%OTN.BADGES.BUTTON.ATTENDEE">
-            <graphic>
-                <Icon content="EVENT_SEAT"/>
-            </graphic>
-        </Button>
-         -->
     </VBox>
 </View>
