@@ -62,7 +62,7 @@ public class TeamPresenter extends GluonPresenter<DevoxxApplication> {
     public void initialize() {
         team.setOnShowing(event -> {
             AppBar appBar = getApp().getAppBar();
-            appBar.setNavIcon(getApp().getNavBackButton());
+            appBar.setNavIcon(getApp().getNavMenuButton());
             appBar.setTitleText(DevoxxView.TEAM.getTitle());
             teamListView.setSelectedItem(null);
             if (loadDataFromService) {
