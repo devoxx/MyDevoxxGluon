@@ -193,7 +193,7 @@ public class BadgePresenter extends GluonPresenter<DevoxxApplication> {
             name.setText(badge.getName());            
             email.setText(badge.getEmail());
             language.setText(badge.getLanguage());
-            age.setText(badge.getAge()+"");
+            age.setText((badge.getAge()>0?badge.getAge():"")+"");
             gender.setText(badge.getGender());
             company.setText(badge.getCompany());
             city.setText(badge.getCity());
