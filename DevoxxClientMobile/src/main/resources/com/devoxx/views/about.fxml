@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.gluonhq.charm.glisten.mvc.View?>
-<?import javafx.scene.control.ScrollPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
-<View fx:id="aboutView" styleClass="about-view" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.devoxx.views.AboutPresenter">
+<View fx:id="aboutView" styleClass="about-view" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.devoxx.views.AboutPresenter">
     <ScrollPane hbarPolicy="NEVER" styleClass="edge-to-edge" fitToWidth="true">
         <VBox fx:id="imageContainer" styleClass="container">
             <ImageView fx:id="devoxxImage" preserveRatio="true" styleClass="devoxx-image"/>
             <Label fx:id="devoxxLabel"/>
+            <VBox fx:id="contentConfBtns" alignment="CENTER" spacing="10.0" styleClass="container">
+                <Button fx:id="btnConfHashtag" styleClass="button"/>
+                <Button fx:id="btnConfHref" styleClass="button"/>
+                <Button fx:id="btnConfConditions" styleClass="button"/>
+                <padding>
+                    <Insets bottom="5.0" top="10.0"/>
+                </padding>
+            </VBox>
             <Separator fx:id="separator"/>
             <VBox styleClass="gluon-logo-container">
                 <ImageView fx:id="gluonLogo" preserveRatio="true" styleClass="gluon-logo"/>
