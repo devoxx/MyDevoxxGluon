@@ -25,6 +25,14 @@
  */
 package com.devoxx;
 
+import static com.gluonhq.charm.glisten.application.MobileApplication.HOME_VIEW;
+
+import java.util.concurrent.atomic.AtomicReference;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import com.devoxx.model.Conference;
 import com.devoxx.service.Service;
 import com.devoxx.util.DevoxxBundle;
@@ -36,18 +44,13 @@ import com.gluonhq.charm.glisten.afterburner.GluonPresenter;
 import com.gluonhq.charm.glisten.control.NavigationDrawer;
 import com.gluonhq.charm.glisten.control.Toast;
 import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
+
 import javafx.css.PseudoClass;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
-import static com.gluonhq.charm.glisten.application.MobileApplication.HOME_VIEW;
 
 @Singleton
 public class DevoxxDrawerPresenter extends GluonPresenter<DevoxxApplication> {
@@ -73,8 +76,14 @@ public class DevoxxDrawerPresenter extends GluonPresenter<DevoxxApplication> {
             }
         }
 
-        logOut = new NavigationDrawer.Item(DevoxxBundle.getString("OTN.DRAWER.LOG_OUT"), MaterialDesignIcon.CANCEL.graphic());
+        
+        
+		logOut = new NavigationDrawer.Item(DevoxxBundle.getString("OTN.DRAWER.LOG_OUT"), MaterialDesignIcon.PERSON.graphic());
         logOut.managedProperty().bind(logOut.visibleProperty());
+        AtomicReference<Node> itemToSelectOnNoLogout = new AtomicReference<>();
+    	drawer.selectedItemProperty().addListener((itemObs, oldItem, newItem) -> {
+    		itemToSelectOnNoLogout.set(newItem);
+    	});
         logOut.selectedProperty().addListener((obs, ov, nv) -> {
             if (nv) {
                 if (service.logOut()) {
@@ -83,13 +92,28 @@ public class DevoxxDrawerPresenter extends GluonPresenter<DevoxxApplication> {
 
                     // switch to home view
                     getApp().switchView(HOME_VIEW);
+                } else {
+                	Node itemToSelect = itemToSelectOnNoLogout.get();
+					if (itemToSelect != null) {
+                		drawer.setSelectedItem(itemToSelect);
+                	}
                 }
             }
         });
-        drawer.getItems().add(logOut);
+        drawer.getItems().add(0, logOut);
         drawer.openProperty().addListener((o, nv, ov) -> {
             if (!nv) {
                 logOut.setVisible(service.isAuthenticated() && !DevoxxSettings.AUTO_AUTHENTICATION);
+                if (service.isAuthenticated()) {
+                	logOut.setTitle(service.getAuthenticatedUser().getName() + " (" + DevoxxBundle.getString("OTN.DRAWER.LOG_OUT") + ")");                	
+
+                	String userPicture = service.getAuthenticatedUser().getPicture();
+					if (userPicture != null && !"".equals(userPicture.trim())) {						
+	                	Image image = new Image(userPicture, 30f, 30f, true, true);
+						logOut.setGraphic(new ImageView(image));
+					}
+					
+                }
             }
         });
     }
