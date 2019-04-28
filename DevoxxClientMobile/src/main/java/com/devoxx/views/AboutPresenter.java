@@ -90,12 +90,12 @@ public class AboutPresenter extends GluonPresenter<DevoxxApplication> {
     private Service service;
 
     public void initialize() {
-        mediaClient = new MediaClient();
+        mediaClient = new MediaClient(false);
 
         try {
-            devoxxImage.setImage(mediaClient.loadImage("aboutDevoxx"));
+            devoxxImage.setImage(mediaClient.loadImage("aboutJBCNConf"));
         } catch (IOException e) {
-            LOG.log(Level.WARNING, "Failed to load media image 'aboutDevoxx'.", e);
+            LOG.log(Level.WARNING, "Failed to load media image 'aboutJBCNConf'.", e);
         }
 
         aboutView.setOnShowing(event -> {
