@@ -49,6 +49,8 @@ import javax.inject.Singleton;
 
 import static com.gluonhq.charm.glisten.application.MobileApplication.HOME_VIEW;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 @Singleton
 public class DevoxxDrawerPresenter extends GluonPresenter<DevoxxApplication> {
 
@@ -73,8 +75,15 @@ public class DevoxxDrawerPresenter extends GluonPresenter<DevoxxApplication> {
             }
         }
 
-        logOut = new NavigationDrawer.Item(DevoxxBundle.getString("OTN.DRAWER.LOG_OUT"), MaterialDesignIcon.CANCEL.graphic());
+        
+        
+        final ImageView graphic = new ImageView();
+		logOut = new NavigationDrawer.Item(DevoxxBundle.getString("OTN.DRAWER.LOG_OUT"), graphic);
         logOut.managedProperty().bind(logOut.visibleProperty());
+        AtomicReference<Node> itemToSelectOnNoLogout = new AtomicReference<>();
+    	drawer.selectedItemProperty().addListener((itemObs, oldItem, newItem) -> {
+    		itemToSelectOnNoLogout.set(newItem);
+    	});
         logOut.selectedProperty().addListener((obs, ov, nv) -> {
             if (nv) {
                 if (service.logOut()) {
@@ -83,13 +92,23 @@ public class DevoxxDrawerPresenter extends GluonPresenter<DevoxxApplication> {
 
                     // switch to home view
                     getApp().switchView(HOME_VIEW);
+                } else {
+                	Node itemToSelect = itemToSelectOnNoLogout.get();
+					if (itemToSelect != null) {
+                		drawer.setSelectedItem(itemToSelect);
+                	}
                 }
             }
         });
-        drawer.getItems().add(logOut);
+        drawer.getItems().add(0, logOut);
         drawer.openProperty().addListener((o, nv, ov) -> {
             if (!nv) {
                 logOut.setVisible(service.isAuthenticated() && !DevoxxSettings.AUTO_AUTHENTICATION);
+                if (service.isAuthenticated()) {
+                	logOut.setTitle(service.getAuthenticatedUser().getName() + " (" + DevoxxBundle.getString("OTN.DRAWER.LOG_OUT") + ")");
+                	Image image = new Image(service.getAuthenticatedUser().getPicture(), 30f, 30f, true, true);
+					graphic.setImage(image);
+                }
             }
         });
     }
