@@ -19,3 +19,4 @@ DevoxxClientMobile/src/main/resources/gluoncloudlink_config.json
 #Custom - Gluon Mobile license
 gluonmobile.license
 local.properties
+.project
