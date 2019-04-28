@@ -846,6 +846,7 @@ public class DevoxxService implements Service {
         RemoteFunctionList fnSponsorBadges = RemoteFunctionBuilder.create("sponsorBadges")
                 .param("conferenceId", getConference().getId())
                 .param("sponsorId", sponsor.getId())
+                .cachingEnabled(false)
                 .list();
         GluonObservableList<SponsorBadge> badgeSponsorsList = fnSponsorBadges.call(SponsorBadge.class);
         badgeSponsorsList.setOnFailed(e -> LOG.log(Level.WARNING, String.format(REMOTE_FUNCTION_FAILED_MSG, "sponsorBadges"), e.getSource().getException()));
