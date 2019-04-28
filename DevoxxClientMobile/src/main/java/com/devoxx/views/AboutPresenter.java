@@ -26,16 +26,17 @@
 package com.devoxx.views;
 
 import com.devoxx.DevoxxApplication;
+import com.devoxx.DevoxxView;
 import com.devoxx.service.Service;
 import com.devoxx.util.DevoxxBundle;
 import com.devoxx.util.DevoxxSettings;
+import com.devoxx.views.helper.Util;
 import com.gluonhq.charm.down.Services;
 import com.gluonhq.charm.down.plugins.SettingsService;
 import com.gluonhq.charm.glisten.afterburner.GluonPresenter;
 import com.gluonhq.charm.glisten.control.AppBar;
 import com.gluonhq.charm.glisten.control.Dialog;
 import com.gluonhq.charm.glisten.mvc.View;
-import com.devoxx.DevoxxView;
 import com.gluonhq.cloudlink.client.media.MediaClient;
 import com.gluonhq.cloudlink.client.user.User;
 import javafx.fxml.FXML;
@@ -76,6 +77,15 @@ public class AboutPresenter extends GluonPresenter<DevoxxApplication> {
     @FXML
     private Label gluonLabel;
 
+    @FXML
+    private Button btnConfHashtag;
+
+    @FXML
+    private Button btnConfHref;
+
+    @FXML
+    private Button btnConfConditions;
+
     @Inject
     private Service service;
 
@@ -92,8 +102,7 @@ public class AboutPresenter extends GluonPresenter<DevoxxApplication> {
             AppBar appBar = getApp().getAppBar();
             appBar.setNavIcon(getApp().getNavMenuButton());
             appBar.setTitleText(DevoxxView.ABOUT.getTitle());
-
-//            devoxxImage.setFitWidth(((Region) separator.getParent()).getWidth());
+//          devoxxImage.setFitWidth(((Region) separator.getParent()).getWidth());
         });
 
         gluonLogo.setImage(new Image(getClass().getResource("gluon_logo.png").toExternalForm()));
@@ -101,13 +110,20 @@ public class AboutPresenter extends GluonPresenter<DevoxxApplication> {
         devoxxImage.setFitWidth(290.0);
         gluonLogo.setFitWidth(250);
 
-        gluonLogo.setOnMouseClicked(event -> {
-            createDebugDialog().showAndWait();
-        });
+        //gluonLogo.setOnMouseClicked(event -> {
+        //    createDebugDialog().showAndWait();
+        //});
 
         devoxxLabel.setText(DevoxxBundle.getString("OTN.ABOUT.LABEL.DEVOXX", DevoxxSettings.BUILD_NUMBER));
         gluonLabel.setText(DevoxxBundle.getString("OTN.ABOUT.LABEL.GLUON"));
 
+        btnConfHashtag.setText(DevoxxBundle.getString("OTN.ABOUT.BUTTON.CONF_HASHTAG"));
+        btnConfHref.setText(DevoxxBundle.getString("OTN.ABOUT.BUTTON.CONF_HREF"));
+        btnConfConditions.setText(DevoxxBundle.getString("OTN.ABOUT.BUTTON.CONF_CONDITIONS"));
+
+        btnConfHashtag.setOnAction(e -> Util.launchExternalBrowser(() -> DevoxxBundle.getString("OTN.ABOUT.BUTTON.CONF_HASHTAG_ACTION")));
+        btnConfHref.setOnAction(e -> Util.launchExternalBrowser(() -> DevoxxBundle.getString("OTN.ABOUT.BUTTON.CONF_HREF_ACTION")));
+        btnConfConditions.setOnAction(e -> Util.launchExternalBrowser(() -> DevoxxBundle.getString("OTN.ABOUT.BUTTON.CONF_CONDITIONS_ACTION")));
     }
 
     private Dialog<TextFlow> createDebugDialog() {
