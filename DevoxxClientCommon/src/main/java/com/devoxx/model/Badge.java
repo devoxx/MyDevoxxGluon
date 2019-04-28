@@ -170,7 +170,7 @@ public class Badge extends Searchable {
         csv.append(",").append(escapeString(safeStr(getCompany())));
         csv.append(",").append(escapeString(safeStr(getCity())));        
         csv.append(",").append(escapeString(safeStr(getCountry())));        
-        csv.append(",").append(escapeString(safeStr(getProgrammingLanguages().replaceAll(", ", "\\|"))));
+        csv.append(",").append(escapeString(safeStr(getProgrammingLanguages()!=null?getProgrammingLanguages().replaceAll(", ", "\\|"):"")));
         csv.append(",").append(escapeString(safeStr(getJobTitle())));
         csv.append(",").append(escapeString(safeStr(getDetails())));
         return csv.toString();
