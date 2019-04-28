@@ -37,6 +37,7 @@ import com.gluonhq.charm.glisten.control.AppBar;
 import com.gluonhq.charm.glisten.mvc.View;
 import com.gluonhq.connect.GluonObservableObject;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -90,6 +91,11 @@ public class BadgesPresenter extends GluonPresenter<DevoxxApplication> {
         } else {
             badgesView.setCenter(content);
         }
+    }
+
+    @FXML
+    public void onEnter(ActionEvent ae){
+        showSponsor();
     }
 
     private void showSponsor() {
