@@ -116,7 +116,7 @@ public class SponsorBadge extends Badge {
 					case "name": badge.setName(value); break;
 					case "email": badge.setEmail(value); break;
 					case "language": badge.setLanguage(value); break;
-					case "age": badge.setAge(Integer.parseInt(value)); break;
+					case "age": badge.setAge(value.isEmpty()?0:Integer.parseInt(value)); break;
 					case "gender": badge.setGender(value); break;
 					case "company": badge.setCompany(value); break;
 					case "city" : badge.setCity(value); break;
