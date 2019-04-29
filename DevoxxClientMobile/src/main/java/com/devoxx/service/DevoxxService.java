@@ -53,6 +53,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.json.JSONObject;
+
 import com.airhacks.afterburner.injection.Injector;
 import com.devoxx.model.Badge;
 import com.devoxx.model.Conference;
@@ -127,8 +129,6 @@ public class DevoxxService implements Service {
     private static final Logger LOG = Logger.getLogger(DevoxxService.class.getName());
     private static final String REMOTE_FUNCTION_FAILED_MSG = "Remote function '%s' failed.";
 
-//    private static final String DEVOXX_CFP_DATA_URL = "https://s3-eu-west-1.amazonaws.com/cfpdevoxx/cfp.json";
-
     private static File rootDir;
     static {
         try {
@@ -189,7 +189,6 @@ public class DevoxxService implements Service {
     private ObservableList<Session> favoredSessions;
     private ObservableList<Note> notes;
     private ObservableList<Badge> badges;
-    private ObservableList<SponsorBadge> sponsorBadges;
 
     private GluonObservableObject<Favorites> allFavorites;
     private ListChangeListener<Session> internalFavoredSessionsListener = null;
@@ -861,12 +860,13 @@ public class DevoxxService implements Service {
 
     @Override
     public void logoutSponsor() {
-        sponsorBadges = null;
+    	// still used?
     }
 
     @Override
     public void saveSponsorBadge(SponsorBadge sponsorBadge) {
         RemoteFunctionObject fnSponsorBadge = RemoteFunctionBuilder.create("saveSponsorBadge")
+        		.param("id", sponsorBadge.getId())
                 .param("sponsorId", safeStr(sponsorBadge.getSponsor().getId()))
                 .param("name", safeStr(sponsorBadge.getName()))
                 .param("email", safeStr(sponsorBadge.getEmail()))
@@ -880,11 +880,17 @@ public class DevoxxService implements Service {
                 .param("jobTitle", safeStr(sponsorBadge.getJobTitle()))
                 .param("details", safeStr(sponsorBadge.getDetails()))
                 .param("timestamp", ZonedDateTime.now().format(DateTimeFormatter.ISO_INSTANT))
-                .object();
+                .object();        
         GluonObservableObject<String> sponsorBadgeResult = fnSponsorBadge.call(String.class);
         sponsorBadgeResult.initializedProperty().addListener((obs, ov, nv) -> {
-            if (nv) {
-                LOG.log(Level.INFO, "Response from save sponsor badge: " + sponsorBadgeResult.get());
+            if (nv) {            	
+            	String res = sponsorBadgeResult.get();
+            	JSONObject obj = new JSONObject(res);
+            	String sponsorBadgeId = obj.getString("_id");
+            	if (sponsorBadgeId != null) {
+            		sponsorBadge.setId(sponsorBadgeId);
+            	}
+				LOG.log(Level.INFO, "Response from save sponsor badge: " + res);
             }
         });
         sponsorBadgeResult.setOnFailed(e -> LOG.log(Level.WARNING, "Failed to call save sponsor badge: ", e.getSource().getException()));
@@ -1091,7 +1097,6 @@ public class DevoxxService implements Service {
         cfpUserUuid.set("");
         notes = null;
         badges = null;
-        sponsorBadges = null;
         favoredSessions = null;
         internalFavoredSessions.clear();
 
