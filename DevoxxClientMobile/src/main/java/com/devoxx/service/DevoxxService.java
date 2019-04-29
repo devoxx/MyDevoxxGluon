@@ -758,9 +758,11 @@ public class DevoxxService implements Service {
 
         retrievingFavoriteSessions.set(true);
 
-        RemoteFunctionObject fnFavored = RemoteFunctionBuilder.create("favored")
-                .param("0", getCfpURL())
-                .param("1", cfpUserUuid.get())
+        User authUser = getAuthenticatedUser();
+        String userUuid = authUser.getKey();
+		RemoteFunctionObject fnFavored = RemoteFunctionBuilder.create("favored")
+                .param("cfpEndpoint", getCfpURL())
+                .param("userUuid", userUuid)
                 .object();
 
         GluonObservableObject<Favored> functionSessions = fnFavored.call(Favored.class);
@@ -788,10 +790,12 @@ public class DevoxxService implements Service {
                 if (c.wasRemoved()) {
                     for (Session session : c.getRemoved()) {
                         LOG.log(Level.INFO, "Removing Session: " + session.getTalk().getId() + " / " + session.getTitle());
-                        RemoteFunctionObject fnRemove = RemoteFunctionBuilder.create(functionPrefix + "Remove")
-                                .param("0", getCfpURL())
-                                .param("1", cfpUserUuid.get())
-                                .param("2", session.getTalk().getId())
+                        User authUser = getAuthenticatedUser();
+                        String userUuid = authUser.getKey();
+						RemoteFunctionObject fnRemove = RemoteFunctionBuilder.create(functionPrefix + "Remove")
+                                .param("cfpEndpoint", getCfpURL())
+                                .param("userUuid", userUuid)
+                                .param("talkId", session.getTalk().getId())
                                 .object();
                         GluonObservableObject<String> response = fnRemove.call(String.class);
                         response.setOnFailed(e -> LOG.log(Level.WARNING, "Failed to remove session " + session.getTalk().getId() + " from " + functionPrefix + ": " + response.getException().getMessage()));
@@ -800,10 +804,12 @@ public class DevoxxService implements Service {
                 if (c.wasAdded()) {
                     for (Session session : c.getAddedSubList()) {
                         LOG.log(Level.INFO, "Adding Session: " + session.getTalk().getId() + " / " + session.getTitle());
-                        RemoteFunctionObject fnAdd = RemoteFunctionBuilder.create(functionPrefix + "Add")
-                                .param("0", getCfpURL())
-                                .param("1", cfpUserUuid.get())
-                                .param("2", session.getTalk().getId())
+                        User authUser = getAuthenticatedUser();
+                        String userUuid = authUser.getKey();
+						RemoteFunctionObject fnAdd = RemoteFunctionBuilder.create(functionPrefix + "Add")
+                                .param("cfpEndpoint", getCfpURL())
+                                .param("userUuid", userUuid)
+                                .param("talkId", session.getTalk().getId())
                                 .object();
                         GluonObservableObject<String> response = fnAdd.call(String.class);
                         response.setOnFailed(e -> LOG.log(Level.WARNING, "Failed to add session " + session.getTalk().getId() + " to " + functionPrefix + ": " + response.getException().getMessage()));
