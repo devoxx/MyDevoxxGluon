@@ -26,7 +26,6 @@
 package com.devoxx.views;
 
 import java.util.Optional;
-import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
@@ -53,6 +52,7 @@ import com.gluonhq.charm.glisten.control.CharmListView;
 import com.gluonhq.charm.glisten.control.FloatingActionButton;
 import com.gluonhq.charm.glisten.control.Toast;
 import com.gluonhq.charm.glisten.mvc.View;
+import com.gluonhq.connect.GluonObservableList;
 
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -104,12 +104,12 @@ public class SponsorBadgePresenter extends GluonPresenter<DevoxxApplication> {
     }
 
     private void loadSponsorBadges(Sponsor sponsor) {
-        final ObservableList<SponsorBadge> badges = service.retrieveSponsorBadges(sponsor);
+        final GluonObservableList<SponsorBadge> badges = service.retrieveSponsorBadges(sponsor);
         final FilteredList<SponsorBadge> filteredBadges = new FilteredList<>(badges, badge -> {
         	badge.setSponsor(sponsor);
             return badge != null /*&& badge.getSponsor() != null && badge.getSponsor().equals(sponsor)*/;
         });
-
+        
         CharmListView<SponsorBadge, String> sponsorBadges = new CharmListView<>(filteredBadges);
         sponsorBadges.setPlaceholder(new Placeholder(EMPTY_LIST_MESSAGE, DevoxxView.SPONSOR_BADGE.getMenuIcon()));
         sponsorBadges.setCellFactory(param -> new BadgeCell<>());
@@ -121,6 +121,15 @@ public class SponsorBadgePresenter extends GluonPresenter<DevoxxApplication> {
         appBar.setTitleText(DevoxxBundle.getString("OTN.SPONSOR.BADGES.FOR", sponsor.getName()));
         appBar.getActionItems().setAll(shareButton);
 
+//		  TODO decide where to show badges count
+//        badges.setOnSucceeded(event -> {
+//        	if (badges.size()==0) {
+//        		appBar.setTitleText(DevoxxBundle.getString("OTN.SPONSOR.BADGES.FOR", sponsor.getName()));
+//        	} else {
+//        		appBar.setTitleText(DevoxxBundle.getString("OTN.SPONSOR.BADGES.FOR", sponsor.getName()) + " (" + badges.size()+ ")");
+//        	}
+//        });
+        
         scan.setOnAction(e -> {
             if (DevoxxSettings.BADGE_TESTS) {
                 addBadge(sponsor, badges, Util.getDummyQR());
@@ -134,28 +143,33 @@ public class SponsorBadgePresenter extends GluonPresenter<DevoxxApplication> {
     }
 
     private void addBadge(Sponsor sponsor, ObservableList<SponsorBadge> badges, String qr) {
-    	BasicSecureFilter filter = new BasicSecureFilter();
-        SponsorBadge badge = SponsorBadge.parseBadge(filter.decrypt(qr));
-        if (badge.getEmail() != null) {
-            boolean exists = false;
-            for (Badge b : badges) {
-                if (b != null && b.getEmail() != null && b.getEmail().equals(badge.getEmail())) {
-                    Toast toast = new Toast(DevoxxBundle.getString("OTN.BADGES.QR.EXISTS"));
-                    toast.show();
-                    exists = true;
-                    break;
-                }
-            }
-            if (!exists) {
-                badge.setSponsor(sponsor);
-                badges.add(badge);
-                // Keep SponsorBadgeView on view stack 
-                DevoxxView.BADGE.switchView(ViewStackPolicy.USE).ifPresent(presenter -> ((BadgePresenter) presenter).setBadge(badge, BadgeType.SPONSOR));
-            }
-        } else {
-            Toast toast = new Toast(DevoxxBundle.getString("OTN.BADGES.BAD.QR"));
-            toast.show();
-        }
+    	try {
+			BasicSecureFilter filter = new BasicSecureFilter();
+			SponsorBadge badge = SponsorBadge.parseBadge(filter.decrypt(qr));
+			if (badge.getEmail() != null) {
+			    boolean exists = false;
+			    for (Badge b : badges) {
+			        if (b != null && b.getEmail() != null && b.getEmail().equals(badge.getEmail())) {
+			            Toast toast = new Toast(DevoxxBundle.getString("OTN.BADGES.QR.EXISTS"));
+			            toast.show();
+			            exists = true;
+			            break;
+			        }
+			    }
+			    if (!exists) {
+			        badge.setSponsor(sponsor);
+			        badges.add(badge);
+			        // Keep SponsorBadgeView on view stack 
+			        DevoxxView.BADGE.switchView(ViewStackPolicy.USE).ifPresent(presenter -> ((BadgePresenter) presenter).setBadge(badge, BadgeType.SPONSOR));
+			    }
+			} else {
+			    Toast toast = new Toast(DevoxxBundle.getString("OTN.BADGES.BAD.QR"));
+			    toast.show();
+			}
+		} catch (Exception e) {
+		    Toast toast = new Toast(DevoxxBundle.getString("OTN.BADGES.BAD.QR"));
+		    toast.show();
+		}
     }
 
     private MenuItem getBadgeChangeMenuItem(String text) {

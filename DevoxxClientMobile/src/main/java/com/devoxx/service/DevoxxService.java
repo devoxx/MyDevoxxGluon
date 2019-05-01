@@ -866,8 +866,8 @@ public class DevoxxService implements Service {
     @Override
     public void saveSponsorBadge(SponsorBadge sponsorBadge) {
     	String functionName = sponsorBadge.getId() != null? "updateSponsorBadge":"saveSponsorBadge";
-        RemoteFunctionObject fnSponsorBadge = RemoteFunctionBuilder.create(functionName)
-        		.param("id", sponsorBadge.getId())
+    	
+        RemoteFunctionBuilder builderSponsorBadge = RemoteFunctionBuilder.create(functionName)
                 .param("sponsorId", safeStr(sponsorBadge.getSponsor().getId()))
                 .param("name", safeStr(sponsorBadge.getName()))
                 .param("email", safeStr(sponsorBadge.getEmail()))
@@ -880,8 +880,13 @@ public class DevoxxService implements Service {
                 .param("programmingLanguages", safeStr(sponsorBadge.getProgrammingLanguages()))
                 .param("jobTitle", safeStr(sponsorBadge.getJobTitle()))
                 .param("details", safeStr(sponsorBadge.getDetails()))
-                .param("timestamp", ZonedDateTime.now().format(DateTimeFormatter.ISO_INSTANT))
-                .object();        
+                .param("timestamp", ZonedDateTime.now().format(DateTimeFormatter.ISO_INSTANT));
+        
+        if (sponsorBadge.getId() != null) {
+        	builderSponsorBadge.param("id", sponsorBadge.getId());
+        }
+        
+		RemoteFunctionObject fnSponsorBadge = builderSponsorBadge.object();        
         GluonObservableObject<String> sponsorBadgeResult = fnSponsorBadge.call(String.class);
         sponsorBadgeResult.initializedProperty().addListener((obs, ov, nv) -> {
             if (nv) {            	
