@@ -101,6 +101,7 @@ public class BadgePresenter extends GluonPresenter<DevoxxApplication> {
     private Badge badge;
     private Timeline timer;
     private boolean textChanged;
+    private boolean badgeChanged;
     private BadgeType badgeType;
 
     public void initialize() {
@@ -201,18 +202,21 @@ public class BadgePresenter extends GluonPresenter<DevoxxApplication> {
             programmingLanguages.setText(badge.getProgrammingLanguages());
             jobTitle.setText(badge.getJobTitle());
             details.setText(badge.getDetails());
+            badgeChanged = true;
         }
     }
     
     private void saveBadge() {
-        if (! textChanged || badge == null) {
+        if (! (textChanged || badgeChanged) || badge == null) {
             return;
         }
 
         badge.setName(name.getText());
         badge.setEmail(email.getText());
         badge.setLanguage(language.getText());
-        badge.setAge(Integer.parseInt(age.getText()));
+        if (age != null && age.getText() != null && age.getText().trim().length()>0) {
+        	badge.setAge(Integer.parseInt(age.getText().trim()));
+        }
         badge.setGender(gender.getText());
         badge.setCompany(company.getText());
         badge.setCity(city.getText());
@@ -228,6 +232,7 @@ public class BadgePresenter extends GluonPresenter<DevoxxApplication> {
         }
 
         textChanged = false;
+        badgeChanged = false;
     }
 
 }

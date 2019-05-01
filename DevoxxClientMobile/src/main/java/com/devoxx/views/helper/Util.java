@@ -324,7 +324,10 @@ public class Util {
 
     public static String getDummyQR() {
         List<String> qrs = Arrays.asList(
-                "UhtlAZptvulfThzvupBfLthpsAzthzvupGtvsvtpjz5jvtBfShun|hnlAluBfHnlA:?BfNluklyATBfJvtwhuAfTvsvtpjzfZSBfJp{AfIhyjlsvuhBfJv|u{yALZBfWyvnShunAfQh}h3fNyvv}3fZjhshBfQvi[p{slAJ[V"
+                "UhtlAIvyqhfNvyypBfLthpsAi5nvyyp4olyuhukvGt{hp5jvtBfShun|hnlAluBfHnlABfNluklyABfJvtwhuABfJp{ABfJv|u{yABfWyvnShunABfQvi[p{slA",
+                "UhtlAKhuplsfJvy{hjhuzfUhyhuqvBfLthpsAkhupls5jvy{hjhuz4uhyhuqvGjhwnltpup5jvtBfShun|hnlAluBfHnlABfNluklyABfJvtwhuABfJp{ABfJv|u{yABfWyvnShunABfQvi[p{slA",
+                "UhtlAJhyslzfNhspukvfMvy{lzBfLthpsAjnhspukvGvuliv{kz5jvtBfShun|hnlAluBfHnlA:9BfNluklyATBfJvtwhuAVulivf[KZBfJp{A[lyyhzzhBfJv|u{yALZBfWyvnShunAQh}h3fHun|shy3fNyvv}3fMsl3fHZ:3fJ223fS|h3f[wlZjypw{BfQvi[p{slAZlupvyfKl}lsvwly",
+                "UhtlAMYLK`fQH]PLYfUH]HYYL[LBfLthpsAmquh}hyyl{lGzpsr5lzBfShun|hnlAluBfHnlABfNluklyATBfJvtwhuAZPSRfHYX\\P[LJ[\\YHBfJp{ABfJv|u{yABfWyvnShunABfQvi[p{slA"                
         );
         return qrs.get(new Random().nextInt(qrs.size()));
     }
