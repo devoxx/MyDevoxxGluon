@@ -865,7 +865,8 @@ public class DevoxxService implements Service {
 
     @Override
     public void saveSponsorBadge(SponsorBadge sponsorBadge) {
-        RemoteFunctionObject fnSponsorBadge = RemoteFunctionBuilder.create("saveSponsorBadge")
+    	String functionName = sponsorBadge.getId() != null? "updateSponsorBadge":"saveSponsorBadge";
+        RemoteFunctionObject fnSponsorBadge = RemoteFunctionBuilder.create(functionName)
         		.param("id", sponsorBadge.getId())
                 .param("sponsorId", safeStr(sponsorBadge.getSponsor().getId()))
                 .param("name", safeStr(sponsorBadge.getName()))
