@@ -41,6 +41,7 @@ import com.devoxx.util.DevoxxSettings;
 import com.devoxx.views.helper.Util;
 import com.gluonhq.charm.glisten.afterburner.AppView;
 import com.gluonhq.charm.glisten.afterburner.GluonPresenter;
+import com.gluonhq.charm.glisten.control.Avatar;
 import com.gluonhq.charm.glisten.control.NavigationDrawer;
 import com.gluonhq.charm.glisten.control.Toast;
 import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
@@ -108,9 +109,11 @@ public class DevoxxDrawerPresenter extends GluonPresenter<DevoxxApplication> {
                 	logOut.setTitle(service.getAuthenticatedUser().getName() + " (" + DevoxxBundle.getString("OTN.DRAWER.LOG_OUT") + ")");                	
 
                 	String userPicture = service.getAuthenticatedUser().getPicture();
-					if (userPicture != null && !"".equals(userPicture.trim())) {						
-	                	Image image = new Image(userPicture, 30f, 30f, true, true);
-						logOut.setGraphic(new ImageView(image));
+					if (userPicture != null && !"".equals(userPicture.trim())) {	
+	                	Image image = new Image(userPicture);
+						Avatar avatar = new Avatar(21, image);
+						avatar.setTranslateX(-10);
+						logOut.setGraphic(avatar);
 					}
 					
                 }
