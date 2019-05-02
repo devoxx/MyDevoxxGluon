@@ -64,7 +64,7 @@ public class BadgesPresenter extends GluonPresenter<DevoxxApplication> {
 
     public void initialize() {
 
-        code.setMaxWidth(140);
+        code.setMaxWidth(160);
         code.textProperty().addListener((final ObservableValue<? extends String> ov, final String oldValue, final String newValue) -> {
                     if (code.getText().length() > 4) {
                         String s = code.getText().substring(0, 4);
