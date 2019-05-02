@@ -282,7 +282,7 @@ public class Badge extends Searchable {
 	}
 
 	public static String getCSVHeader() {
-		return "\"name\",\"email\",\"language\",\"age\",\"gender\",\"company\",\"city\",\"country\",\"proglang\",\"jobtitle\"";
+		return "\"name\",\"email\",\"language\",\"age\",\"gender\",\"company\",\"city\",\"country\",\"proglang\",\"jobtitle\",\"details\"";
 	}
 
 	public static Badge parseBadge(String qrCode) {
