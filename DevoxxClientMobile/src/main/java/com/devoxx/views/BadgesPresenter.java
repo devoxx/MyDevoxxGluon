@@ -29,11 +29,13 @@ import com.devoxx.DevoxxApplication;
 import com.devoxx.DevoxxView;
 import com.devoxx.model.Sponsor;
 import com.devoxx.service.Service;
+import com.devoxx.util.DevoxxBundle;
 import com.devoxx.util.DevoxxSettings;
 import com.gluonhq.charm.down.Services;
 import com.gluonhq.charm.down.plugins.SettingsService;
 import com.gluonhq.charm.glisten.afterburner.GluonPresenter;
 import com.gluonhq.charm.glisten.control.AppBar;
+import com.gluonhq.charm.glisten.control.Toast;
 import com.gluonhq.charm.glisten.mvc.View;
 import com.gluonhq.connect.GluonObservableObject;
 import javafx.beans.value.ObservableValue;
@@ -107,6 +109,10 @@ public class BadgesPresenter extends GluonPresenter<DevoxxApplication> {
                 service.store(DevoxxSettings.BADGE_SPONSOR, sponsor.get().toCSV());
             }
             DevoxxView.SPONSOR_BADGE.switchView();
+        });
+        sponsor.setOnFailed(event -> {
+            Toast toast = new Toast(DevoxxBundle.getString("OTN.SPONSORS.SPONSOR.NOT_FOUND", code.getText()));
+            toast.show();        	
         });
     }
 
