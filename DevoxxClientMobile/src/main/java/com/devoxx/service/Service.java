@@ -300,7 +300,7 @@ public interface Service {
      * Sends the sponsor badge to a GCL remote function
      * @param sponsorBadge The sponsor badge to be send to the GCL remote function.
      */
-    void saveSponsorBadge(SponsorBadge sponsorBadge);
+    GluonObservableObject<String> saveSponsorBadge(SponsorBadge sponsorBadge);
     
     
     /**
@@ -335,5 +335,12 @@ public interface Service {
     /**
      * Fetches a map of vote texts for each rating
      */
-    ObservableList<RatingData> retrieveVoteTexts(int rating);
+    GluonObservableList<RatingData> retrieveVoteTexts(int rating);
+
+	/**
+	 * Retrieve an existing vote for a talk
+	 * @param talkId talk id
+	 * @return vote if existing
+	 */
+	GluonObservableObject<Vote> retrieveExistingVote(String talkId);
 }
