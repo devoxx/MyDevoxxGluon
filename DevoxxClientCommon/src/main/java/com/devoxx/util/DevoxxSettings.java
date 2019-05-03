@@ -59,7 +59,7 @@ public class DevoxxSettings {
      * boolean option to switch on/off voting
      * Default: false
      */
-    public final static boolean VOTING_TESTS = false;
+    public final static boolean VOTING_TESTS = true;
 
     /**
      * Setting this option to true will allow to scan a random badge by pressing the scan FAB

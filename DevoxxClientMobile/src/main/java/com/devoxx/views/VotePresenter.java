@@ -25,6 +25,13 @@
  */
 package com.devoxx.views;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+import java.util.ResourceBundle;
+
+import javax.inject.Inject;
+
 import com.devoxx.DevoxxApplication;
 import com.devoxx.DevoxxView;
 import com.devoxx.model.RatingData;
@@ -42,7 +49,13 @@ import com.gluonhq.charm.glisten.control.TextArea;
 import com.gluonhq.charm.glisten.control.Toast;
 import com.gluonhq.charm.glisten.mvc.View;
 import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
+import com.gluonhq.connect.GluonObservableList;
+import com.gluonhq.connect.GluonObservableObject;
+
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -54,15 +67,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-
-import javax.inject.Inject;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-import java.util.ResourceBundle;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
-import javafx.css.PseudoClass;
 
 public class VotePresenter extends GluonPresenter<DevoxxApplication> {
 
@@ -119,7 +123,7 @@ public class VotePresenter extends GluonPresenter<DevoxxApplication> {
                 } else {
                     setText(item.getText());
                     if (Util.isEmptyString(item.getImageUrl())) {
-                        imageView.setImage(randomImage());
+                        imageView.setImage(null);
                     } else {
                         imageView.setImage(new Image(item.getImageUrl()));
                     }
@@ -150,11 +154,37 @@ public class VotePresenter extends GluonPresenter<DevoxxApplication> {
         feedbackLabel.pseudoClassStateChanged(EMPTY, true);
         feedbackLabel.setWrapText(true);
         
-        rating.setRating(4);
+        rating.setRating(0);
         comments.getSelectionModel().clearSelection();
+
+        GluonObservableObject<Vote> existingVote = service.retrieveExistingVote(session.getTalk().getId());
+        existingVote.setOnSucceeded(event -> {
+        	Vote remoteVote = existingVote.get();
+        	rating.setRating(remoteVote.getValue());
+        	if (feedback == null) {
+        		feedback = new TextArea();
+        	}
+        	feedback.setText(remoteVote.getOther());
+        	feedbackLabel.setText(remoteVote.getOther()); 
+        	
+        	// delivery is compliment text!
+        	selectComment(remoteVote.getDelivery());
+        });
     }
 
-    @FXML
+    private void selectComment(String delivery) {
+    	if (delivery != null && delivery.trim().length()>0) {
+	    	for (int i=0; i<comments.getItems().size(); i++) {
+	    		RatingData ratingData = comments.getItems().get(i);
+	    		if (delivery.equals(ratingData.getText())) {
+	    			comments.getSelectionModel().select(i);
+	    			break;
+	    		}
+	    	}
+    	}
+	}
+
+	@FXML
     private void submit() {
         // Submit Vote to Backend
         service.voteTalk(createVote(session.getTalk().getId()));
@@ -185,32 +215,43 @@ public class VotePresenter extends GluonPresenter<DevoxxApplication> {
     }
 
     private void updateRating(int rating) {
-        switch (rating) {
+         compliment.setText("loading...");
+    	 switch (rating) {
             case 5:
                 ratingLabel.setText(resources.getString("OTN.VOTE.EXCELLENT"));
-                compliment.setText(resources.getString("OTN.VOTE.COMPLIMENT"));
-                comments.setItems(service.retrieveVoteTexts(5));
+                GluonObservableList<RatingData> voteText = service.retrieveVoteTexts(5);
+                voteText.setOnSucceeded(event -> {compliment.setText(resources.getString("OTN.VOTE.COMPLIMENT")); /*set also delivery if sent */});
+                comments.setItems(voteText);
                 break;
             case 4:
                 ratingLabel.setText(resources.getString("OTN.VOTE.VERY.GOOD"));
-                compliment.setText(resources.getString("OTN.VOTE.COMPLIMENT"));
-                comments.setItems(service.retrieveVoteTexts(4));
+                voteText = service.retrieveVoteTexts(4);
+                voteText.setOnSucceeded(event -> compliment.setText(resources.getString("OTN.VOTE.COMPLIMENT")));
+                comments.setItems(voteText);
                 break;
             case 3:
                 ratingLabel.setText(resources.getString("OTN.VOTE.GOOD"));
-                compliment.setText(resources.getString("OTN.VOTE.COMPLIMENT"));
-                comments.setItems(service.retrieveVoteTexts(3));
+                voteText = service.retrieveVoteTexts(3);
+                voteText.setOnSucceeded(event -> compliment.setText(resources.getString("OTN.VOTE.COMPLIMENT")));
+                comments.setItems(voteText);
                 break;
             case 2:
                 ratingLabel.setText(resources.getString("OTN.VOTE.FAIR"));
-                compliment.setText(resources.getString("OTN.VOTE.IMPROVEMENT"));
-                comments.setItems(service.retrieveVoteTexts(2));
+                voteText = service.retrieveVoteTexts(2);
+                voteText.setOnSucceeded(event -> compliment.setText(resources.getString("OTN.VOTE.IMPROVEMENT")));
+                comments.setItems(voteText);
                 break;
             case 1:
                 ratingLabel.setText(resources.getString("OTN.VOTE.POOR"));
-                compliment.setText(resources.getString("OTN.VOTE.IMPROVEMENT"));
-                comments.setItems(service.retrieveVoteTexts(1));
+                voteText = service.retrieveVoteTexts(1);
+                voteText.setOnSucceeded(event -> compliment.setText(resources.getString("OTN.VOTE.IMPROVEMENT")));
+                comments.setItems(voteText);
                 break;
+            case 0:
+            	ratingLabel.setText("Give your vote");
+            	comments.getSelectionModel().clearSelection();
+            	compliment.setText("");
+            	break;
         }
     }
 

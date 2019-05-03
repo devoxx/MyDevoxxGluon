@@ -26,3 +26,12 @@
 .view {
     -fx-font-family: "FakeFontFamily";  /*forces default OS font family selection*/
 }
+
+.badge-count {
+	-fx-alignment: center;
+	-fx-padding: 10;
+    -fx-max-width: infinity;
+    -fx-background-color: #1266a3;
+    -fx-text-fill: #fff;
+    -fx-font-weight: bold;
+}

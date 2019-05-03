@@ -58,6 +58,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 
 public class SponsorBadgePresenter extends GluonPresenter<DevoxxApplication> {
@@ -67,6 +68,9 @@ public class SponsorBadgePresenter extends GluonPresenter<DevoxxApplication> {
     @FXML
     private View sponsorView;
 
+    @FXML
+    private Label badgesCount;
+    
     @Inject
     private Service service;
 
@@ -88,7 +92,7 @@ public class SponsorBadgePresenter extends GluonPresenter<DevoxxApplication> {
             Services.get(SettingsService.class).ifPresent(service -> {
                 if (this.sponsor != null){
                     setSponsor(this.sponsor);
-                }else{
+                } else {
                     final Sponsor sponsor = Sponsor.fromCSV(service.retrieve(DevoxxSettings.BADGE_SPONSOR));
                     if (sponsor != null){
                         setSponsor(sponsor);
@@ -110,10 +114,23 @@ public class SponsorBadgePresenter extends GluonPresenter<DevoxxApplication> {
             return badge != null /*&& badge.getSponsor() != null && badge.getSponsor().equals(sponsor)*/;
         });
         
+        badgesCount.setVisible(false);
+        badges.setOnSucceeded(event -> {        	
+        	String text = "";
+        	switch (badges.size()) {
+        		case 1: text = "1 badge"; break;
+        		default: text = badges.size() + " badges"; break;
+        	}
+            badgesCount.setVisible(badges.size()>0);
+			badgesCount.setText(text);
+        });
+        
         CharmListView<SponsorBadge, String> sponsorBadges = new CharmListView<>(filteredBadges);
         sponsorBadges.setPlaceholder(new Placeholder(EMPTY_LIST_MESSAGE, DevoxxView.SPONSOR_BADGE.getMenuIcon()));
         sponsorBadges.setCellFactory(param -> new BadgeCell<>());
+        
         sponsorView.setCenter(sponsorBadges);
+        
 
         final Button shareButton = getApp().getShareButton(BadgeType.SPONSOR, sponsor);
         shareButton.disableProperty().bind(sponsorBadges.itemsProperty().emptyProperty());

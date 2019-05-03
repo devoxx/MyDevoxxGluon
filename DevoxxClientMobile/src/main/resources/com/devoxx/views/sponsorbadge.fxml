@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.gluonhq.charm.glisten.mvc.View?>
+<?import javafx.scene.control.Label?>
+
 <View fx:id="sponsorView" styleClass="sponsor-view" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.devoxx.views.SponsorBadgePresenter">
+	<top>
+		<Label fx:id="badgesCount" styleClass="badge-count" alignment="CENTER"></Label> 
+	</top>
 </View>
