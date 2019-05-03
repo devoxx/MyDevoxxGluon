@@ -1438,6 +1438,12 @@
     -fx-font-size: 1.3em;
 }
 
+.badge-view > .bottom > .submit {
+    -fx-max-width: infinity;
+    -fx-text-fill: white;
+    -fx-font-size: 1.3em;
+}
+
 /** Leaderboard View **/
 
 /** TODO: Doesn't work **/

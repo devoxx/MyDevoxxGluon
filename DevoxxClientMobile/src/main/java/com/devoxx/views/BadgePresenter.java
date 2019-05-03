@@ -42,20 +42,20 @@ import com.gluonhq.charm.glisten.afterburner.GluonPresenter;
 import com.gluonhq.charm.glisten.application.MobileApplication;
 import com.gluonhq.charm.glisten.control.AppBar;
 import com.gluonhq.charm.glisten.control.Dialog;
+import com.gluonhq.charm.glisten.control.ProgressIndicator;
 import com.gluonhq.charm.glisten.mvc.View;
 import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
+import com.gluonhq.connect.GluonObservableObject;
 
-import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.util.Duration;
 
 public class BadgePresenter extends GluonPresenter<DevoxxApplication> {
-    private static final int WAIT_TIME = 3000; // In milliseconds
+   //  private static final int WAIT_TIME = 3000; // In milliseconds
 
     @FXML
     private View badgeView;
@@ -93,11 +93,15 @@ public class BadgePresenter extends GluonPresenter<DevoxxApplication> {
     @FXML
     private TextField jobTitle;
 
-
-    
     @FXML
     private TextArea details;
+
+    @FXML
+    private ProgressIndicator progress;
     
+    @FXML
+    private Button saveButton;
+
     private Badge badge;
     private Timeline timer;
     private boolean textChanged;
@@ -117,19 +121,19 @@ public class BadgePresenter extends GluonPresenter<DevoxxApplication> {
         
         timer = new Timeline();
         timer.setCycleCount(1);
-        KeyFrame keyFrame = new KeyFrame(Duration.millis(WAIT_TIME), event -> {
-            if (textChanged) {
-                saveBadge();
-            }
-        });
-        timer.getKeyFrames().add(keyFrame);
+//        KeyFrame keyFrame = new KeyFrame(Duration.millis(WAIT_TIME), event -> {
+//            if (textChanged) {
+//                saveBadge();
+//            }
+//        });
+//        timer.getKeyFrames().add(keyFrame);
         
         details.textProperty().addListener((observable, oldValue, newValue) -> {
             textChanged = true;
             timer.playFromStart();
         });
         
-        badgeView.setOnHiding(event -> saveBadge());
+//        badgeView.setOnHiding(event -> saveBadge());
         
         // Fix for keyboard not showing on Android.
         // As TextArea is the only focusable control, 
@@ -204,13 +208,20 @@ public class BadgePresenter extends GluonPresenter<DevoxxApplication> {
             details.setText(badge.getDetails());
             badgeChanged = true;
         }
+        
+        saveButton.setVisible(true);
+        progress.setVisible(false);        
     }
     
+    @FXML
     private void saveBadge() {
         if (! (textChanged || badgeChanged) || badge == null) {
             return;
         }
 
+        saveButton.setVisible(false);
+        progress.setVisible(true);
+        
         badge.setName(name.getText());
         badge.setEmail(email.getText());
         badge.setLanguage(language.getText());
@@ -228,7 +239,10 @@ public class BadgePresenter extends GluonPresenter<DevoxxApplication> {
         
         if (badge instanceof SponsorBadge) {
             // every scanned sponsor badge must be posted with the remote function
-            service.saveSponsorBadge((SponsorBadge) badge);
+            GluonObservableObject<String> result = service.saveSponsorBadge((SponsorBadge) badge);
+            result.setOnSucceeded(event -> {
+            	getApp().getNavBackButton().fire();
+            });            	
         }
 
         textChanged = false;
