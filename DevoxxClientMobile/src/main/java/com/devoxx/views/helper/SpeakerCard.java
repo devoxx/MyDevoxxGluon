@@ -51,6 +51,7 @@ public class SpeakerCard extends Region {
     private final Label speakerName;
     private final Label speakerCompany;
     private final Label speakerTitle;
+    private final Label speakerBlog;
 
     public SpeakerCard(Speaker speaker) {
 
@@ -79,10 +80,24 @@ public class SpeakerCard extends Region {
                 }
             }
         }));
+        
+        speakerBlog = new Label(speaker.getBlog());
+        speakerBlog.getStyleClass().addAll("speaker-title","link");
+        speakerBlog.setOnMousePressed(e -> Services.get(BrowserService.class).ifPresent(b -> {
+            if(speaker.getBlog() != null && !speaker.getBlog().isEmpty() && speaker.getBlog().startsWith("http")) {
+                try {
+                    String url = speaker.getBlog();
+                    b.launchExternalBrowser(url);
+                } catch (IOException | URISyntaxException ex) {
+                    Toast toast = new Toast(DevoxxBundle.getString("OTN.VISUALS.CONNECTION_FAILED"));
+                    toast.show();
+                }
+            }
+        }));
 
         avatar = Util.getSpeakerAvatar(speaker);
 
-        getChildren().addAll(imageView, imageSpacer, avatar, speakerName, speakerCompany, speakerTitle);
+        getChildren().addAll(imageView, imageSpacer, avatar, speakerName, speakerCompany, speakerTitle, speakerBlog);
         Platform.runLater(this::requestLayout);
     }
 
@@ -131,6 +146,11 @@ public class SpeakerCard extends Region {
             speakerTitle.resizeRelocate(0, y, w, speakerTitle.prefHeight(w));
             y += speakerTitle.prefHeight(w) + PADDING;
         }
+        
+        if (speakerBlog.getText() != null && !speakerBlog.getText().isEmpty()) {
+        	speakerBlog.resizeRelocate(0, y, w, speakerBlog.prefHeight(w));
+            y += speakerBlog.prefHeight(w) + PADDING;
+        }
 
     }
 
@@ -146,9 +166,11 @@ public class SpeakerCard extends Region {
     private double computeHeightExceptImageSpacer(double width) {
         final boolean showSpeakerCompany = speakerCompany.getText() != null && !speakerCompany.getText().isEmpty();
         final boolean showSpeakerTitle = speakerTitle.getText() != null && !speakerTitle.getText().isEmpty();
+        final boolean showSpeakerBlog = speakerBlog.getText() != null && !speakerBlog.getText().isEmpty();
         return avatar.prefHeight(-1) / 2.0
                 + (showSpeakerCompany ? speakerCompany.prefHeight(width) : 0)
                 + (showSpeakerTitle ? speakerTitle.prefHeight(width) : 0)
+                + (showSpeakerBlog ? speakerBlog.prefHeight(width) : 0)
                 + 20;
     }
 

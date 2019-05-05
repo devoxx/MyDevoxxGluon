@@ -294,6 +294,23 @@ public class SessionPresenter extends GluonPresenter<DevoxxApplication> {
                     }
                 }
             }));            
+            
+            Label blog = new Label(speaker.getBlog());
+            blog.getStyleClass().addAll("speaker-title","link");
+            blog.setWrapText(true);
+            GridPane.setHgrow(blog, Priority.ALWAYS);
+            blog.setOnMousePressed(e -> Services.get(BrowserService.class).ifPresent(b -> {
+                if(speaker.getBlog() != null && !speaker.getBlog().isEmpty() && speaker.getBlog().startsWith("http")) {
+                    try {
+                        String url = speaker.getBlog();
+                        b.launchExternalBrowser(url);
+                    } catch (IOException | URISyntaxException ex) {
+                        Toast toast = new Toast(DevoxxBundle.getString("OTN.VISUALS.CONNECTION_FAILED"));
+                        toast.show();
+                    }
+                }
+            }));
+            
 
             Label company = new Label(speaker.getCompany());
             company.getStyleClass().add("company");
@@ -327,8 +344,9 @@ public class SessionPresenter extends GluonPresenter<DevoxxApplication> {
             gridPane.add(name, 0, 0);
             gridPane.add(company, 0, 1);
             gridPane.add(twitter, 0, 2);
+            gridPane.add(blog, 0, 3);
             gridPane.add(speakerBtn, 1, 0, 1, 3);
-            gridPane.add(summary, 0, 3, 2, 1);
+            gridPane.add(summary, 0, 4, 2, 1);
 
 
             return createScrollPane(gridPane);
