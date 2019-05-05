@@ -42,11 +42,14 @@ import com.devoxx.views.helper.Placeholder;
 import com.devoxx.views.helper.SessionNotesEditor;
 import com.devoxx.views.helper.SessionVisuals;
 import com.devoxx.views.helper.Util;
+import com.gluonhq.charm.down.Services;
+import com.gluonhq.charm.down.plugins.BrowserService;
 import com.gluonhq.charm.glisten.afterburner.GluonPresenter;
 import com.gluonhq.charm.glisten.control.AppBar;
 import com.gluonhq.charm.glisten.control.AvatarPane;
 import com.gluonhq.charm.glisten.control.BottomNavigation;
 import com.gluonhq.charm.glisten.control.BottomNavigationButton;
+import com.gluonhq.charm.glisten.control.Toast;
 import com.gluonhq.charm.glisten.mvc.View;
 import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
 import javafx.beans.property.ReadOnlyListProperty;
@@ -65,6 +68,11 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
+
+import static com.devoxx.util.DevoxxSettings.TWITTER_URL;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -271,10 +279,21 @@ public class SessionPresenter extends GluonPresenter<DevoxxApplication> {
             name.setWrapText(true);
             GridPane.setHgrow(name, Priority.ALWAYS);
 
-//            Label jobTitle = new Label(speaker.getJobTitle());
-//            jobTitle.getStyleClass().add("job-title");
-//            jobTitle.setWrapText(true);
-//            GridPane.setHgrow(jobTitle, Priority.ALWAYS);
+            Label twitter = new Label(speaker.getTwitter());
+            twitter.getStyleClass().addAll("speaker-title", "link");
+            twitter.setWrapText(true);
+            GridPane.setHgrow(twitter, Priority.ALWAYS);
+            twitter.setOnMousePressed(e -> Services.get(BrowserService.class).ifPresent(b -> {
+                if(speaker.getTwitter() != null && !speaker.getTwitter().isEmpty() && speaker.getTwitter().startsWith("@")) {
+                    try {
+                        String url = TWITTER_URL + speaker.getTwitter().substring(1);
+                        b.launchExternalBrowser(url);
+                    } catch (IOException | URISyntaxException ex) {
+                        Toast toast = new Toast(DevoxxBundle.getString("OTN.VISUALS.CONNECTION_FAILED"));
+                        toast.show();
+                    }
+                }
+            }));            
 
             Label company = new Label(speaker.getCompany());
             company.getStyleClass().add("company");
@@ -306,8 +325,8 @@ public class SessionPresenter extends GluonPresenter<DevoxxApplication> {
             GridPane gridPane = new GridPane();
             gridPane.getStyleClass().add("content-box");
             gridPane.add(name, 0, 0);
-//            gridPane.add(jobTitle, 0, 1);
-            gridPane.add(company, 0, 2);
+            gridPane.add(company, 0, 1);
+            gridPane.add(twitter, 0, 2);
             gridPane.add(speakerBtn, 1, 0, 1, 3);
             gridPane.add(summary, 0, 3, 2, 1);
 
