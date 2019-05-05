@@ -25,10 +25,6 @@
  */
 package com.devoxx.views;
 
-import java.util.Objects;
-
-import javax.inject.Inject;
-
 import com.devoxx.DevoxxApplication;
 import com.devoxx.DevoxxView;
 import com.devoxx.model.Badge;
@@ -46,13 +42,15 @@ import com.gluonhq.charm.glisten.control.ProgressIndicator;
 import com.gluonhq.charm.glisten.mvc.View;
 import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
 import com.gluonhq.connect.GluonObservableObject;
-
 import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+
+import javax.inject.Inject;
+import java.util.Objects;
 
 public class BadgePresenter extends GluonPresenter<DevoxxApplication> {
    //  private static final int WAIT_TIME = 3000; // In milliseconds
