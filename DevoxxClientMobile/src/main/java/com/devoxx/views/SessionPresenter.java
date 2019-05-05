@@ -343,9 +343,9 @@ public class SessionPresenter extends GluonPresenter<DevoxxApplication> {
     }
 
     private Label fetchLabelForAudienceLevel(String audienceLevel) {
-        if (audienceLevel.equalsIgnoreCase("L1")) {
+        if (audienceLevel.equalsIgnoreCase("beginner")) {
             return new Label(DevoxxBundle.getString("OTN.SESSION.AUDIENCE_LEVEL.BEGINNER"));
-        } else if (audienceLevel.equalsIgnoreCase("L2")) {
+        } else if (audienceLevel.equalsIgnoreCase("middle")) {
             return new Label(DevoxxBundle.getString("OTN.SESSION.AUDIENCE_LEVEL.INTERMEDIATE"));
         } else {
             return new Label(DevoxxBundle.getString("OTN.SESSION.AUDIENCE_LEVEL.EXPERT"));
