@@ -25,10 +25,6 @@
  */
 package com.devoxx.views;
 
-import java.util.Optional;
-
-import javax.inject.Inject;
-
 import com.devoxx.DevoxxApplication;
 import com.devoxx.DevoxxView;
 import com.devoxx.model.Badge;
@@ -52,14 +48,17 @@ import com.gluonhq.charm.glisten.control.CharmListView;
 import com.gluonhq.charm.glisten.control.FloatingActionButton;
 import com.gluonhq.charm.glisten.control.Toast;
 import com.gluonhq.charm.glisten.mvc.View;
+import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
 import com.gluonhq.connect.GluonObservableList;
-
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+
+import javax.inject.Inject;
+import java.util.Optional;
 
 public class SponsorBadgePresenter extends GluonPresenter<DevoxxApplication> {
 
@@ -84,10 +83,7 @@ public class SponsorBadgePresenter extends GluonPresenter<DevoxxApplication> {
         scan.showOn(sponsorView);
 
         sponsorView.setOnShowing(event -> {
-            AppBar appBar = getApp().getAppBar();
-            appBar.setNavIcon(getApp().getNavMenuButton());
-            appBar.setTitleText(DevoxxView.SPONSOR_BADGE.getTitle());
-            appBar.getMenuItems().setAll(getBadgeChangeMenuItem("Logout"));
+            updateAppBar(getApp().getAppBar());
 
             Services.get(SettingsService.class).ifPresent(service -> {
                 if (this.sponsor != null){
@@ -105,6 +101,11 @@ public class SponsorBadgePresenter extends GluonPresenter<DevoxxApplication> {
     public void setSponsor(Sponsor sponsor) {
         this.sponsor = sponsor;
         loadSponsorBadges(sponsor);
+    }
+
+    private void updateAppBar(AppBar appBar) {
+        appBar.setNavIcon(getApp().getNavMenuButton());
+        appBar.setTitleText(DevoxxView.SPONSOR_BADGE.getTitle());
     }
 
     private void loadSponsorBadges(Sponsor sponsor) {
@@ -136,7 +137,14 @@ public class SponsorBadgePresenter extends GluonPresenter<DevoxxApplication> {
         shareButton.disableProperty().bind(sponsorBadges.itemsProperty().emptyProperty());
         AppBar appBar = getApp().getAppBar();
         appBar.setTitleText(DevoxxBundle.getString("OTN.SPONSOR.BADGES.FOR", sponsor.getName()));
-        appBar.getActionItems().setAll(shareButton);
+
+        final Button logoutButton = MaterialDesignIcon.EXIT_TO_APP.button(e -> {
+            Util.removeKeysFromSettings(DevoxxSettings.BADGE_TYPE, DevoxxSettings.BADGE_SPONSOR);
+            this.sponsor = null;
+            service.logoutSponsor();
+            DevoxxView.BADGES.switchView();
+        });
+        appBar.getActionItems().setAll(shareButton, logoutButton);
 
 //		  TODO decide where to show badges count
 //        badges.setOnSucceeded(event -> {
