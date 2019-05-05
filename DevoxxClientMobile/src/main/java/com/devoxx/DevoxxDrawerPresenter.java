@@ -25,14 +25,6 @@
  */
 package com.devoxx;
 
-import static com.gluonhq.charm.glisten.application.MobileApplication.HOME_VIEW;
-
-import java.util.concurrent.atomic.AtomicReference;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import com.devoxx.model.Conference;
 import com.devoxx.service.Service;
 import com.devoxx.util.DevoxxBundle;
@@ -45,13 +37,19 @@ import com.gluonhq.charm.glisten.control.Avatar;
 import com.gluonhq.charm.glisten.control.NavigationDrawer;
 import com.gluonhq.charm.glisten.control.Toast;
 import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
-
 import javafx.css.PseudoClass;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.util.concurrent.atomic.AtomicReference;
+
+import static com.gluonhq.charm.glisten.application.MobileApplication.HOME_VIEW;
 
 @Singleton
 public class DevoxxDrawerPresenter extends GluonPresenter<DevoxxApplication> {
@@ -106,7 +104,9 @@ public class DevoxxDrawerPresenter extends GluonPresenter<DevoxxApplication> {
             if (!nv) {
                 logOut.setVisible(service.isAuthenticated() && !DevoxxSettings.AUTO_AUTHENTICATION);
                 if (service.isAuthenticated()) {
-                	logOut.setTitle(service.getAuthenticatedUser().getName() + " (" + DevoxxBundle.getString("OTN.DRAWER.LOG_OUT") + ")");                	
+                    String username = (service.getAuthenticatedUser().getName() != null) ?
+                            service.getAuthenticatedUser().getName() : "";
+                	logOut.setTitle(username + " (" + DevoxxBundle.getString("OTN.DRAWER.LOG_OUT") + ")");
 
                 	String userPicture = service.getAuthenticatedUser().getPicture();
 					if (userPicture != null && !"".equals(userPicture.trim())) {	
