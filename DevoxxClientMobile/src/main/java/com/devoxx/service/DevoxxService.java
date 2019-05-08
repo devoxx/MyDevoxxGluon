@@ -683,7 +683,7 @@ public class DevoxxService implements Service {
 
 				List<Floor> floors = new ArrayList<>();
 				for (Floor floor : getConference().getFloorPlans()) {
-					if (floor.getImageURL().startsWith("https")) {
+					if (floor.getImageURL().startsWith("http")) {
 						floors.add(floor);
 					}
 				}
