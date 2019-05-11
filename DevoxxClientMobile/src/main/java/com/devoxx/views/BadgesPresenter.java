@@ -58,6 +58,7 @@ public class BadgesPresenter extends GluonPresenter<DevoxxApplication> {
 
     @FXML
     private TextField code;
+
     @FXML
     private Button btnAccess;
 
@@ -67,8 +68,13 @@ public class BadgesPresenter extends GluonPresenter<DevoxxApplication> {
     public void initialize() {
 
         code.setMaxWidth(160);
+        code.setOnMouseClicked(e -> {
+            content.requestFocus();
+            code.requestFocus();
+        });
+
         code.textProperty().addListener((final ObservableValue<? extends String> ov, final String oldValue, final String newValue) -> {
-                    if (code.getText().length() > 4) {
+            if (code.getText().length() > 4) {
                         String s = code.getText().substring(0, 4);
                         code.setText(s);
                     }
@@ -96,7 +102,7 @@ public class BadgesPresenter extends GluonPresenter<DevoxxApplication> {
     }
 
     @FXML
-    public void onEnter(ActionEvent ae){
+    private void onEnter(ActionEvent ae){
         showSponsor();
     }
 

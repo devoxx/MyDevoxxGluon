@@ -125,7 +125,11 @@ public class BadgePresenter extends GluonPresenter<DevoxxApplication> {
 //            }
 //        });
 //        timer.getKeyFrames().add(keyFrame);
-        
+
+        details.setOnMouseClicked(e -> {
+            badgeView.requestFocus();
+            details.requestFocus();
+        });
         details.textProperty().addListener((observable, oldValue, newValue) -> {
             textChanged = true;
             timer.playFromStart();
