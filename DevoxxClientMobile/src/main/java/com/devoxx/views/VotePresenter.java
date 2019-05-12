@@ -39,6 +39,7 @@ import com.devoxx.model.Session;
 import com.devoxx.model.Vote;
 import com.devoxx.service.Service;
 import com.devoxx.util.DevoxxBundle;
+import com.devoxx.util.ImageCache;
 import com.devoxx.views.helper.Util;
 import com.gluonhq.charm.glisten.afterburner.GluonPresenter;
 import com.gluonhq.charm.glisten.application.MobileApplication;
@@ -125,12 +126,16 @@ public class VotePresenter extends GluonPresenter<DevoxxApplication> {
                     if (Util.isEmptyString(item.getImageUrl())) {
                         imageView.setImage(null);
                     } else {
-                        imageView.setImage(new Image(item.getImageUrl()));
+                        Image image = ImageCache.get(item.getImageUrl(), () -> null,
+                                downloadedImage -> imageView.setImage(downloadedImage));
+                        imageView.setImage(image);
                     }
                     setGraphic(imageView);
                 }
             }
         });
+        
+        
     }
 
     public void showVote(Session session) {
