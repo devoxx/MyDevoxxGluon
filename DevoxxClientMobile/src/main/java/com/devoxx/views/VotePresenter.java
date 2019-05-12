@@ -87,6 +87,8 @@ public class VotePresenter extends GluonPresenter<DevoxxApplication> {
     private Session session;
     private TextArea feedback;
     private Dialog<String> feedbackDialog;
+    
+    private String complimentsToSelect;
 
     public void initialize() {
 
@@ -161,7 +163,8 @@ public class VotePresenter extends GluonPresenter<DevoxxApplication> {
         
         rating.setRating(0);
         comments.getSelectionModel().clearSelection();
-
+        complimentsToSelect = null;
+        
         GluonObservableObject<Vote> existingVote = service.retrieveExistingVote(session.getTalk().getId());
         existingVote.setOnSucceeded(event -> {
         	Vote remoteVote = existingVote.get();
@@ -173,6 +176,7 @@ public class VotePresenter extends GluonPresenter<DevoxxApplication> {
         	feedbackLabel.setText(remoteVote.getOther()); 
         	
         	// delivery is compliment text!
+        	complimentsToSelect = remoteVote.getDelivery();
         	selectComment(remoteVote.getDelivery());
         });
     }
@@ -182,7 +186,7 @@ public class VotePresenter extends GluonPresenter<DevoxxApplication> {
 	    	for (int i=0; i<comments.getItems().size(); i++) {
 	    		RatingData ratingData = comments.getItems().get(i);
 	    		if (delivery.equals(ratingData.getText())) {
-	    			comments.getSelectionModel().select(i);
+	    			comments.getSelectionModel().select(i);	    			
 	    			break;
 	    		}
 	    	}
@@ -225,36 +229,42 @@ public class VotePresenter extends GluonPresenter<DevoxxApplication> {
             case 5:
                 ratingLabel.setText(resources.getString("OTN.VOTE.EXCELLENT"));
                 GluonObservableList<RatingData> voteText = service.retrieveVoteTexts(5);
-                voteText.setOnSucceeded(event -> {compliment.setText(resources.getString("OTN.VOTE.COMPLIMENT")); /*set also delivery if sent */});
+                voteText.setOnSucceeded(event -> {compliment.setText(resources.getString("OTN.VOTE.COMPLIMENT")); selectComment(complimentsToSelect);});
                 comments.setItems(voteText);
+                comments.setVisible(true);
                 break;
             case 4:
                 ratingLabel.setText(resources.getString("OTN.VOTE.VERY.GOOD"));
                 voteText = service.retrieveVoteTexts(4);
-                voteText.setOnSucceeded(event -> compliment.setText(resources.getString("OTN.VOTE.COMPLIMENT")));
+                voteText.setOnSucceeded(event -> {compliment.setText(resources.getString("OTN.VOTE.COMPLIMENT")); selectComment(complimentsToSelect);});
                 comments.setItems(voteText);
+                comments.setVisible(true);
                 break;
             case 3:
                 ratingLabel.setText(resources.getString("OTN.VOTE.GOOD"));
                 voteText = service.retrieveVoteTexts(3);
-                voteText.setOnSucceeded(event -> compliment.setText(resources.getString("OTN.VOTE.COMPLIMENT")));
+                voteText.setOnSucceeded(event -> {compliment.setText(resources.getString("OTN.VOTE.COMPLIMENT")); selectComment(complimentsToSelect);});
                 comments.setItems(voteText);
+                comments.setVisible(true);
                 break;
             case 2:
                 ratingLabel.setText(resources.getString("OTN.VOTE.FAIR"));
                 voteText = service.retrieveVoteTexts(2);
-                voteText.setOnSucceeded(event -> compliment.setText(resources.getString("OTN.VOTE.IMPROVEMENT")));
+                voteText.setOnSucceeded(event -> {compliment.setText(resources.getString("OTN.VOTE.IMPROVEMENT")); selectComment(complimentsToSelect);});
                 comments.setItems(voteText);
+                comments.setVisible(true);
                 break;
             case 1:
                 ratingLabel.setText(resources.getString("OTN.VOTE.POOR"));
                 voteText = service.retrieveVoteTexts(1);
-                voteText.setOnSucceeded(event -> compliment.setText(resources.getString("OTN.VOTE.IMPROVEMENT")));
+                voteText.setOnSucceeded(event -> {compliment.setText(resources.getString("OTN.VOTE.IMPROVEMENT")); selectComment(complimentsToSelect);});
                 comments.setItems(voteText);
+                comments.setVisible(true);
                 break;
             case 0:
             	ratingLabel.setText("Give your vote");
             	comments.getSelectionModel().clearSelection();
+                comments.setVisible(false);
             	compliment.setText("");
             	break;
         }
