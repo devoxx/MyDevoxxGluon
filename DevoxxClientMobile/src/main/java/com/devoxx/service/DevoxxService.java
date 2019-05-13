@@ -74,6 +74,7 @@ import com.devoxx.model.SessionType;
 import com.devoxx.model.Speaker;
 import com.devoxx.model.Sponsor;
 import com.devoxx.model.SponsorBadge;
+import com.devoxx.model.Tag;
 import com.devoxx.model.TeamMember;
 import com.devoxx.model.Track;
 import com.devoxx.model.Vote;
@@ -183,6 +184,7 @@ public class DevoxxService implements Service {
 	private final AtomicBoolean retrievingSpeakers = new AtomicBoolean(false);
 
 	private ReadOnlyListWrapper<Track> tracks = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
+	private ReadOnlyListWrapper<Tag> tags = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
 	private ReadOnlyListWrapper<SessionType> sessionTypes = new ReadOnlyListWrapper<>(
 			FXCollections.observableArrayList());
 	private ReadOnlyListWrapper<Floor> exhibitionMaps = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
@@ -258,6 +260,7 @@ public class DevoxxService implements Service {
 				retrieveSessionsInternal();
 				retrieveSpeakersInternal();
 				retrieveTracksInternal();
+				retrieveTagsInternal();
 				retrieveSessionTypesInternal();
 				retrieveExhibitionMapsInternal();
 
@@ -628,6 +631,11 @@ public class DevoxxService implements Service {
 	public ReadOnlyListProperty<Track> retrieveTracks() {
 		return tracks.getReadOnlyProperty();
 	}
+	
+	@Override
+	public ReadOnlyListProperty<Tag> retrieveTags() {
+		return tags.getReadOnlyProperty();
+	}
 
 	private void retrieveTracksInternal() {
 		if (getConference() != null && getConference().getTracks() != null) {
@@ -635,6 +643,12 @@ public class DevoxxService implements Service {
 		}
 	}
 
+	private void retrieveTagsInternal() {
+		if (getConference() != null && getConference().getTags() != null) {
+			tags.setAll(getConference().getTags());
+		}
+	}
+	
 	@Override
 	public ReadOnlyListProperty<SessionType> retrieveSessionTypes() {
 		return sessionTypes.getReadOnlyProperty();

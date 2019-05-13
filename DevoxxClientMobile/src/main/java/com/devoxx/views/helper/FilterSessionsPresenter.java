@@ -30,6 +30,7 @@ import com.devoxx.filter.TimePeriod;
 import com.devoxx.model.Conference;
 import com.devoxx.model.Session;
 import com.devoxx.model.SessionType;
+import com.devoxx.model.Tag;
 import com.devoxx.model.Track;
 import com.devoxx.service.Service;
 import com.devoxx.util.DevoxxBundle;
@@ -78,6 +79,8 @@ public class FilterSessionsPresenter extends GluonPresenter<DevoxxApplication> {
 
     @FXML private VBox trackFilter;
 
+    @FXML private VBox tagFilter;
+
     @FXML private VBox typeFilter;
 
     @FXML private VBox timePeriodFilter;
@@ -85,6 +88,7 @@ public class FilterSessionsPresenter extends GluonPresenter<DevoxxApplication> {
     @FXML private TabPane tabPane;
     @FXML private Tab tabDay;
     @FXML private Tab tabTrack;
+    @FXML private Tab tabTags;
     @FXML private Tab tabType;
     @FXML private Tab tabTimePeriod;
 
@@ -108,6 +112,7 @@ public class FilterSessionsPresenter extends GluonPresenter<DevoxxApplication> {
 
         tabDay.setText(DevoxxBundle.getString("OTN.FILTER.TABDAY"));
         tabTrack.setText(DevoxxBundle.getString("OTN.FILTER.TABTRACK"));
+        tabTags.setText("Tags");
         tabType.setText(DevoxxBundle.getString("OTN.FILTER.TABTYPE"));
         tabTimePeriod.setText(DevoxxBundle.getString("OTN.FILTER.TABTIMEPERIOD"));
 
@@ -115,22 +120,46 @@ public class FilterSessionsPresenter extends GluonPresenter<DevoxxApplication> {
         for (Track track : tracks) {
             addTrackCheckBox(track);
         }
+        
         tracks.addListener((ListChangeListener<Track>) c -> {
+        	while (c.next()) {
+        		for (Track track : c.getRemoved()) {
+        			for (Iterator<Node> iterator = trackFilter.getChildren().iterator(); iterator.hasNext();) {
+        				Node node = iterator.next();
+        				if (((Track) node.getUserData()).getId().equals(track.getId())) {
+        					iterator.remove();
+        				}
+        			}
+        		}
+        		for (Track track : c.getAddedSubList()) {
+        			addTrackCheckBox(track);
+        		}
+        		updateIsFilterApplied();
+        	}
+        });
+        
+        ObservableList<Tag> tags = service.retrieveTags();
+        for (Tag tag : tags) {
+        	addTagCheckBox(tag);
+        }
+        
+        tags.addListener((ListChangeListener<Tag>) c -> {
             while (c.next()) {
-                for (Track track : c.getRemoved()) {
-                    for (Iterator<Node> iterator = trackFilter.getChildren().iterator(); iterator.hasNext();) {
+                for (Tag tag : c.getRemoved()) {
+                    for (Iterator<Node> iterator = tagFilter.getChildren().iterator(); iterator.hasNext();) {
                         Node node = iterator.next();
-                        if (((Track) node.getUserData()).getId().equals(track.getId())) {
+                        if (((Tag) node.getUserData()).getValue().equals(tag.getValue())) {
                             iterator.remove();
                         }
                     }
                 }
-                for (Track track : c.getAddedSubList()) {
-                    addTrackCheckBox(track);
+                for (Tag tag : c.getAddedSubList()) {
+                    addTagCheckBox(tag);
                 }
                 updateIsFilterApplied();
             }
-        });
+        });        
+        
 
         ObservableList<SessionType> sessionTypes = service.retrieveSessionTypes();
         for (SessionType sessionType : sessionTypes) {
@@ -298,6 +327,13 @@ public class FilterSessionsPresenter extends GluonPresenter<DevoxxApplication> {
         cbTrack.setOnAction(this::addToFilter);
         trackFilter.getChildren().add(cbTrack);
     }
+    
+    private void addTagCheckBox(Tag tag) {
+        CheckBox cbTag = new CheckBox(tag.getValue());
+        cbTag.setUserData(tag);
+        cbTag.setOnAction(this::addToFilter);
+        tagFilter.getChildren().add(cbTag);
+    }    
 
     private void addSessionTypeCheckBox(SessionType sessionType) {
         CheckBox cbSessionType = new CheckBox(sessionType.getName());
@@ -337,6 +373,10 @@ public class FilterSessionsPresenter extends GluonPresenter<DevoxxApplication> {
             ((CheckBox) node).setSelected(false);
         }
 
+        for (Node node : tagFilter.getChildren()) {
+            ((CheckBox) node).setSelected(false);
+        }
+        
         for (Node node : typeFilter.getChildren()) {
             ((CheckBox) node).setSelected(false);
         }
@@ -371,11 +411,28 @@ public class FilterSessionsPresenter extends GluonPresenter<DevoxxApplication> {
         return false;
     }
 
+    private boolean checkTag(Session session) {
+        if (session.getTalk() == null || session.getTalk().getTags() == null || session.getTalk().getTags().isEmpty()) {
+            return false;
+        }
+
+        for (Node node : tagFilter.getChildren()) {
+        	Tag selectedTag = (Tag)node.getUserData();        	
+            if (((CheckBox) node).isSelected() && session.getTalk().getTags().contains(selectedTag)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     private boolean considerTrackFilter() {
         return considerAnyCheckBoxSelected(trackFilter);
     }
 
+    private boolean considerTagFilter() {
+        return considerAnyCheckBoxSelected(tagFilter);
+    }
   
     private boolean checkType(Session session) {
         if (session.getTalk() == null || session.getTalk().getTalkType() == null) {
@@ -407,6 +464,7 @@ public class FilterSessionsPresenter extends GluonPresenter<DevoxxApplication> {
                 session != null &&
                 (!considerDayFilter() || checkDay(session)) &&
                 (!considerTrackFilter() || checkTrack(session)) &&
+                (!considerTagFilter() || checkTag(session)) &&
                 (!considerTypeFilter() || checkType(session)) &&
                 checkPeriod(session)
         );

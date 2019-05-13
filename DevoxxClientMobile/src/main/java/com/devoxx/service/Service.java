@@ -43,6 +43,7 @@ import com.devoxx.model.SessionType;
 import com.devoxx.model.Speaker;
 import com.devoxx.model.Sponsor;
 import com.devoxx.model.SponsorBadge;
+import com.devoxx.model.Tag;
 import com.devoxx.model.TeamMember;
 import com.devoxx.model.Track;
 import com.devoxx.model.Vote;
@@ -137,6 +138,14 @@ public interface Service {
      */
     ReadOnlyListProperty<Track> retrieveTracks();
 
+    /**
+     * Returns a list of tags for the conference
+     * 
+     * @return
+     */
+    ReadOnlyListProperty<Tag> retrieveTags();
+    
+    
     /**
      * Returns a list of tracks at the conference.
      *
@@ -343,4 +352,5 @@ public interface Service {
 	 * @return vote if existing
 	 */
 	GluonObservableObject<Vote> retrieveExistingVote(String talkId);
+
 }

@@ -47,6 +47,9 @@
             <Tab fx:id="tabTrack">
                 <VBox fx:id="trackFilter" styleClass="track-filter"/>
             </Tab>
+            <Tab fx:id="tabTags">
+                <VBox fx:id="tagFilter" styleClass="track-filter"/>
+            </Tab>
             <Tab fx:id="tabType">
                 <VBox fx:id="typeFilter" styleClass="type-filter"/>
             </Tab>
