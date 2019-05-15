@@ -128,7 +128,7 @@ public class DevoxxSettings {
     public static final String VERSION_NO = "version_3_0_0";
 
     private static final String WEARABLE_DAY_PATTERN  = "MMMM dd, uuuu";
-    private static final String TIME_PATTERN = "h:mma";
+    private static final String TIME_PATTERN = DevoxxBundle.getString("OTN.TIME.PATTERN");
     private static final String NEWS_PATTERN  = "EEEE, h:mma";
 
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL);

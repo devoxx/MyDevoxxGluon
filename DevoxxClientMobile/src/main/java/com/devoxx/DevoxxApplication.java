@@ -31,7 +31,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -48,7 +47,6 @@ import com.devoxx.model.SponsorBadge;
 import com.devoxx.service.DevoxxService;
 import com.devoxx.service.Service;
 import com.devoxx.util.DevoxxBundle;
-import com.devoxx.util.DevoxxCountry;
 import com.devoxx.util.DevoxxLogging;
 import com.devoxx.util.DevoxxNotifications;
 import com.devoxx.util.DevoxxSearch;
@@ -72,7 +70,6 @@ import com.gluonhq.charm.glisten.application.MobileApplication;
 import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
 import com.gluonhq.cloudlink.client.push.PushClient;
 import com.gluonhq.cloudlink.client.usage.UsageClient;
-import com.gluonhq.connect.ConnectStateEvent;
 import com.gluonhq.connect.GluonObservableList;
 import com.gluonhq.connect.GluonObservableObject;
 
@@ -110,6 +107,8 @@ public class DevoxxApplication extends MobileApplication {
     @Override
     public void init() {
 
+    	Locale.setDefault(Locale.FRANCE);
+    	
         // Config logging
         DevoxxLogging.config();
 

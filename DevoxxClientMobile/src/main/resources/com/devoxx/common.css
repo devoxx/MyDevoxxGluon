@@ -780,6 +780,8 @@
 .venue-detail .address {
     -fx-alignment: TOP_LEFT;
     -fx-padding: 0em 0em 1.5em 1.2em;
+    -fx-pref-height: 80em;
+	-fx-grid-lines-visible: true;    
 }
 
 .exhibitor-detail .booth {

@@ -13,7 +13,7 @@
             <!-- A transparent spacer to push down the rest of the content to show imageView-->
             <Region fx:id="imageSpacer" GridPane.rowIndex="0"/>
             <Label fx:id="name" styleClass="name" wrapText="true" GridPane.rowIndex="1"/>
-            <Label fx:id="address" styleClass="address" wrapText="true" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS"/>
+            <Label fx:id="address" styleClass="address" wrapText="false" GridPane.rowIndex="2"/>
             <MapView fx:id="mapView" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS"/>
         </GridPane>
     </StackPane>
