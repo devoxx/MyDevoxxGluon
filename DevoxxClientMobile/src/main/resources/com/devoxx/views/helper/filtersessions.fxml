@@ -38,30 +38,34 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ScrollPane?>
+
 <View fx:id="filterView" styleClass="sessions-filter" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.devoxx.views.helper.FilterSessionsPresenter">
-    <center>
-        <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
-            <Tab fx:id="tabDay">
-                <VBox fx:id="dayFilter" styleClass="day-filter"/>
-            </Tab>
-            <Tab fx:id="tabTrack">
-                <VBox fx:id="trackFilter" styleClass="track-filter"/>
-            </Tab>
-            <Tab fx:id="tabTags">
-                <VBox fx:id="tagFilter" styleClass="track-filter"/>
-            </Tab>
-            <Tab fx:id="tabType">
-                <VBox fx:id="typeFilter" styleClass="type-filter"/>
-            </Tab>
-            <Tab fx:id="tabTimePeriod">
-                <VBox fx:id="timePeriodFilter" styleClass="period-filter"/>
-            </Tab>
-        </TabPane>
-    </center>
-    <bottom>
-        <HBox fx:id="buttonContainer" styleClass="button-container">
-            <Button fx:id="resetButton" onAction="#reset" styleClass="flat, reset-button"/>
-            <Button fx:id="applyButton" onAction="#apply" styleClass="flat, apply-button"/>
-        </HBox>
-    </bottom>
+	    <center>
+	        <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+	            <Tab fx:id="tabDay">
+	                <VBox fx:id="dayFilter" styleClass="day-filter"/>
+	            </Tab>
+	            <Tab fx:id="tabTrack">
+	                <VBox fx:id="trackFilter" styleClass="track-filter"/>
+	            </Tab>
+	            <Tab fx:id="tabTags">
+					<ScrollPane prefHeight="250"> 
+	        	        <VBox fx:id="tagFilter" styleClass="track-filter"/>
+					</ScrollPane>    
+	            </Tab>
+	            <Tab fx:id="tabType">
+	                <VBox fx:id="typeFilter" styleClass="type-filter"/>
+	            </Tab>
+	            <Tab fx:id="tabTimePeriod">
+	                <VBox fx:id="timePeriodFilter" styleClass="period-filter"/>
+	            </Tab>
+	        </TabPane>
+	    </center>
+	    <bottom>
+	        <HBox fx:id="buttonContainer" styleClass="button-container">
+	            <Button fx:id="resetButton" onAction="#reset" styleClass="flat, reset-button"/>
+	            <Button fx:id="applyButton" onAction="#apply" styleClass="flat, apply-button"/>
+	        </HBox>
+	    </bottom>
 </View>

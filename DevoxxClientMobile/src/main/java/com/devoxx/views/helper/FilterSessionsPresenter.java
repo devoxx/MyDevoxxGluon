@@ -476,7 +476,7 @@ public class FilterSessionsPresenter extends GluonPresenter<DevoxxApplication> {
 
 
     private void updateIsFilterApplied() {
-        isFilterApplied.set(considerDayFilter() || considerTrackFilter() || considerTypeFilter()
+        isFilterApplied.set(considerDayFilter() || considerTrackFilter() || considerTagFilter() || considerTypeFilter()
                 || considerPeriodFilter());
     }
 
