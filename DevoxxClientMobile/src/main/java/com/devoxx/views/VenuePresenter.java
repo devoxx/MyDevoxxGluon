@@ -30,6 +30,7 @@ import com.devoxx.DevoxxView;
 import com.devoxx.model.Conference;
 import com.devoxx.model.Location;
 import com.devoxx.service.Service;
+import com.devoxx.util.JBcnBundle;
 import com.devoxx.views.helper.Util;
 import com.gluonhq.charm.glisten.afterburner.GluonPresenter;
 import com.gluonhq.charm.glisten.control.AppBar;
@@ -48,6 +49,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 
@@ -62,6 +64,9 @@ public class VenuePresenter extends GluonPresenter<DevoxxApplication> {
 
     @FXML
     private View venue;
+    
+    @FXML
+    private GridPane venueDetail;
 
     @FXML
     private MapView mapView;
@@ -115,7 +120,7 @@ public class VenuePresenter extends GluonPresenter<DevoxxApplication> {
         venue.setOnHiding(event -> {
             venue.getScene().widthProperty().removeListener(widthListener);
             venue.getScene().heightProperty().removeListener(heightListener);
-        });
+        });        
     }
 
     private void fetchLocationAndUpdateVenue(Conference conference) {
@@ -157,7 +162,7 @@ public class VenuePresenter extends GluonPresenter<DevoxxApplication> {
 
     private String getLocationAddress(Location location) {
         StringBuilder address = new StringBuilder();
-        if (location.getAddress1() != null && !location.getAddress2().equals("")) {
+        if (location.getAddress1() != null && !location.getAddress1().equals("")) {
             address.append(location.getAddress1());
         }
         if (location.getAddress2() != null && !location.getAddress2().equals("")) {
@@ -170,16 +175,16 @@ public class VenuePresenter extends GluonPresenter<DevoxxApplication> {
             if (!address.toString().equals("")) {
                 address.append("\n");
             }
-            address.append(location.getCity());
+            address.append(JBcnBundle.getCity(location.getCity()));
             if (location.getCountry() != null && !location.getCountry().equals("")) {
                 address.append(", ");
-                address.append(location.getCountry());
+                address.append(JBcnBundle.getCountry(location.getCountry()));
             }
         } else if (location.getCountry() != null && !location.getCountry().equals("")) {
             if (!address.toString().equals("")) {
                 address.append("\n");
             }
-            address.append(location.getCountry());
+            address.append(JBcnBundle.getCountry(location.getCountry()));
         }
         
         return address.toString();

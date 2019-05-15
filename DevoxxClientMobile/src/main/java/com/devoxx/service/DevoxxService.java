@@ -81,6 +81,7 @@ import com.devoxx.model.Vote;
 import com.devoxx.util.DevoxxBundle;
 import com.devoxx.util.DevoxxNotifications;
 import com.devoxx.util.DevoxxSettings;
+import com.devoxx.util.JBcnBundle;
 import com.devoxx.views.helper.Placeholder;
 import com.devoxx.views.helper.SessionVisuals.SessionListType;
 import com.devoxx.views.helper.Util;
@@ -706,7 +707,15 @@ public class DevoxxService implements Service {
 			}
 		};
 
-		task.setOnSucceeded(event -> exhibitionMaps.setAll(task.getValue()));
+		task.setOnSucceeded(event -> {
+			List<Floor> floors = task.getValue();
+			for (Floor floor : floors) {
+				// apply i18n to floor
+				String i18nFloorName = JBcnBundle.getFloorName(floor);
+				floor.setName(i18nFloorName);
+				exhibitionMaps.add(floor);
+			}
+		});
 
 		Thread retrieveExhibitionMapsThread = new Thread(task);
 		retrieveExhibitionMapsThread.setDaemon(true);

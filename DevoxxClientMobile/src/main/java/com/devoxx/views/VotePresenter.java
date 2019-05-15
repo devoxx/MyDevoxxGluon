@@ -262,7 +262,7 @@ public class VotePresenter extends GluonPresenter<DevoxxApplication> {
                 comments.setVisible(true);
                 break;
             case 0:
-            	ratingLabel.setText("Give your vote");
+            	ratingLabel.setText(resources.getString("OTN.VOTE.PROMPT"));
             	comments.getSelectionModel().clearSelection();
                 comments.setVisible(false);
             	compliment.setText("");

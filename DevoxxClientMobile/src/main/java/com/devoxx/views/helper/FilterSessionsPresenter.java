@@ -25,6 +25,16 @@
  */
 package com.devoxx.views.helper;
 
+import static com.devoxx.DevoxxApplication.POPUP_FILTER_SESSIONS_MENU;
+import static com.devoxx.views.helper.SessionTrack.fetchStyleClassForTrack;
+
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Iterator;
+import java.util.function.Predicate;
+
+import javax.inject.Inject;
+
 import com.devoxx.DevoxxApplication;
 import com.devoxx.filter.TimePeriod;
 import com.devoxx.model.Conference;
@@ -35,8 +45,10 @@ import com.devoxx.model.Track;
 import com.devoxx.service.Service;
 import com.devoxx.util.DevoxxBundle;
 import com.devoxx.util.DevoxxSettings;
+import com.devoxx.util.JBcnBundle;
 import com.gluonhq.charm.glisten.afterburner.GluonPresenter;
 import com.gluonhq.charm.glisten.application.MobileApplication;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -61,15 +73,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
-
-import javax.inject.Inject;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Iterator;
-import java.util.function.Predicate;
-
-import static com.devoxx.DevoxxApplication.POPUP_FILTER_SESSIONS_MENU;
-import static com.devoxx.views.helper.SessionTrack.fetchStyleClassForTrack;
 
 public class FilterSessionsPresenter extends GluonPresenter<DevoxxApplication> {
 
@@ -112,7 +115,7 @@ public class FilterSessionsPresenter extends GluonPresenter<DevoxxApplication> {
 
         tabDay.setText(DevoxxBundle.getString("OTN.FILTER.TABDAY"));
         tabTrack.setText(DevoxxBundle.getString("OTN.FILTER.TABTRACK"));
-        tabTags.setText("Tags");
+        tabTags.setText(DevoxxBundle.getString("OTN.FILTER.TABTAGS"));
         tabType.setText(DevoxxBundle.getString("OTN.FILTER.TABTYPE"));
         tabTimePeriod.setText(DevoxxBundle.getString("OTN.FILTER.TABTIMEPERIOD"));
 
@@ -319,7 +322,7 @@ public class FilterSessionsPresenter extends GluonPresenter<DevoxxApplication> {
     }
 
     private void addTrackCheckBox(Track track) {
-        CheckBox cbTrack = new CheckBox(track.getName());
+        CheckBox cbTrack = new CheckBox(JBcnBundle.getTrackName(track.getName()));
         Rectangle trackColor = new Rectangle(20, 20);
         trackColor.getStyleClass().add(fetchStyleClassForTrack(track.getName().toUpperCase()));
         cbTrack.setGraphic(trackColor);
@@ -336,7 +339,7 @@ public class FilterSessionsPresenter extends GluonPresenter<DevoxxApplication> {
     }    
 
     private void addSessionTypeCheckBox(SessionType sessionType) {
-        CheckBox cbSessionType = new CheckBox(sessionType.getName());
+        CheckBox cbSessionType = new CheckBox(JBcnBundle.getSessionType(sessionType));
         cbSessionType.setUserData(sessionType);
         cbSessionType.setOnAction(this::addToFilter);
         typeFilter.getChildren().add(cbSessionType);

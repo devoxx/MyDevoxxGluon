@@ -31,6 +31,7 @@ import com.devoxx.service.Service;
 import com.devoxx.util.DevoxxBundle;
 import com.devoxx.util.DevoxxNotifications;
 import com.devoxx.util.DevoxxSettings;
+import com.devoxx.util.JBcnBundle;
 import com.gluonhq.charm.down.Services;
 import com.gluonhq.charm.down.plugins.SettingsService;
 import com.gluonhq.charm.glisten.control.Dialog;
@@ -123,7 +124,7 @@ public class SessionVisuals {
         ZonedDateTime startDate = session.getStartDate();
         ZonedDateTime endDate = session.getEndDate();
         return DevoxxBundle.getString("OTN.VISUALS.FORMAT.MULTILINE",
-                session.getTalk().getTrack(),
+        		JBcnBundle.getTrackName(session.getTalk().getTrack()),
                 service.getConference().getConferenceDayIndex(startDate),
                 startDate.format(DevoxxSettings.TIME_FORMATTER),
                 endDate.format(DevoxxSettings.TIME_FORMATTER),
