@@ -107,8 +107,6 @@ public class DevoxxApplication extends MobileApplication {
     @Override
     public void init() {
 
-    	Locale.setDefault(Locale.FRANCE);
-    	
         // Config logging
         DevoxxLogging.config();
 
