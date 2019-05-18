@@ -64,7 +64,7 @@ public class Tag {
 		if (value == null) {
 			if (other.value != null)
 				return false;
-		} else if (!value.equals(other.value))
+		} else if (!value.equalsIgnoreCase(other.value))
 			return false;
 		return true;
 	}
