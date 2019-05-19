@@ -26,6 +26,7 @@
 package com.devoxx.util;
 
 import com.devoxx.model.Conference;
+import com.devoxx.model.RemoteConfiguration;
 import com.gluonhq.charm.down.Services;
 import com.gluonhq.charm.down.plugins.SettingsService;
 
@@ -58,8 +59,10 @@ public class DevoxxSettings {
     /**
      * boolean option to switch on/off voting
      * Default: false
+     * @deprecated  now retrieved through {@link RemoteConfiguration}
+     * 
      */
-    public final static boolean VOTING_TESTS = true;
+    // public final static boolean VOTING_TESTS = true;
 
     /**
      * Setting this option to true will allow to scan a random badge by pressing the scan FAB

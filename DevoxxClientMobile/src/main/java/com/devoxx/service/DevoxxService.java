@@ -68,6 +68,7 @@ import com.devoxx.model.Location;
 import com.devoxx.model.Note;
 import com.devoxx.model.Rating;
 import com.devoxx.model.RatingData;
+import com.devoxx.model.RemoteConfiguration;
 import com.devoxx.model.Session;
 import com.devoxx.model.SessionId;
 import com.devoxx.model.SessionType;
@@ -199,6 +200,8 @@ public class DevoxxService implements Service {
 	private ListChangeListener<Session> internalFavoredSessionsListener = null;
 	private ObservableList<Session> internalFavoredSessions = FXCollections.observableArrayList();
 	private ObservableList<Favorite> favorites = FXCollections.observableArrayList();
+	
+	private ReadOnlyObjectWrapper<RemoteConfiguration> remoteConfiguration = new ReadOnlyObjectWrapper<>(new RemoteConfiguration());
 
 	public DevoxxService() {
 
@@ -258,6 +261,7 @@ public class DevoxxService implements Service {
 					pushClient.subscribe(nv.getId());
 				}
 
+				retrieveRemoteConfigurationInternal();
 				retrieveSessionsInternal();
 				retrieveSpeakersInternal();
 				retrieveTracksInternal();
@@ -533,6 +537,14 @@ public class DevoxxService implements Service {
 		});
 
 		sessions.set(sessionsList);
+	}
+	
+	private void retrieveRemoteConfigurationInternal() {
+		RemoteFunctionObject fnRemoteConfiguration = RemoteFunctionBuilder.create("config").object();
+		GluonObservableObject<RemoteConfiguration> remoteConfigCall = fnRemoteConfiguration.call(RemoteConfiguration.class);
+		remoteConfigCall.setOnSucceeded(event -> {
+			remoteConfiguration.set(remoteConfigCall.get());
+		});
 	}
 
 	@Override
@@ -1051,6 +1063,12 @@ public class DevoxxService implements Service {
 				.param("name", feedback.getName()).param("email", feedback.getEmail())
 				.param("message", feedback.getMessage()).object();
 		fnSendFeedback.call(String.class);
+	}
+	
+	
+	@Override
+	public RemoteConfiguration getRemoteConfiguration() {
+		return remoteConfiguration.getReadOnlyProperty().get();
 	}
 
 	private ObservableList<Note> internalRetrieveNotes() {

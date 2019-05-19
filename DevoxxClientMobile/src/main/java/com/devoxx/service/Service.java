@@ -38,6 +38,7 @@ import com.devoxx.model.Floor;
 import com.devoxx.model.Location;
 import com.devoxx.model.Note;
 import com.devoxx.model.RatingData;
+import com.devoxx.model.RemoteConfiguration;
 import com.devoxx.model.Session;
 import com.devoxx.model.SessionType;
 import com.devoxx.model.Speaker;
@@ -353,4 +354,11 @@ public interface Service {
 	 */
 	GluonObservableObject<Vote> retrieveExistingVote(String talkId);
 
+	
+	/**
+	 * Retrieve remote configuration
+	 * @return
+	 */
+	RemoteConfiguration getRemoteConfiguration();
+	
 }

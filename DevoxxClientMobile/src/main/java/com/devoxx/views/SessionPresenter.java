@@ -401,8 +401,8 @@ public class SessionPresenter extends GluonPresenter<DevoxxApplication> {
      * 2. The session has started and it has not passed 12 hours since the conference has ended.
      */
     private boolean isVotingPossible(Session session) {
-        ZonedDateTime now = ZonedDateTime.now(service.getConference().getConferenceZoneId());
-        return DevoxxSettings.VOTING_TESTS ||
+        ZonedDateTime now = ZonedDateTime.now(service.getConference().getConferenceZoneId());        
+        return service.getRemoteConfiguration().isTestVotingEnabled() ||
                 now.isAfter(session.getStartDate()) &&
                         now.isBefore(service.getConference().getEndDateTime().plusHours(48));
     }
