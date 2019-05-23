@@ -39,7 +39,7 @@ import com.gluonhq.charm.down.Services;
 import com.gluonhq.charm.down.plugins.SettingsService;
 
 public class DevoxxSettings {
-    public static final String BUILD_NUMBER = "46";
+    public static final String BUILD_NUMBER = "47";
 
     /**
      * boolean option to switch on/off automatic authentication by using a self generated random UUID
