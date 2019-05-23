@@ -33,7 +33,7 @@ import javafx.beans.property.StringProperty;
 
 public class Vote {
 
-	public static final String EMPTY_DELIVERY = "no_one";
+	public static final String EMPTY_DELIVERY = "none";
 	
     private String uuid;
     private String talkId;
