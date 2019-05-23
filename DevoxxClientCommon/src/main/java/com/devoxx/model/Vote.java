@@ -33,10 +33,16 @@ import javafx.beans.property.StringProperty;
 
 public class Vote {
 
+	public static final String EMPTY_DELIVERY = "no_one";
+	
     private String uuid;
     private String talkId;
 
-    @SuppressWarnings("unused")
+    private final IntegerProperty value = new SimpleIntegerProperty(0);
+    private final StringProperty delivery = new SimpleStringProperty();
+    private final StringProperty content = new SimpleStringProperty();
+    private final StringProperty other = new SimpleStringProperty();
+
     public Vote() {
     }
 
@@ -61,30 +67,26 @@ public class Vote {
         return talkId;
     }
 
-    private final IntegerProperty value = new SimpleIntegerProperty(0);
     public void setValue(int value) { this.value.set(value); }
     public int getValue() {
         return value.get();
     }
     public IntegerProperty valueProperty() { return value; }
 
-    private final StringProperty delivery = new SimpleStringProperty();
     public String getDelivery() {
-        return delivery.get();
+        return delivery.get() != null && delivery.get().trim().length() > 0 ? delivery.get() : EMPTY_DELIVERY;
     }
     public void setDelivery(String delivery) { this.delivery.set(delivery); }
     public StringProperty deliveryProperty() { return delivery; }
 
-    private final StringProperty content = new SimpleStringProperty();
     public String getContent() {
-        return content.get();
+        return content.get() != null ? content.get() : "";
     }
     public void setContent(String content) { this.content.set(content); }
     public StringProperty contentProperty() { return content; }
 
-    private final StringProperty other = new SimpleStringProperty();
     public String getOther() {
-        return other.get();
+        return other.get() != null? other.get() : "";
     }
     public void setOther(String other) { this.other.set(other); }
     public StringProperty otherProperty() { return other; }

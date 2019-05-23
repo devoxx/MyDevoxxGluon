@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016, Gluon Software
+ * Copyright (c) 2019, Gluon Software
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -25,62 +25,24 @@
  */
 package com.devoxx.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+public class Translation {
 
-public class RatingData {
-
+	private String language;
 	private String text;
-	private String imageUrl;
-	private List<Translation> translations = new ArrayList<>();
-
-	public RatingData() {
+	
+	public String getLanguage() {
+		return language;
 	}
-
-	public RatingData(String text, String imageUrl) {
-		this.text = text;
-		this.imageUrl = imageUrl;
+	public void setLanguage(String language) {
+		this.language = language;
 	}
-
 	public String getText() {
 		return text;
 	}
-
 	public void setText(String text) {
 		this.text = text;
 	}
-
-	public String getImageUrl() {
-		return imageUrl;
-	}
-
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
-	}
-
-	public List<Translation> getTranslations() {
-		return translations;
-	}
-
-	public void setTranslations(List<Translation> translations) {
-		this.translations = translations;
-	}
-
-	public String getTextForLocale(Locale locale) {
-		String text = this.text;
-		try {
-			String language = locale.getLanguage();
-			for (Translation translation : translations) {
-				if (translation.getLanguage().equalsIgnoreCase(language)) {
-					text = translation.getText();
-					break;
-				}
-			}
-		} catch (Exception e) {}
-		return text;
-	}
-
+	
+	
+	
 }

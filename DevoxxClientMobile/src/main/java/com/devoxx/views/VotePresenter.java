@@ -27,6 +27,7 @@ package com.devoxx.views;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 import java.util.ResourceBundle;
 
@@ -121,10 +122,10 @@ public class VotePresenter extends GluonPresenter<DevoxxApplication> {
             protected void updateItem(RatingData item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
-                    setText("");
+                    setText(Vote.EMPTY_DELIVERY);
                     setGraphic(null);
                 } else {
-                    setText(item.getText());
+                    setText(item.getTextForLocale(Locale.getDefault()));
                     if (Util.isEmptyString(item.getImageUrl())) {
                         imageView.setImage(null);
                     } else {
@@ -232,6 +233,7 @@ public class VotePresenter extends GluonPresenter<DevoxxApplication> {
                 voteText.setOnSucceeded(event -> {compliment.setText(resources.getString("OTN.VOTE.COMPLIMENT")); selectComment(complimentsToSelect);});
                 comments.setItems(voteText);
                 comments.setVisible(true);
+                compliment.setVisible(true);
                 break;
             case 4:
                 ratingLabel.setText(resources.getString("OTN.VOTE.VERY.GOOD"));
@@ -239,6 +241,7 @@ public class VotePresenter extends GluonPresenter<DevoxxApplication> {
                 voteText.setOnSucceeded(event -> {compliment.setText(resources.getString("OTN.VOTE.COMPLIMENT")); selectComment(complimentsToSelect);});
                 comments.setItems(voteText);
                 comments.setVisible(true);
+                compliment.setVisible(true);
                 break;
             case 3:
                 ratingLabel.setText(resources.getString("OTN.VOTE.GOOD"));
@@ -246,6 +249,7 @@ public class VotePresenter extends GluonPresenter<DevoxxApplication> {
                 voteText.setOnSucceeded(event -> {compliment.setText(resources.getString("OTN.VOTE.COMPLIMENT")); selectComment(complimentsToSelect);});
                 comments.setItems(voteText);
                 comments.setVisible(true);
+                compliment.setVisible(true);
                 break;
             case 2:
                 ratingLabel.setText(resources.getString("OTN.VOTE.FAIR"));
@@ -253,6 +257,7 @@ public class VotePresenter extends GluonPresenter<DevoxxApplication> {
                 voteText.setOnSucceeded(event -> {compliment.setText(resources.getString("OTN.VOTE.IMPROVEMENT")); selectComment(complimentsToSelect);});
                 comments.setItems(voteText);
                 comments.setVisible(true);
+                compliment.setVisible(true);
                 break;
             case 1:
                 ratingLabel.setText(resources.getString("OTN.VOTE.POOR"));
@@ -260,13 +265,15 @@ public class VotePresenter extends GluonPresenter<DevoxxApplication> {
                 voteText.setOnSucceeded(event -> {compliment.setText(resources.getString("OTN.VOTE.IMPROVEMENT")); selectComment(complimentsToSelect);});
                 comments.setItems(voteText);
                 comments.setVisible(true);
+                compliment.setVisible(true);
                 break;
-            case 0:
+            default:
             	ratingLabel.setText(resources.getString("OTN.VOTE.PROMPT"));
             	comments.getSelectionModel().clearSelection();
                 comments.setVisible(false);
             	compliment.setText("");
-            	break;
+                compliment.setVisible(false);
+            	break;            	
         }
     }
 
