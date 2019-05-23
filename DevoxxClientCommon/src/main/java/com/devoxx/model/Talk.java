@@ -38,6 +38,7 @@ public class Talk {
     private String audienceLevel;
     private String summary;
     private String summaryAsHtml;
+    private String requirements;
     private List<Tag> tags;
     private List<TalkSpeaker> speakers;
 
@@ -91,6 +92,8 @@ public class Talk {
     public String getSummaryAsHtml() {
         return summaryAsHtml;
     }
+
+    public String getRequirements() { return requirements; }
 
     public List<Tag> getTags() {
         return tags;
@@ -158,6 +161,14 @@ public class Talk {
      */
     public void setSummaryAsHtml(String summaryAsHtml) {
         this.summaryAsHtml = summaryAsHtml;
+    }
+
+    /**
+     *
+     * @param requirements url link
+     */
+    public void setRequirements(String requirements) {
+        this.requirements = requirements;
     }
 
     /**

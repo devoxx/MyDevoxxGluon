@@ -194,7 +194,13 @@ public class Session extends Searchable {
         if (talk != null) return talk.getSummary();
         return null;
     }
-    
+
+    public String getRequirements()
+    {
+        if (talk !=null) return talk.getRequirements();
+        return null;
+    }
+
     public String getLocation() {
         return getRoomName();
     }
@@ -221,5 +227,5 @@ public class Session extends Searchable {
         return  (talk != null && talk.equals(otherTalk)) ||
                 (aBreak != null && aBreak.equals(((Session) obj).aBreak));
     }
-    
+
 }

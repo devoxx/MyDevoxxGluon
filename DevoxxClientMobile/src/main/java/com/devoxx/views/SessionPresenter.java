@@ -28,28 +28,16 @@ package com.devoxx.views;
 import com.devoxx.DevoxxApplication;
 import com.devoxx.DevoxxView;
 import com.devoxx.control.DataLabel;
-import com.devoxx.model.Link;
-import com.devoxx.model.Session;
-import com.devoxx.model.Speaker;
-import com.devoxx.model.Tag;
-import com.devoxx.model.TalkSpeaker;
+import com.devoxx.model.*;
 import com.devoxx.service.Service;
 import com.devoxx.util.DevoxxBundle;
 import com.devoxx.util.DevoxxSettings;
 import com.devoxx.views.dialog.VotePane;
-import com.devoxx.views.helper.LoginPrompter;
-import com.devoxx.views.helper.Placeholder;
-import com.devoxx.views.helper.SessionNotesEditor;
-import com.devoxx.views.helper.SessionVisuals;
-import com.devoxx.views.helper.Util;
+import com.devoxx.views.helper.*;
 import com.gluonhq.charm.down.Services;
 import com.gluonhq.charm.down.plugins.BrowserService;
 import com.gluonhq.charm.glisten.afterburner.GluonPresenter;
-import com.gluonhq.charm.glisten.control.AppBar;
-import com.gluonhq.charm.glisten.control.AvatarPane;
-import com.gluonhq.charm.glisten.control.BottomNavigation;
-import com.gluonhq.charm.glisten.control.BottomNavigationButton;
-import com.gluonhq.charm.glisten.control.Toast;
+import com.gluonhq.charm.glisten.control.*;
 import com.gluonhq.charm.glisten.mvc.View;
 import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
 import javafx.beans.property.ReadOnlyListProperty;
@@ -58,23 +46,19 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Toggle;
+import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
-
-import static com.devoxx.util.DevoxxSettings.TWITTER_URL;
-
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
 import java.util.List;
+
+import static com.devoxx.util.DevoxxSettings.TWITTER_URL;
 
 public class SessionPresenter extends GluonPresenter<DevoxxApplication> {
 
@@ -156,6 +140,10 @@ public class SessionPresenter extends GluonPresenter<DevoxxApplication> {
             sessionSummary.setWrapText(true);
             sessionSummary.getStyleClass().add("session-summary");
 
+            Hyperlink hyperlink = new Hyperlink(session.getRequirements());
+            hyperlink.setWrapText(true);
+            hyperlink.setOnMousePressed(me -> Util.launchExternalBrowser(() -> session.getRequirements()));
+
             final FlowPane flowPane = new FlowPane();
             flowPane.getStyleClass().add("tag-container");
             final List<Tag> tags = session.getTalk().getTags();
@@ -167,7 +155,7 @@ public class SessionPresenter extends GluonPresenter<DevoxxApplication> {
             }
 
             final ScrollPane scrollPane = createScrollPane(sessionSummary);
-            final VBox vBox = new VBox(scrollPane, flowPane);
+            final VBox vBox = new VBox(scrollPane, hyperlink, flowPane);
             VBox.setVgrow(scrollPane, Priority.ALWAYS);
             sessionView.setCenter(vBox);
         });
