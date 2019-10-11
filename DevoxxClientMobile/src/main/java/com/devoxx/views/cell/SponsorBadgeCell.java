@@ -26,29 +26,19 @@
 package com.devoxx.views.cell;
 
 import com.devoxx.model.SponsorBadge;
-import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
-import javafx.scene.Node;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
+import javafx.css.PseudoClass;
 
 public class SponsorBadgeCell extends BadgeCell<SponsorBadge> {
 
-    private final AnchorPane anchorPane;
+    private final PseudoClass PSEUDO_CLASS_SYNC = PseudoClass.getPseudoClass("sync");
     
     public SponsorBadgeCell() {
-        final Node graphic = MaterialDesignIcon.SYNC_PROBLEM.graphic();
-        anchorPane = new AnchorPane(graphic);
-        anchorPane.getStyleClass().add("sync-box");
-        AnchorPane.setTopAnchor(graphic, 2.0);
-        AnchorPane.setRightAnchor(graphic, 2.0);
-        final StackPane secondaryGraphic = new StackPane(anchorPane, MaterialDesignIcon.CHEVRON_RIGHT.graphic());
-        tile.setSecondaryGraphic(secondaryGraphic);
         getStyleClass().add("sponsor-badge-cell");
     }
 
     @Override
     public void updateItem(SponsorBadge badge, boolean empty) {
         super.updateItem(badge, empty);
-        anchorPane.setVisible(!badge.isSync());
+        pseudoClassStateChanged(PSEUDO_CLASS_SYNC, !badge.isSync());
     }
 }

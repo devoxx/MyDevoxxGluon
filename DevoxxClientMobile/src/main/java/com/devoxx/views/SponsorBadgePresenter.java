@@ -37,6 +37,7 @@ import com.devoxx.util.DevoxxSettings;
 import com.devoxx.views.cell.SponsorBadgeCell;
 import com.devoxx.views.helper.Placeholder;
 import com.devoxx.views.helper.Util;
+import com.gluonhq.charm.down.Platform;
 import com.gluonhq.charm.down.Services;
 import com.gluonhq.charm.down.plugins.BarcodeScanService;
 import com.gluonhq.charm.down.plugins.ConnectivityService;
@@ -177,20 +178,33 @@ public class SponsorBadgePresenter extends GluonPresenter<DevoxxApplication> {
     }
 
     private void syncSponsorBadges() {
-        Services.get(ConnectivityService.class).ifPresent(connectivityService -> {
-            final Toast toast = new Toast();
-            if (connectivityService.isConnected()) {
-                toast.setMessage(DevoxxBundle.getString("OTN.SPONSOR.BADGES.SYNC"));
-                toast.show();
-                for (SponsorBadge sponsorBadge : service.retrieveSponsorBadges(sponsor)) {
-                    if (!sponsorBadge.isSync()) {
-                        service.saveSponsorBadge(sponsorBadge);
-                    }
+        if (Platform.isDesktop()) {
+            sync();
+        } else {
+            Services.get(ConnectivityService.class).ifPresent(connectivityService -> {
+                if (connectivityService.isConnected()) {
+                    sync();
+                } else {
+                    showSyncFailureMessage();
                 }
-            } else {
-                toast.setMessage(DevoxxBundle.getString("OTN.VISUALS.NO_INTERNET"));
-                toast.show();
+            });
+        }
+    }
+
+    private void showSyncFailureMessage() {
+        final Toast toast = new Toast();
+        toast.setMessage(DevoxxBundle.getString("OTN.VISUALS.NO_INTERNET"));
+        toast.show();
+    }
+
+    private void sync() {
+        final Toast toast = new Toast();
+        toast.setMessage(DevoxxBundle.getString("OTN.SPONSOR.BADGES.SYNC"));
+        toast.show();
+        for (SponsorBadge sponsorBadge : service.retrieveSponsorBadges(sponsor)) {
+            if (!sponsorBadge.isSync()) {
+                service.saveSponsorBadge(sponsorBadge);
             }
-        });
+        }
     }
 }

@@ -1473,3 +1473,7 @@
 .sponsor-badge-cell .sync-box > .icon-text {
     -fx-font-size: 0.80em;
 }
+
+.sponsor-badge-cell:sync {
+    -fx-background-color: derive(#ffd9e0, 40%);
+}
