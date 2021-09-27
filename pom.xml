@@ -19,11 +19,11 @@
         <maven.compiler.release>11</maven.compiler.release>
         <gluon.mobile.version>6.0.6</gluon.mobile.version>
         <gluon.afterburner.version>2.0.5</gluon.afterburner.version>
-        <gluon.maps.version>2.0.0-ea+4</gluon.maps.version>
-        <attach.version>4.0.11</attach.version>
-        <javafx.version>17-ea+7</javafx.version>
-        <javafx-maven-plugin-version>0.0.6</javafx-maven-plugin-version>
-        <client-maven-plugin-version>0.1.39</client-maven-plugin-version>
+        <gluon.maps.version>2.0.0-ea+5</gluon.maps.version>
+        <attach.version>4.0.13</attach.version>
+        <javafx.version>17.0.0.1</javafx.version>
+        <javafx-maven-plugin-version>0.0.7</javafx-maven-plugin-version>
+        <gluonfx-maven-plugin-version>1.0.6</gluonfx-maven-plugin-version>
     </properties>
     
     <repositories>
