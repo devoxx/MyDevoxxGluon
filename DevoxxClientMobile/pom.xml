@@ -198,6 +198,12 @@
                 <clientTarget>ios</clientTarget>
             </properties>
         </profile>
+        <profile>
+            <id>android</id>
+            <properties>
+                <clientTarget>android</clientTarget>
+            </properties>
+        </profile>
     </profiles>
     <build>
         <plugins>
@@ -311,6 +317,11 @@
                     </reflectionList>
 <!--                    <verbose>true</verbose>-->
                     <mainClass>${mainClassName}</mainClass>
+                    <releaseConfiguration>
+                        <appLabel>Devoxx</appLabel>
+                        <versionCode>409</versionCode>
+                        <versionName>3.6.3</versionName>
+                    </releaseConfiguration>
                 </configuration>
             </plugin>
 
