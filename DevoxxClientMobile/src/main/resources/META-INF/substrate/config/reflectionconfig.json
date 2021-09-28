@@ -24,6 +24,16 @@
   }
 ,
   {
+    "name":"com.gluonhq.impl.charm.glisten.connect.view.GlistenAuthenticationView",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.gluonhq.impl.cloudlink.client.user.LoginMethodImpl",
+    "allPublicMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  }
+,
+  {
     "name":"com.gluonhq.impl.cloudlink.client.usage.Device",
     "methods":[
       {"name":"<init>","parameterTypes":[] }
