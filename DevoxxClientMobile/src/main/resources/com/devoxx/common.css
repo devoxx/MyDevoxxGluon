@@ -828,7 +828,7 @@
 
 .search-list-view .avatar,
 .speakers-list-view .avatar {
-    -charm-radius: 2.916667em; 
+    -charm-radius: 1.5em;
 }
 
 .speaker-card .avatar {

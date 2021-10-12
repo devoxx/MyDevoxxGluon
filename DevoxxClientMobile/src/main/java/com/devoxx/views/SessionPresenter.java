@@ -259,7 +259,13 @@ public class SessionPresenter extends GluonPresenter<DevoxxApplication> {
     }
 
     private AvatarPane<Speaker> createSpeakerAvatarPane(ObservableList<Speaker> speakers) {
-        AvatarPane<Speaker> avatarPane = new AvatarPane<>(speakers);
+        AvatarPane<Speaker> avatarPane = new AvatarPane<>(speakers) {
+            @Override
+            public String getUserAgentStylesheet() {
+                return AvatarPane.class.getResource("avatarPane.css").toExternalForm();
+            }
+        };
+
         avatarPane.setExpanded(true);
         avatarPane.setCollapsible(false);
         avatarPane.setAvatarFactory(Util::getSpeakerAvatar);

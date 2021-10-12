@@ -184,15 +184,19 @@ public class ScheduleCell extends CharmListCell<Session> {
             listTile.setTextLine(1, convertSpeakersToString(speakers));
             listTile.setTextLine(2, DevoxxBundle.getString("OTN.SCHEDULE.IN_AT",
                     session.getRoomName(),
-                    DevoxxSettings.TIME_FORMATTER.format(session.getStartDate()),
-                    DevoxxSettings.TIME_FORMATTER.format(session.getEndDate())));
+                    com.devoxx.util.time.ZonedDateTime.ofTime(session.getStartDate()),
+                    com.devoxx.util.time.ZonedDateTime.ofTime(session.getEndDate())));
+//                    DevoxxSettings.TIME_FORMATTER.format(session.getStartDate()),
+//                    DevoxxSettings.TIME_FORMATTER.format(session.getEndDate())));
             updateFavorite();
         } else if (session.getBreak() != null) {
             listTile.setTextLine(0, session.getBreak().getNameEN());
             listTile.setTextLine(1, "");
             listTile.setTextLine(2, DevoxxBundle.getString("OTN.SCHEDULE.IN_AT_BREAK",
-                    DevoxxSettings.TIME_FORMATTER.format(session.getStartDate()),
-                    DevoxxSettings.TIME_FORMATTER.format(session.getEndDate())));
+                    com.devoxx.util.time.ZonedDateTime.ofTime(session.getStartDate()),
+                    com.devoxx.util.time.ZonedDateTime.ofTime(session.getEndDate())));
+//                    DevoxxSettings.TIME_FORMATTER.format(session.getStartDate()),
+//                    DevoxxSettings.TIME_FORMATTER.format(session.getEndDate())));
             final VBox vBox = (VBox) listTile.getChildren().get(0);
             Label label = (Label) vBox.getChildren().get(vBox.getChildren().size() - 1);
             label.setGraphic(null);
@@ -201,7 +205,8 @@ public class ScheduleCell extends CharmListCell<Session> {
 
         if (showDate) {
             initializeStartLabel();
-            startDateLabel.setText(DevoxxSettings.DATE_FORMATTER.format(session.getStartDate()));
+//            startDateLabel.setText(DevoxxSettings.DATE_FORMATTER.format(session.getStartDate()));
+            startDateLabel.setText(com.devoxx.util.time.ZonedDateTime.formatToDate(session.getStartDate()));
             // Hacky Code as it uses internals of ListTile
             ((VBox) listTile.getChildren().get(0)).getChildren().add(startDateLabel);
         }

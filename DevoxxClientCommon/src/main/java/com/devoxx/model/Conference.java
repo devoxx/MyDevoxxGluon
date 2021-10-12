@@ -31,7 +31,7 @@ import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+//import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
@@ -383,11 +383,13 @@ public class Conference {
         return timezoneId;
     }
 
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     private void calculateConferenceDays() {
-        this.fromDateTime = LocalDate.parse(fromDate, DATE_FORMATTER).atStartOfDay(timezoneId);
-        this.endDateTime = LocalDate.parse(endDate, DATE_FORMATTER).atStartOfDay(timezoneId);
+//        this.fromDateTime = LocalDate.parse(fromDate, DATE_FORMATTER).atStartOfDay(timezoneId);
+        this.fromDateTime = com.devoxx.util.time.ZonedDateTime.ofDate(fromDate, timezoneId);
+        //        this.endDateTime = LocalDate.parse(endDate, DATE_FORMATTER).atStartOfDay(timezoneId);
+        this.endDateTime = com.devoxx.util.time.ZonedDateTime.ofDate(endDate, timezoneId);
         long numberOfDays = DAYS.between(fromDateTime, endDateTime) + 1;
         days = new ZonedDateTime[(int) numberOfDays];
         days[0] = dayOnly(fromDateTime, timezoneId);

@@ -33,7 +33,7 @@ import com.devoxx.model.SessionType;
 import com.devoxx.model.Track;
 import com.devoxx.service.Service;
 import com.devoxx.util.DevoxxBundle;
-import com.devoxx.util.DevoxxSettings;
+//import com.devoxx.util.DevoxxSettings;
 import com.gluonhq.charm.glisten.afterburner.GluonPresenter;
 import com.gluonhq.charm.glisten.application.MobileApplication;
 import javafx.beans.property.BooleanProperty;
@@ -63,7 +63,7 @@ import javafx.scene.shape.Rectangle;
 
 import javax.inject.Inject;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+//import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
@@ -327,10 +327,11 @@ public class FilterSessionsPresenter extends GluonPresenter<DevoxxApplication> {
     }
 
     private void updateDayFilter(Conference conference) {
-        DateTimeFormatter formatter = DevoxxSettings.DATE_FORMATTER;
+//        DateTimeFormatter formatter = DevoxxSettings.DATE_FORMATTER;
         dayFilter.getChildren().clear();
         for (int i = 0; i < conference.getDays().length; i++) {
-            String dayName = formatter.format(conference.getDays()[i]);
+//            String dayName = formatter.format(conference.getDays()[i]);
+            String dayName = com.devoxx.util.time.ZonedDateTime.formatToDate(conference.getDays()[i]);
             addDayCheckBox(i, dayName);
         }
         updateIsFilterApplied();

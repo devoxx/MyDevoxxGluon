@@ -26,15 +26,15 @@
 package com.devoxx.util;
 
 import com.devoxx.model.Conference;
-import com.gluonhq.charm.down.Services;
-import com.gluonhq.charm.down.plugins.SettingsService;
+import com.gluonhq.attach.settings.SettingsService;
+import com.gluonhq.attach.version.VersionService;
 
-import java.time.format.DateTimeFormatter;
+//import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.*;
 
 public class DevoxxSettings {
-    public static final String BUILD_NUMBER = "415"                                                                   ;
+    public static final String BUILD_NUMBER = VersionService.create().map(VersionService::getBuildNumber).orElse("415");                                                                  ;
 
     /**
      * boolean option to switch on/off automatic authentication by using a self generated random UUID
@@ -135,10 +135,10 @@ public class DevoxxSettings {
     private static final String TIME_PATTERN = "h:mma";
     private static final String NEWS_PATTERN  = "EEEE, h:mma";
 
-    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL);
-    public static final DateTimeFormatter WEARABLE_DATE_FORMATTER = DateTimeFormatter.ofPattern(WEARABLE_DAY_PATTERN, LOCALE);
-    public static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern(TIME_PATTERN, LOCALE);
-    public static final DateTimeFormatter NEWS_FORMATTER = DateTimeFormatter.ofPattern(NEWS_PATTERN, LOCALE);
+//    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL);
+//    public static final DateTimeFormatter WEARABLE_DATE_FORMATTER = DateTimeFormatter.ofPattern(WEARABLE_DAY_PATTERN, LOCALE);
+//    public static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern(TIME_PATTERN, LOCALE);
+//    public static final DateTimeFormatter NEWS_FORMATTER = DateTimeFormatter.ofPattern(NEWS_PATTERN, LOCALE);
 
     public static final String TWITTER_URL = "https://www.twitter.com/";
     
@@ -169,13 +169,13 @@ public class DevoxxSettings {
 
     private static String uuid;
     public static String getUserUUID() {
-        uuid = Services.get(SettingsService.class)
+        uuid = SettingsService.create()
                 .map(s -> s.retrieve("UUID"))
                 .orElse(null);
 
         if (uuid == null) {
             uuid = UUID.randomUUID().toString();
-            Services.get(SettingsService.class).ifPresent(s -> s.store("UUID", uuid));
+            SettingsService.create().ifPresent(s -> s.store("UUID", uuid));
         }
         return uuid;
     }
@@ -185,7 +185,7 @@ public class DevoxxSettings {
     private static Long lastVoteCast = null;
     public static long getLastVoteCast() {
         if (lastVoteCast == null) {
-            lastVoteCast = Services.get(SettingsService.class)
+            lastVoteCast = SettingsService.create()
                     .flatMap(s -> Optional.ofNullable(s.retrieve(LAST_VOTE_CAST)))
                     .map(Long::parseLong)
                     .orElse(0L);
@@ -195,7 +195,7 @@ public class DevoxxSettings {
 
     public static void setLastVoteCast(long updatedLastVoteCast) {
         lastVoteCast = updatedLastVoteCast;
-        Services.get(SettingsService.class).ifPresent(s -> s.store(LAST_VOTE_CAST, String.valueOf(lastVoteCast)));
+        SettingsService.create().ifPresent(s -> s.store(LAST_VOTE_CAST, String.valueOf(lastVoteCast)));
     }
     
     public static boolean conferenceHasVoting(Conference conference) {

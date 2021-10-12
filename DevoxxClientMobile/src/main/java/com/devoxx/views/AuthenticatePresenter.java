@@ -30,9 +30,8 @@ import com.devoxx.DevoxxView;
 import com.devoxx.model.User;
 import com.devoxx.service.Service;
 import com.devoxx.util.DevoxxBundle;
-import com.gluonhq.charm.down.Services;
-import com.gluonhq.charm.down.plugins.BrowserService;
-import com.gluonhq.charm.down.plugins.SettingsService;
+import com.gluonhq.attach.browser.BrowserService;
+import com.gluonhq.attach.settings.SettingsService;
 import com.gluonhq.charm.glisten.afterburner.GluonPresenter;
 import com.gluonhq.charm.glisten.application.MobileApplication;
 import com.gluonhq.charm.glisten.control.AppBar;
@@ -92,7 +91,7 @@ public class AuthenticatePresenter extends GluonPresenter<DevoxxApplication> {
     }
 
     public void forgetPassword() {
-        Services.get(BrowserService.class).ifPresent(b -> {
+        BrowserService.create().ifPresent(b -> {
             try {
                 b.launchExternalBrowser(forgetPasswordURL());
             }  catch (IOException | URISyntaxException ex) {
@@ -103,7 +102,7 @@ public class AuthenticatePresenter extends GluonPresenter<DevoxxApplication> {
     }
 
     public void register() {
-        Services.get(BrowserService.class).ifPresent(b -> {
+        BrowserService.create().ifPresent(b -> {
             try {
                 b.launchExternalBrowser(registerURL());
             }  catch (IOException | URISyntaxException ex) {
@@ -154,7 +153,7 @@ public class AuthenticatePresenter extends GluonPresenter<DevoxxApplication> {
         final JsonObject jsonObject = reader.readObject();
         long exp = jsonObject.getJsonNumber("exp").longValue();
         final String username = jsonObject.getString("sub");
-        Services.get(SettingsService.class).ifPresent(settingsService -> {
+        SettingsService.create().ifPresent(settingsService -> {
             settingsService.store(SAVED_ACCOUNT_TOKEN, token);
             settingsService.store(SAVED_ACCOUNT_EXPIRY, String.valueOf(exp));
             settingsService.store(SAVED_ACCOUNT_USERNAME, username);

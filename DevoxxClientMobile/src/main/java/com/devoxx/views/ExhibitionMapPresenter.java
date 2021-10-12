@@ -29,7 +29,7 @@ import com.devoxx.DevoxxApplication;
 import com.devoxx.model.Floor;
 import com.devoxx.service.Service;
 import com.devoxx.views.helper.ETagImageTask;
-import com.gluonhq.charm.down.Platform;
+import com.gluonhq.attach.util.Platform;
 import com.gluonhq.charm.glisten.afterburner.GluonPresenter;
 import com.gluonhq.charm.glisten.control.Alert;
 import com.gluonhq.charm.glisten.control.AppBar;

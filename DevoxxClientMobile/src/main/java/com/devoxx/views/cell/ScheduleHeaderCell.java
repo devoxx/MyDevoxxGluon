@@ -45,7 +45,8 @@ public class ScheduleHeaderCell extends CharmListCell<Session> {
     public void updateItem(Session item, boolean empty) {
         super.updateItem(item, empty);
         if (item != null && !empty) {
-            tile.textProperty().setAll(DevoxxSettings.DATE_FORMATTER.format(item.getStartDate()));
+//            tile.textProperty().setAll(DevoxxSettings.DATE_FORMATTER.format(item.getStartDate()));
+            tile.textProperty().setAll(com.devoxx.util.time.ZonedDateTime.formatToDate(item.getStartDate()));
             setGraphic(tile);
         } else {
             setGraphic(null);

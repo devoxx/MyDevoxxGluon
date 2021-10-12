@@ -29,8 +29,7 @@ import com.devoxx.DevoxxApplication;
 import com.devoxx.service.Service;
 import com.devoxx.util.DevoxxBundle;
 import com.devoxx.util.DevoxxSettings;
-import com.gluonhq.charm.down.Services;
-import com.gluonhq.charm.down.plugins.SettingsService;
+import com.gluonhq.attach.settings.SettingsService;
 import com.gluonhq.charm.glisten.afterburner.GluonPresenter;
 import com.gluonhq.charm.glisten.control.AppBar;
 import com.gluonhq.charm.glisten.control.Dialog;
@@ -131,7 +130,7 @@ public class AboutPresenter extends GluonPresenter<DevoxxApplication> {
         }
 
 
-        Services.get(SettingsService.class).ifPresent(settingsService -> {
+        SettingsService.create().ifPresent(settingsService -> {
             debug.append(settingsService.retrieve(DevoxxSettings.SAVED_CONFERENCE_ID)).append("\n");
             debug.append(settingsService.retrieve(DevoxxSettings.SAVED_CONFERENCE_CFP_URL)).append("\n");
             debug.append(settingsService.retrieve(DevoxxSettings.SAVED_CONFERENCE_NAME)).append("\n");

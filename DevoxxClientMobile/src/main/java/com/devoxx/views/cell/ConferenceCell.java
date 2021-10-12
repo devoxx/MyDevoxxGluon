@@ -31,9 +31,8 @@ import com.devoxx.service.Service;
 import com.devoxx.util.DevoxxSettings;
 import com.devoxx.views.helper.ETagImageTask;
 import com.devoxx.views.layer.ConferenceLoadingLayer;
-import com.gluonhq.charm.down.Services;
-import com.gluonhq.charm.down.plugins.DisplayService;
-import com.gluonhq.charm.down.plugins.SettingsService;
+import com.gluonhq.attach.display.DisplayService;
+import com.gluonhq.attach.settings.SettingsService;
 import com.gluonhq.charm.glisten.application.MobileApplication;
 import com.gluonhq.charm.glisten.control.CharmListCell;
 import javafx.css.PseudoClass;
@@ -46,8 +45,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+//import java.time.LocalDate;
+//import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -59,7 +58,7 @@ public class ConferenceCell extends CharmListCell<Conference> {
     private static final Logger LOG = Logger.getLogger(ConferenceCell.class.getName());
 
     private static final PseudoClass PSEUDO_CLASS_VOXXED = PseudoClass.getPseudoClass("voxxed");
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MMMM dd, yyyy");
+//    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MMMM dd, yyyy");
     private static final int PHONE_HEIGHT = 222;
     private static final int TABLET_HEIGHT = 333;
     private static final String CONFERENCE_TAG = "conference_";
@@ -114,7 +113,7 @@ public class ConferenceCell extends CharmListCell<Conference> {
         root = new StackPane(new Group(background), content);
         getStyleClass().add("conference-cell"); 
         
-        final boolean isTablet = Services.get(DisplayService.class)
+        final boolean isTablet = DisplayService.create()
                 .map(DisplayService::isTablet)
                 .orElse(false);
                 
@@ -138,12 +137,13 @@ public class ConferenceCell extends CharmListCell<Conference> {
             }
             
             name.setText(item.getName());
-            if (item.getFromDate().equals(item.getEndDate())) {
-                dateLabel.setText(LocalDate.parse(item.getFromDate()).format(DATE_TIME_FORMATTER));
-            } else {
-                dateLabel.setText(LocalDate.parse(item.getFromDate()).getDayOfMonth() + " - " +
-                        LocalDate.parse(item.getEndDate()).format(DATE_TIME_FORMATTER));
-            }
+//            if (item.getFromDate().equals(item.getEndDate())) {
+//                dateLabel.setText(LocalDate.parse(item.getFromDate()).format(DATE_TIME_FORMATTER));
+//            } else {
+//                dateLabel.setText(LocalDate.parse(item.getFromDate()).getDayOfMonth() + " - " +
+//                        LocalDate.parse(item.getEndDate()).format(DATE_TIME_FORMATTER));
+//            }
+            dateLabel.setText(com.devoxx.util.time.ZonedDateTime.formatToConferenceDate(item.getFromDate(), item.getEndDate()));
 
             if (imageTask != null) {
                 imageTask.cancel();
@@ -155,12 +155,14 @@ public class ConferenceCell extends CharmListCell<Conference> {
                 imageTask = new ETagImageTask(imageId, item.getImageURL());
                 imageTask.setOnSucceeded(e -> {
                     final Image value = imageTask.getValue();
-                    imagesMap.put(imageId, value);
-                    background.setImage(value);
-                    fitImage();
+                    if (image != null) {
+                        imagesMap.put(imageId, value);
+                        background.setImage(value);
+                        fitImage();
+                    }
                 });
                 imageTask.exceptionProperty().addListener((o, ov, nv) -> {
-                    LOG.log(Level.SEVERE, nv.getMessage());
+                    LOG.log(Level.SEVERE, "Error retrieving " + imageId + ": " + nv.getMessage());
                 });
                 executor.submit(imageTask);
                 imageTask.image().ifPresent(value -> {
@@ -176,7 +178,7 @@ public class ConferenceCell extends CharmListCell<Conference> {
             content.setOnMouseReleased(e -> {
                 if (!item.equals(service.getConference())) {
                     ConferenceLoadingLayer.show(service, item);
-                    Services.get(SettingsService.class).ifPresent(settingsService -> {
+                    SettingsService.create().ifPresent(settingsService -> {
                         settingsService.store(DevoxxSettings.SAVED_CONFERENCE_TYPE, item.getEventType().name());
                         settingsService.store(DevoxxSettings.SAVED_CONFERENCE_ID, String.valueOf(item.getId()));
                         settingsService.store(DevoxxSettings.SAVED_CONFERENCE_CFP_URL, String.valueOf(item.getCfpURL()));

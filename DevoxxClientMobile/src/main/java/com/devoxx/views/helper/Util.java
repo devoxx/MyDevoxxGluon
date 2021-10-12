@@ -33,10 +33,9 @@ import com.devoxx.util.DevoxxBundle;
 import com.devoxx.util.ImageCache;
 import com.devoxx.views.ExhibitionMapPresenter;
 import com.devoxx.util.DevoxxSettings;
-import com.gluonhq.charm.down.Platform;
-import com.gluonhq.charm.down.Services;
-import com.gluonhq.charm.down.plugins.BrowserService;
-import com.gluonhq.charm.down.plugins.SettingsService;
+import com.gluonhq.attach.browser.BrowserService;
+import com.gluonhq.attach.settings.SettingsService;
+import com.gluonhq.attach.util.Platform;
 import com.gluonhq.charm.glisten.application.MobileApplication;
 import com.gluonhq.charm.glisten.control.AppBar;
 import com.gluonhq.charm.glisten.control.Avatar;
@@ -71,7 +70,7 @@ import static com.devoxx.util.DevoxxSettings.DAYS_PAST_END_DATE;
 public class Util {
 
     // speaker avatars
-    private static final Image DEFAULT_IMAGE = new Image(SpeakerCard.class.getResource("speaker.jpeg").toString());
+    private static final Image DEFAULT_IMAGE = new Image(SpeakerCard.class.getResource("speaker.png").toString());
     
     // drawer's header default image
     private static final Image DEFAULT_BACKGROUND_IMAGE = new Image(Util.class.getResource("backgroundImage.png").toString());
@@ -127,7 +126,7 @@ public class Util {
 
     public static FloatingActionButton createWebLaunchFAB(Supplier<String> urlSupplier) {
         return createFAB(MaterialDesignIcon.LAUNCH, e -> {
-            Services.get(BrowserService.class).ifPresent(b -> {
+            BrowserService.create().ifPresent(b -> {
                 try {
                     String url = urlSupplier.get();
                     if (!url.startsWith("http://") && !url.startsWith("https://")) {
@@ -150,7 +149,7 @@ public class Util {
             url = DevoxxSettings.IOS_REVIEW_URL;
         }
         String finalUrl = url;
-        Services.get(BrowserService.class).ifPresent(b -> {
+        BrowserService.create().ifPresent(b -> {
             try {
                 if (finalUrl != null) {
                     b.launchExternalBrowser(finalUrl);
@@ -206,7 +205,7 @@ public class Util {
     }
     
     public static void removeKeysFromSettings(String... toRemove) {
-        Services.get(SettingsService.class).ifPresent(service -> {
+        SettingsService.create().ifPresent(service -> {
             for (String s : toRemove) {
                 service.remove(s);
             }
@@ -285,7 +284,7 @@ public class Util {
      * @param newValue The new value to the added
      */
     public static void addCSVToLocalStorage(String key, String newValue) {
-        Services.get(SettingsService.class).ifPresent(ss -> {
+        SettingsService.create().ifPresent(ss -> {
             String previousValues = ss.retrieve(key);
             if (previousValues != null && !previousValues.isEmpty()) {
                 ss.store(key, previousValues + "," + newValue);
@@ -301,7 +300,7 @@ public class Util {
      * @return List of values if values are present else empty list.
      */
     public static List<String> fetchCSVFromLocalStorage(String key) {
-        return Services.get(SettingsService.class).map(ss -> {
+        return SettingsService.create().map(ss -> {
             String values = ss.retrieve(key);
             if (values != null && !values.isEmpty()) {
                 return Arrays.asList(values.split(","));

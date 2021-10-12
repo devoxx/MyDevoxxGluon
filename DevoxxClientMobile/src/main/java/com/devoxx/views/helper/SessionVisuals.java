@@ -31,8 +31,7 @@ import com.devoxx.service.Service;
 import com.devoxx.util.DevoxxBundle;
 import com.devoxx.util.DevoxxNotifications;
 import com.devoxx.util.DevoxxSettings;
-import com.gluonhq.charm.down.Services;
-import com.gluonhq.charm.down.plugins.SettingsService;
+import com.gluonhq.attach.settings.SettingsService;
 import com.gluonhq.charm.glisten.control.Dialog;
 import com.gluonhq.charm.glisten.control.Toast;
 import com.gluonhq.charm.glisten.visual.GlistenStyleClasses;
@@ -125,8 +124,10 @@ public class SessionVisuals {
         return DevoxxBundle.getString("OTN.VISUALS.FORMAT.MULTILINE",
                 session.getTalk().getTrack(),
                 service.getConference().getConferenceDayIndex(startDate),
-                startDate.format(DevoxxSettings.TIME_FORMATTER),
-                endDate.format(DevoxxSettings.TIME_FORMATTER),
+                com.devoxx.util.time.ZonedDateTime.ofTime(startDate),
+                com.devoxx.util.time.ZonedDateTime.ofTime(endDate),
+//                startDate.format(DevoxxSettings.TIME_FORMATTER),
+//                endDate.format(DevoxxSettings.TIME_FORMATTER),
                 session.getRoomName());
     }
 
@@ -136,8 +137,10 @@ public class SessionVisuals {
         ZonedDateTime endDate = session.getEndDate();
         return DevoxxBundle.getString("OTN.VISUALS.FORMAT.ONELINE",
                 service.getConference().getConferenceDayIndex(startDate),
-                startDate.format(DevoxxSettings.TIME_FORMATTER),
-                endDate.format(DevoxxSettings.TIME_FORMATTER),
+                com.devoxx.util.time.ZonedDateTime.ofTime(startDate),
+                com.devoxx.util.time.ZonedDateTime.ofTime(endDate),
+//                startDate.format(DevoxxSettings.TIME_FORMATTER),
+//                endDate.format(DevoxxSettings.TIME_FORMATTER),
                 session.getLocation());
 
     }
@@ -262,7 +265,7 @@ public class SessionVisuals {
                 if (listType == SessionListType.FAVORITES) {
                     devoxxNotifications.addFavoriteSessionNotifications(session); 
                 }
-                Services.get(SettingsService.class).ifPresent(settings -> {
+                SettingsService.create().ifPresent(settings -> {
                     String skip = settings.retrieve(DevoxxSettings.SKIP_FAV_DIALOG);
                     if (skip == null || skip.isEmpty() || !Boolean.parseBoolean(skip)) {
                         final Dialog<TextFlow> information = createFavoriteDialog();

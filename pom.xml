@@ -1,0 +1,60 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.devoxx</groupId>
+    <artifactId>devoxx</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    
+    <description>The Devoxx App</description>
+    <url>https://gluonhq.com</url>
+
+    <modules>
+        <module>DevoxxClientMobile</module>
+        <module>DevoxxClientCommon</module>
+    </modules>
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>11</maven.compiler.release>
+        <gluon.mobile.version>6.0.6</gluon.mobile.version>
+        <gluon.afterburner.version>2.0.5</gluon.afterburner.version>
+        <gluon.maps.version>2.0.0-ea+5</gluon.maps.version>
+        <attach.version>4.0.13</attach.version>
+        <javafx.version>17.0.0.1</javafx.version>
+        <javafx-maven-plugin-version>0.0.8</javafx-maven-plugin-version>
+        <gluonfx-maven-plugin-version>1.0.8-SNAPSHOT</gluonfx-maven-plugin-version>
+    </properties>
+    
+    <repositories>
+        <repository>
+            <id>Gluon Releases</id>
+            <url>https://nexus.gluonhq.com/nexus/content/repositories/releases/</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>Snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <release>${maven.compiler.release}</release>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <organization>
+        <name>Gluon</name>
+        <url>https://www.gluonhq.com</url>
+    </organization>
+</project>

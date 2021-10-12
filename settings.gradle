@@ -1,7 +1,0 @@
-include 'DevoxxClientCommon'
-include 'DevoxxClientMobile'
-include 'DevoxxRemoteFunctions'
-
-rootProject.name = 'MyDevoxx'
-
-project(':DevoxxClientMobile').name = 'DevoxxClient'

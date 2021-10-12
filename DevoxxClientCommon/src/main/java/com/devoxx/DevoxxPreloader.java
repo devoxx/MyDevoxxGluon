@@ -25,7 +25,7 @@
  */
 package com.devoxx;
 
-import com.gluonhq.charm.down.Platform;
+import com.gluonhq.attach.util.Platform;
 import javafx.application.Preloader;
 import javafx.application.Preloader.StateChangeNotification.Type;
 import javafx.geometry.Rectangle2D;
