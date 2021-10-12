@@ -33,14 +33,24 @@ import com.devoxx.model.Sponsor;
 import com.devoxx.model.SponsorBadge;
 import com.devoxx.service.DevoxxService;
 import com.devoxx.service.Service;
-import com.devoxx.util.*;
+import com.devoxx.util.DevoxxBundle;
+import com.devoxx.util.DevoxxCountry;
+import com.devoxx.util.DevoxxLogging;
+import com.devoxx.util.DevoxxNotifications;
+import com.devoxx.util.DevoxxSearch;
+import com.devoxx.util.DevoxxSettings;
+import com.devoxx.util.Strings;
 import com.devoxx.views.SessionsPresenter;
 import com.devoxx.views.helper.ConnectivityUtils;
 import com.devoxx.views.helper.SessionVisuals;
 import com.devoxx.views.layer.ConferenceLoadingLayer;
-import com.gluonhq.charm.down.Platform;
-import com.gluonhq.charm.down.Services;
-import com.gluonhq.charm.down.plugins.*;
+import com.gluonhq.attach.connectivity.ConnectivityService;
+import com.gluonhq.attach.device.DeviceService;
+import com.gluonhq.attach.display.DisplayService;
+import com.gluonhq.attach.settings.SettingsService;
+import com.gluonhq.attach.share.ShareService;
+import com.gluonhq.attach.storage.StorageService;
+import com.gluonhq.attach.util.Platform;
 import com.gluonhq.charm.glisten.afterburner.AppView;
 import com.gluonhq.charm.glisten.afterburner.GluonInstanceProvider;
 import com.gluonhq.charm.glisten.application.MobileApplication;
@@ -90,11 +100,13 @@ public class DevoxxApplication extends MobileApplication {
 
     private boolean signUp = false;
 
-    @Override
-    public void init() {
-
+    static {
         // Config logging
         DevoxxLogging.config();
+    }
+
+    @Override
+    public void init() {
 
         new UsageClient().enable();
 
@@ -107,7 +119,7 @@ public class DevoxxApplication extends MobileApplication {
             view.registerView(this);
         }
 
-        Services.get(SettingsService.class).ifPresent(settings -> {
+        SettingsService.create().ifPresent(settings -> {
             String sign = settings.retrieve(DevoxxSettings.SIGN_UP);
             if (!Strings.isNullOrEmpty(sign)) {
                 signUp = Boolean.parseBoolean(sign);
@@ -124,7 +136,7 @@ public class DevoxxApplication extends MobileApplication {
             ConferenceLoadingLayer.show(service, conference);
         }
 
-        String deviceFactorSuffix = Services.get(DeviceService.class)
+        String deviceFactorSuffix = DeviceService.create()
                 .map(s -> {
                     if (Platform.isAndroid() && s.getModel() != null) {
                         for (String device : DevoxxSettings.DEVICES_WITH_SANS_CSS) {
@@ -137,7 +149,7 @@ public class DevoxxApplication extends MobileApplication {
                 })
                 .orElse("");
 
-        String formFactorSuffix = Services.get(DisplayService.class)
+        String formFactorSuffix = DisplayService.create()
                 .map(s -> s.isTablet() ? "_tablet" : s.hasNotch() ? "_notch" : "")
                 .orElse("");
 
@@ -173,7 +185,7 @@ public class DevoxxApplication extends MobileApplication {
         });
         
         if (signUp) {
-            Services.get(SettingsService.class).ifPresent(settings -> settings.remove(DevoxxSettings.SIGN_UP));
+            SettingsService.create().ifPresent(settings -> settings.remove(DevoxxSettings.SIGN_UP));
             DevoxxView.SESSIONS.switchView().ifPresent(s -> ((SessionsPresenter) s).selectFavorite());
         }
     }
@@ -189,7 +201,7 @@ public class DevoxxApplication extends MobileApplication {
     }
 
     private void initConnectivityServices() {
-        Services.get(ConnectivityService.class).ifPresent(connectivityService -> {
+        ConnectivityService.create().ifPresent(connectivityService -> {
             connectivityService.connectedProperty().addListener((observable, oldValue, newValue) -> {
                 ConnectivityUtils.showConnectivityIndication(newValue);
             });
@@ -218,8 +230,8 @@ public class DevoxxApplication extends MobileApplication {
     
     public Button getShareButton(BadgeType badgeType, Sponsor sponsor) {
         return MaterialDesignIcon.SHARE.button(e -> {
-            Services.get(ShareService.class).ifPresent(s -> {
-                File root = Services.get(StorageService.class).flatMap(storage -> storage.getPublicStorage("Documents")).orElse(null);
+            ShareService.create().ifPresent(s -> {
+                File root = StorageService.create().flatMap(storage -> storage.getPublicStorage("Documents")).orElse(null);
                 if (root != null) {
                     if (!root.exists()) {
                         root.mkdirs();
@@ -257,5 +269,9 @@ public class DevoxxApplication extends MobileApplication {
                 }
             });
         }); 
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }

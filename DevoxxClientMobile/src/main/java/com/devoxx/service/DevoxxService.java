@@ -36,12 +36,11 @@ import com.devoxx.views.helper.Placeholder;
 import com.devoxx.views.helper.SessionVisuals.SessionListType;
 import com.devoxx.views.helper.Util;
 import com.devoxx.views.layer.ConferenceLoadingLayer;
-import com.gluonhq.charm.down.Services;
-import com.gluonhq.charm.down.plugins.ConnectivityService;
-import com.gluonhq.charm.down.plugins.DeviceService;
-import com.gluonhq.charm.down.plugins.RuntimeArgsService;
-import com.gluonhq.charm.down.plugins.SettingsService;
-import com.gluonhq.charm.down.plugins.StorageService;
+import com.gluonhq.attach.device.DeviceService;
+import com.gluonhq.attach.connectivity.ConnectivityService;
+import com.gluonhq.attach.runtimeargs.RuntimeArgsService;
+import com.gluonhq.attach.settings.SettingsService;
+import com.gluonhq.attach.storage.StorageService;
 import com.gluonhq.charm.glisten.application.MobileApplication;
 import com.gluonhq.charm.glisten.control.Alert;
 import com.gluonhq.charm.glisten.control.Dialog;
@@ -94,11 +93,11 @@ public class DevoxxService implements Service {
     private static File rootDir;
     static {
         try {
-            rootDir = Services.get(StorageService.class)
+            rootDir = StorageService.create()
                     .flatMap(StorageService::getPrivateStorage)
                     .orElseThrow(() -> new IOException("Private storage file not available"));
             deleteOldFiles(rootDir);
-            Services.get(RuntimeArgsService.class).ifPresent(ras -> {
+            RuntimeArgsService.create().ifPresent(ras -> {
                 ras.addListener(RuntimeArgsService.LAUNCH_PUSH_NOTIFICATION_KEY, (f) -> {
                     LOG.log(Level.INFO, ">>> received a silent push notification with contents: " + f);
                     LOG.log(Level.INFO, "[DBG] writing reload file");
@@ -113,7 +112,7 @@ public class DevoxxService implements Service {
                 });
             });
 
-            Services.get(SettingsService.class).ifPresent(ss -> {
+            SettingsService.create().ifPresent(ss -> {
                 // Remove Sessions filter key-value
                 ss.remove(SESSION_FILTER);
                 // Check for account expiry and remove token
@@ -257,9 +256,9 @@ public class DevoxxService implements Service {
             }
         });
 
-        Services.get(SettingsService.class).ifPresent(settingsService -> {
-            String configuredConferenceId = settingsService.retrieve(SAVED_CONFERENCE_ID);
-            String configuredConferenceCfpURL = settingsService.retrieve(SAVED_CONFERENCE_CFP_URL);
+        SettingsService.create().ifPresent(settingsService -> {
+            String configuredConferenceId = settingsService.retrieve(DevoxxSettings.SAVED_CONFERENCE_ID);
+            String configuredConferenceCfpURL = settingsService.retrieve(DevoxxSettings.SAVED_CONFERENCE_CFP_URL);
             if (configuredConferenceId != null) {
                 if (isNumber(configuredConferenceId)) {
                     retrieveConference(configuredConferenceId, configuredConferenceCfpURL);
@@ -438,7 +437,7 @@ public class DevoxxService implements Service {
     @Override
     public Conference createConferenceFromLocalStorage() {
         Conference conference = new Conference();
-        Services.get(SettingsService.class).ifPresent(settingsService -> {
+        SettingsService.create().ifPresent(settingsService -> {
             String conferenceId = settingsService.retrieve(DevoxxSettings.SAVED_CONFERENCE_ID);
             String conferenceCfpURL = settingsService.retrieve(DevoxxSettings.SAVED_CONFERENCE_CFP_URL);
             String conferenceName = settingsService.retrieve(DevoxxSettings.SAVED_CONFERENCE_NAME);
@@ -541,7 +540,7 @@ public class DevoxxService implements Service {
 
         DevoxxNotifications notifications = Injector.instantiateModelOrService(DevoxxNotifications.class);
         if (!isAuthenticated()) {
-            notifications.preloadRatingNotifications();
+//            notifications.preloadRatingNotifications();
         }
 
         sessionsList.setOnFailed(e -> {
@@ -555,7 +554,7 @@ public class DevoxxService implements Service {
             sessionsList.removeListener(sessionsListChangeListener);
             retrieveAuthenticatedUserSessionInformation();
             finishNotificationsPreloading();
-            addLocalNotification();
+//            addLocalNotification();
         });
 
         sessions.set(sessionsList);
@@ -780,7 +779,7 @@ public class DevoxxService implements Service {
     public GluonObservableList<Sponsor> retrieveSponsors() {
         // Sponsors still use the id from the conferences list
         AtomicReference<String> configuredConferenceId = new AtomicReference<>();
-        Services.get(SettingsService.class).ifPresent(settingsService -> {
+        SettingsService.create().ifPresent(settingsService -> {
             configuredConferenceId.set(settingsService.retrieve(SAVED_CONFERENCE_ID));
         });
         RemoteFunctionList fnSponsors = RemoteFunctionBuilder.create("sponsors")
@@ -1170,7 +1169,7 @@ public class DevoxxService implements Service {
 
     private GluonObservableList<SponsorBadge> internalRetrieveSponsorBadges(Sponsor sponsor) {
         GluonObservableList<SponsorBadge> localSponsorBadges = DataProvider.retrieveList(localDataClient.createListDataReader(getConference().getId() + "_" + sponsor.getSlug() + "_sponsor_badges_" +
-                Services.get(DeviceService.class).map(DeviceService::getUuid).orElse(System.getProperty("user.name")),
+                        DeviceService.create().map(DeviceService::getUuid).orElse(System.getProperty("user.name")),
                 SponsorBadge.class, SyncFlag.LIST_WRITE_THROUGH, SyncFlag.OBJECT_WRITE_THROUGH));
         localSponsorBadges.setOnFailed(ex -> {
             LOG.log(Level.SEVERE, "Loading of badges for sponsor " + sponsor.getName() + " failed..", ex);
@@ -1181,7 +1180,7 @@ public class DevoxxService implements Service {
     private void loadCfpAccount(User user, Runnable successRunnable) {
         if (isNewCfpURL()) {
             if (username.isEmpty().get()) {
-                Services.get(SettingsService.class).ifPresent(settingsService -> {
+                SettingsService.create().ifPresent(settingsService -> {
                     username.set(Optional.ofNullable(settingsService.retrieve(SAVED_ACCOUNT_USERNAME)).orElse(""));
                     userToken.set(Optional.ofNullable(settingsService.retrieve(SAVED_ACCOUNT_TOKEN)).orElse(""));
                 });
@@ -1191,7 +1190,7 @@ public class DevoxxService implements Service {
             }
         } else {
             if (cfpUserUuid.isEmpty().get()) {
-                Services.get(SettingsService.class).ifPresent(settingsService -> {
+                SettingsService.create().ifPresent(settingsService -> {
                     String devoxxCfpAccountUuid = settingsService.retrieve(SAVED_ACCOUNT_ID);
                     if (devoxxCfpAccountUuid == null) {
                         if (user.getLoginMethod() == LoginMethod.Type.CUSTOM) {
@@ -1253,7 +1252,7 @@ public class DevoxxService implements Service {
         favoredSessions = null;
         internalFavoredSessions.clear();
 
-        Services.get(SettingsService.class).ifPresent(settingsService -> {
+        SettingsService.create().ifPresent(settingsService -> {
             settingsService.remove(SAVED_ACCOUNT_ID);
 
             settingsService.remove(SAVED_ACCOUNT_USERNAME);
@@ -1327,7 +1326,7 @@ public class DevoxxService implements Service {
     }
 
     private Boolean isSavedAccountExpired() {
-        final Optional<SettingsService> settingsService = Services.get(SettingsService.class);
+        final Optional<SettingsService> settingsService = SettingsService.create();
         if (settingsService.isPresent()) {
             final String expiryString = settingsService.get().retrieve(SAVED_ACCOUNT_EXPIRY);
             if (expiryString != null) {
@@ -1342,7 +1341,7 @@ public class DevoxxService implements Service {
     }
 
     private void retrySaveSponsorBadge(SponsorBadge sponsorBadge) {
-        Services.get(ConnectivityService.class).ifPresent(service -> {
+        ConnectivityService.create().ifPresent(service -> {
             if (!service.isConnected()) {
                 service.connectedProperty().addListener(new ChangeListener<Boolean>() {
                     @Override
@@ -1368,7 +1367,7 @@ public class DevoxxService implements Service {
     }
 
     private void clearConferenceDetails() {
-        Services.get(SettingsService.class).ifPresent(settingsService -> {
+        SettingsService.create().ifPresent(settingsService -> {
             settingsService.remove(SAVED_CONFERENCE_ID);
             settingsService.remove(SAVED_CONFERENCE_CFP_URL);
             settingsService.remove(SAVED_CONFERENCE_NAME);

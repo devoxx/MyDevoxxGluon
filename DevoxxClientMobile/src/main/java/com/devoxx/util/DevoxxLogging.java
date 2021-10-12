@@ -34,7 +34,7 @@ import java.util.logging.Logger;
 
 public class DevoxxLogging {
     
-    public static boolean LOGGING_ENABLED = false;
+    public static boolean LOGGING_ENABLED = true;
 
     DevoxxLogging() {
     }
@@ -43,11 +43,11 @@ public class DevoxxLogging {
         try {
             // By default there's no console output
             String file = "/loggingOFF.properties";
-            if (Boolean.getBoolean("enable.logging")) {
+            if (LOGGING_ENABLED) {
                 // to enable output on mobile, set enable.logging=true in java.custom.properties
                 // on desktop, in the build.gradle file, under applicationDefaultJvmArgs
                 file = "/loggingON.properties";
-                LOGGING_ENABLED = true;
+//                LOGGING_ENABLED = true;
             }
             LogManager.getLogManager().readConfiguration(DevoxxApplication.class.getResourceAsStream(file));
         } catch (IOException ex) {

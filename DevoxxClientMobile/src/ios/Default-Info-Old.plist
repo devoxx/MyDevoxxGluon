@@ -9,7 +9,7 @@
         <key>CFBundleShortVersionString</key>
         <!-- versionnumber --><string>3.6.5</string>
         <key>CFBundleExecutable</key>
-        <string>DevoxxClient</string>
+        <string>DevoxxClientMobile</string>
         <key>CFBundleIconName</key>
         <string>AppIcon</string>
         <key>CFBundleName</key>

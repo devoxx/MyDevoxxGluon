@@ -70,7 +70,8 @@ public class ETagImageTask extends Task<Image> {
             } else {
                 final FileDataSource imageDataSource = createCacheImageDataSource(imageFileName);
                 if (imageDataSource != null && imageDataSource.getFile().exists()) {
-                    image = new Image(imageDataSource.getInputStream());
+                    InputStream inputStream = imageDataSource.getInputStream();
+                    image = new Image(inputStream);
                 }
             }
         } catch (IOException e) {

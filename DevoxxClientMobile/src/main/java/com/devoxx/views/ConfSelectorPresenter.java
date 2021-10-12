@@ -67,8 +67,6 @@ public class ConfSelectorPresenter extends GluonPresenter<DevoxxApplication> {
     
     private final Map<String, Image> imagesMap = new HashMap<>();
     
-    private final ResourceBundle bundle = ResourceBundle.getBundle("com/devoxx/views/confselector");
-
     @FXML
     private CharmListView<Conference, LocalDateTime> selector;
 
@@ -80,6 +78,9 @@ public class ConfSelectorPresenter extends GluonPresenter<DevoxxApplication> {
 
     @FXML
     public Label header;
+
+    @FXML
+    private ResourceBundle resources;
 
     @Inject
     private Service service;
@@ -129,8 +130,8 @@ public class ConfSelectorPresenter extends GluonPresenter<DevoxxApplication> {
         Menu menu = new Menu();
         MenuItem devoxx = new MenuItem(Conference.Type.DEVOXX.toString());
         MenuItem voxxed = new MenuItem(Conference.Type.VOXXED.toString());
-        MenuItem futureEvents = new MenuItem(bundle.getString("OTN.CONFERENCE_SELECTOR.HEADER.DEVOXX_VOXXED"));
-        MenuItem pastEvents = new MenuItem(bundle.getString("OTN.CONFERENCE_SELECTOR.HEADER.PAST_EVENTS"));
+        MenuItem futureEvents = new MenuItem(resources.getString("OTN.CONFERENCE_SELECTOR.HEADER.DEVOXX_VOXXED"));
+        MenuItem pastEvents = new MenuItem(resources.getString("OTN.CONFERENCE_SELECTOR.HEADER.PAST_EVENTS"));
         menu.getItems().addAll(futureEvents, devoxx, voxxed, pastEvents);
         
         devoxx.setOnAction(e -> {
@@ -148,7 +149,7 @@ public class ConfSelectorPresenter extends GluonPresenter<DevoxxApplication> {
         pastEvents.setOnAction(e -> {
             selector.setComparator(pastConferenceComparator);
             selector.setItems(service.retrievePastConferences());
-            header.setText(bundle.getString("OTN.CONFERENCE_SELECTOR.HEADER.PAST_EVENTS"));
+            header.setText(resources.getString("OTN.CONFERENCE_SELECTOR.HEADER.PAST_EVENTS"));
             STATUS_BAR.pseudoClassStateChanged(PSEUDO_CLASS_STATUS_VOXXED, false);
         });
 
@@ -165,7 +166,7 @@ public class ConfSelectorPresenter extends GluonPresenter<DevoxxApplication> {
             header.setText(eventType.getDisplayName());
             filteredList.setPredicate(conference -> !isEmptyString(conference.getCfpURL()) && conference.getEventType() == eventType);
         } else {
-            header.setText(bundle.getString("OTN.CONFERENCE_SELECTOR.HEADER.DEVOXX_VOXXED"));
+            header.setText(resources.getString("OTN.CONFERENCE_SELECTOR.HEADER.DEVOXX_VOXXED"));
             filteredList.setPredicate(conference -> !isEmptyString(conference.getCfpURL()));
         }
     }

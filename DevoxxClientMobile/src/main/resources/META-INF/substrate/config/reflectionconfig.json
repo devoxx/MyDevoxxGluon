@@ -1,0 +1,53 @@
+[
+  {
+    "name":"com.gluonhq.charm.glisten.control.Rating",
+    "methods":[
+      {"name":"<init>","parameterTypes":[] },
+      {"name":"<init>","parameterTypes":["int"] },
+      {"name":"<init>","parameterTypes":["int","int"] }
+    ]
+  }
+,
+  {
+    "name":"com.gluonhq.charm.glisten.control.TextField",
+    "methods":[
+      {"name":"<init>","parameterTypes":[] },
+      {"name":"<init>","parameterTypes":["java.lang.String"] }
+    ]
+  }
+,
+  {
+    "name":"com.gluonhq.maps.MapView",
+    "methods":[
+      {"name":"<init>","parameterTypes":[] }
+    ]
+  }
+,
+  {
+    "name":"com.gluonhq.impl.charm.glisten.connect.view.GlistenAuthenticationView",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.gluonhq.impl.cloudlink.client.user.LoginMethodImpl",
+    "allPublicMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  }
+,
+  {
+    "name":"com.gluonhq.impl.cloudlink.client.usage.Device",
+    "methods":[
+      {"name":"<init>","parameterTypes":[] }
+    ]
+  }
+,
+  {
+    "name":"com.gluonhq.charm.glisten.control.TextInput",
+    "methods":[
+      {"name":"<init>","parameterTypes":[] },
+      {"name":"setText","parameterTypes":["java.lang.String"] },
+      {"name":"getText","parameterTypes":[] },
+      {"name":"setPromptText","parameterTypes":["java.lang.String"] },
+      {"name":"getPromptText","parameterTypes":[] }
+    ]
+  }
+]

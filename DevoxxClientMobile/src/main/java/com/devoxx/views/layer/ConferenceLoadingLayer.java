@@ -28,8 +28,7 @@ package com.devoxx.views.layer;
 import com.devoxx.DevoxxView;
 import com.devoxx.model.Conference;
 import com.devoxx.service.Service;
-import com.gluonhq.charm.down.Services;
-import com.gluonhq.charm.down.plugins.DisplayService;
+import com.gluonhq.attach.display.DisplayService;
 import com.gluonhq.charm.glisten.application.GlassPane;
 import com.gluonhq.charm.glisten.application.MobileApplication;
 import com.gluonhq.charm.glisten.control.ProgressIndicator;
@@ -73,7 +72,7 @@ public class ConferenceLoadingLayer extends Layer {
     private ConferenceLoadingLayer(Service service, Conference conference) {
         this.service = service;
         glassPane = MobileApplication.getInstance().getGlassPane();
-        displayService = Services.get(DisplayService.class).orElse(null);
+        displayService = DisplayService.create().orElse(null);
 
         progressIndicator = new ProgressIndicator();
         progressIndicator.pseudoClassStateChanged(PSEUDO_CLASS_VOXXED, Conference.Type.VOXXED == conference.getEventType());

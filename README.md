@@ -33,17 +33,61 @@ for complete description of the project and how to start development.
 
 ## Getting Started
 
-Before you clone and run the project, it is advisable to go through the short tutorial on
-[Getting Started with Gluon Mobile](http://docs.gluonhq.com/getting-started/).
-
-Run the mobile project on desktop:
-
-```
-./gradlew :DevoxxClient:run
-```
+Before you clone and run the project, check the GluonFX plugin [documentation](https://docs.gluonhq.com/).
 
 For more details about the project, please refer to our [Wiki](https://github.com/devoxx/MyDevoxxGluon/wiki).
 
+Once you have cloned the project, with JDK 11, build it from the root:
+
+    mvn clean install
+
+Then cd into the `DevoxxClientMobile` folder. 
+
+### Desktop
+
+Run the application on JVM/HotSpot:
+
+    mvn gluonfx:run
+
+Build a native image using:
+
+    mvn gluonfx:build
+
+Run the native image app:
+
+    mvn gluonfx:nativerun
+
+### Android
+
+Build a native image for Android using:
+
+    mvn gluonfx:build -Pandroid
+
+Package the native image as an 'apk' file:
+
+    mvn gluonfx:package -Pandroid
+
+Install it on a connected android device:
+
+    mvn gluonfx:install -Pandroid
+
+Run the installed app on a connected android device:
+
+    mvn gluonfx:nativerun -Pandroid
+
+### iOS
+
+Build a native image for iOS using:
+
+    mvn gluonfx:build -Pios
+
+Install and run the native image on a connected iOS device:
+
+    mvn gluonfx:nativerun -Pios
+
+Create an IPA file (for submission to TestFlight or App Store):
+
+    mvn gluonfx:package -Pios
 
 ## Contributing
 

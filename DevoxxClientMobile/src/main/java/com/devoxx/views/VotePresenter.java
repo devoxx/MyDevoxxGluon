@@ -243,7 +243,7 @@ public class VotePresenter extends GluonPresenter<DevoxxApplication> {
             });
             feedbackDialog.getButtons().addAll(cancelButton, saveButton);
             feedbackDialog.setOnCloseRequest(e -> feedbackLabel.setText(feedback.getText()));
-            if (com.gluonhq.charm.down.Platform.isAndroid()) {
+            if (com.gluonhq.attach.util.Platform.isAndroid()) {
                 feedback.skinProperty().addListener(new InvalidationListener() {
                     @Override
                     public void invalidated(Observable observable) {

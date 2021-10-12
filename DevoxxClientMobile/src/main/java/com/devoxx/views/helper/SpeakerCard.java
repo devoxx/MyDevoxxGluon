@@ -28,8 +28,8 @@ package com.devoxx.views.helper;
 import com.devoxx.model.Speaker;
 import com.devoxx.util.DevoxxBundle;
 import static com.devoxx.util.DevoxxSettings.TWITTER_URL;
-import com.gluonhq.charm.down.Services;
-import com.gluonhq.charm.down.plugins.BrowserService;
+
+import com.gluonhq.attach.browser.BrowserService;
 import com.gluonhq.charm.glisten.control.Avatar;
 import com.gluonhq.charm.glisten.control.Toast;
 import javafx.application.Platform;
@@ -68,7 +68,7 @@ public class SpeakerCard extends Region {
 
         speakerTitle = new Label(speaker.getTwitter());
         speakerTitle.getStyleClass().addAll("speaker-title", "link");
-        speakerTitle.setOnMousePressed(e -> Services.get(BrowserService.class).ifPresent(b -> {
+        speakerTitle.setOnMousePressed(e -> BrowserService.create().ifPresent(b -> {
             if(speaker.getTwitter() != null && !speaker.getTwitter().isEmpty() && speaker.getTwitter().startsWith("@")) {
                 try {
                     String url = TWITTER_URL + speaker.getTwitter().substring(1);

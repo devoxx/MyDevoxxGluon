@@ -31,8 +31,7 @@ import com.devoxx.model.BadgeType;
 import com.devoxx.model.Sponsor;
 import com.devoxx.service.Service;
 import com.devoxx.util.DevoxxSettings;
-import com.gluonhq.charm.down.Services;
-import com.gluonhq.charm.down.plugins.SettingsService;
+import com.gluonhq.attach.settings.SettingsService;
 import com.gluonhq.charm.glisten.afterburner.GluonPresenter;
 import com.gluonhq.charm.glisten.application.ViewStackPolicy;
 import com.gluonhq.charm.glisten.control.AppBar;
@@ -101,7 +100,7 @@ public class BadgesPresenter extends GluonPresenter<DevoxxApplication> {
     }
 
     private BadgeType loadPreviousSelection() {
-        final Optional<SettingsService> settingsService = Services.get(SettingsService.class);
+        final Optional<SettingsService> settingsService = SettingsService.create();
         if (settingsService.isPresent()) {
             final SettingsService service = settingsService.get();
             final String badgeType = service.retrieve(DevoxxSettings.BADGE_TYPE);
@@ -130,7 +129,7 @@ public class BadgesPresenter extends GluonPresenter<DevoxxApplication> {
     }
 
     private Optional<Sponsor> fetchSavedSponsor() {
-        final Optional<SettingsService> settingsService = Services.get(SettingsService.class);
+        final Optional<SettingsService> settingsService = SettingsService.create();
         if (settingsService.isPresent()) {
             SettingsService service = settingsService.get();
             return Optional.ofNullable(Sponsor.fromCSV(service.retrieve(DevoxxSettings.BADGE_SPONSOR)));

@@ -36,9 +36,8 @@ import com.devoxx.views.cell.BadgeCell;
 import com.devoxx.views.helper.LoginPrompter;
 import com.devoxx.views.helper.Placeholder;
 import com.devoxx.views.helper.Util;
-import com.gluonhq.charm.down.Services;
-import com.gluonhq.charm.down.plugins.BarcodeScanService;
-import com.gluonhq.charm.down.plugins.SettingsService;
+import com.gluonhq.attach.barcodescan.BarcodeScanService;
+import com.gluonhq.attach.settings.SettingsService;
 import com.gluonhq.charm.glisten.afterburner.GluonPresenter;
 import com.gluonhq.charm.glisten.application.MobileApplication;
 import com.gluonhq.charm.glisten.control.AppBar;
@@ -121,7 +120,7 @@ public class AttendeeBadgePresenter extends GluonPresenter<DevoxxApplication> {
             MobileApplication.getInstance().switchToPreviousView();
             DevoxxView.ATTENDEE_BADGE.switchView();
         }
-        Services.get(SettingsService.class).ifPresent(service -> {
+        SettingsService.create().ifPresent(service -> {
             service.store(DevoxxSettings.BADGE_TYPE, BadgeType.ATTENDEE.toString());
         });
         showAttendee();
@@ -152,7 +151,7 @@ public class AttendeeBadgePresenter extends GluonPresenter<DevoxxApplication> {
                     addBadge(badges, Util.getDummyQR());
                     return;
                 }
-                Services.get(BarcodeScanService.class).ifPresent(s -> {
+                BarcodeScanService.create().ifPresent(s -> {
                     final Optional<String> scanQr = s.scan(DevoxxBundle.getString("OTN.BADGES.ATTENDEE.QR.TITLE"), null, null);
                     scanQr.ifPresent(qr -> addBadge(badges, qr));
                 });

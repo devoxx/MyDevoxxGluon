@@ -25,12 +25,10 @@
  */
 package com.devoxx.util;
 
-import com.gluonhq.charm.down.Platform;
-import com.gluonhq.charm.down.Services;
-
-import com.gluonhq.charm.down.plugins.Cache;
-import com.gluonhq.charm.down.plugins.CacheService;
-import com.gluonhq.charm.down.plugins.StorageService;
+import com.gluonhq.attach.cache.Cache;
+import com.gluonhq.attach.cache.CacheService;
+import com.gluonhq.attach.storage.StorageService;
+import com.gluonhq.attach.util.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.image.Image;
@@ -73,7 +71,7 @@ public class ImageCache {
     });
 
     static {
-        memoryImageCache =  Services.get(CacheService.class)
+        memoryImageCache = CacheService.create()
             .map(c -> c.<String, Image>getCache("OTNImageCache"))
             .orElseGet(null);
     }
@@ -138,7 +136,7 @@ public class ImageCache {
 
     private static Optional<File> initImageStore() {
         try {
-            File rootDir = Services.get(StorageService.class)
+            File rootDir = StorageService.create()
                     .flatMap(StorageService::getPrivateStorage)
                     .orElseThrow(() -> new IOException("Private storage file not available"));
             

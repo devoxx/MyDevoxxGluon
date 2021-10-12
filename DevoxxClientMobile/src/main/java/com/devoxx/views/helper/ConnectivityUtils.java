@@ -25,8 +25,7 @@
  */
 package com.devoxx.views.helper;
 
-import com.gluonhq.charm.down.Services;
-import com.gluonhq.charm.down.plugins.SettingsService;
+import com.gluonhq.attach.settings.SettingsService;
 import com.gluonhq.charm.glisten.application.MobileApplication;
 import com.gluonhq.charm.glisten.application.StatusBar;
 import com.gluonhq.charm.glisten.control.Dialog;
@@ -53,7 +52,7 @@ public class ConnectivityUtils {
     public static void showOfflineIndication() {
         STATUS_BAR.pseudoClassStateChanged(PSEUDO_CLASS_ERROR, true);
         
-        boolean show = Services.get(SettingsService.class)
+        boolean show = SettingsService.create()
                 .map(s -> !"checked".equals(s.retrieve(DONT_SHOW_AGAIN_KEY)))
                 .orElse(true);
         
@@ -70,7 +69,7 @@ public class ConnectivityUtils {
             Button okButton = new Button(DevoxxBundle.getString("OTN.OFFLINE.DIALOG.OK"));
             okButton.setOnAction(event -> {
                 if (checkBox.isSelected()) {
-                    Services.get(SettingsService.class).ifPresent(s -> s.store(DONT_SHOW_AGAIN_KEY, "checked"));
+                    SettingsService.create().ifPresent(s -> s.store(DONT_SHOW_AGAIN_KEY, "checked"));
                 }
                 dialog.hide();
             });

@@ -12,3 +12,5 @@ out/
 
 # Custom
 DevoxxClientMobile/src/main/resources/gluoncloudlink_config.json
+DevoxxClientCommon/target
+DevoxxClientMobile/target
