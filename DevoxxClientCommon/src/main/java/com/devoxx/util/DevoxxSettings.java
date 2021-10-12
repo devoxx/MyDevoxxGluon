@@ -27,13 +27,14 @@ package com.devoxx.util;
 
 import com.devoxx.model.Conference;
 import com.gluonhq.attach.settings.SettingsService;
+import com.gluonhq.attach.version.VersionService;
 
 //import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.*;
 
 public class DevoxxSettings {
-    public static final String BUILD_NUMBER = "415"                                                                  ;
+    public static final String BUILD_NUMBER = VersionService.create().map(VersionService::getBuildNumber).orElse("415");                                                                  ;
 
     /**
      * boolean option to switch on/off automatic authentication by using a self generated random UUID

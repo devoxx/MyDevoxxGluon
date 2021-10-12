@@ -15,6 +15,15 @@
 
     <properties>
         <mainClassName>com.devoxx.DevoxxApplication</mainClassName>
+        <gluonfxTarget>host</gluonfxTarget>
+        <!-- for Android -->
+        <version.code>415</version.code>
+        <version.name>3.6.5</version.name>
+        <!-- for iOS -->
+        <iosSignIdentity/>
+        <iosProvisioningProfile/>
+        <bundle.version>415</bundle.version>
+        <bundle.short.version>3.6.5</bundle.short.version>
     </properties>
 
     <dependencies>
@@ -237,6 +246,7 @@
                         <list>share</list>
                         <list>statusbar</list>
                         <list>storage</list>
+                        <list>version</list>
                         <list>video</list>
                     </attachList>
                     <bundlesList>
@@ -321,14 +331,14 @@
                     <releaseConfiguration>
                         <!-- for iOS -->
                         <bundleName>devoxx</bundleName>
-                        <bundleVersion>415</bundleVersion>
-                        <bundleShortVersion>3.6.5</bundleShortVersion>
+                        <bundleVersion>${bundle.version}</bundleVersion>
+                        <bundleShortVersion>${bundle.short.version}</bundleShortVersion>
                         <providedSigningIdentity>${iosSignIdentity}</providedSigningIdentity>
                         <providedProvisioningProfile>${iosProvisioningProfile}</providedProvisioningProfile>
                         <!-- for Android -->
                         <appLabel>Devoxx</appLabel>
-                        <versionCode>415</versionCode>
-                        <versionName>3.6.5</versionName>
+                        <versionCode>${version.code}</versionCode>
+                        <versionName>${version.name}</versionName>
                     </releaseConfiguration>
                 </configuration>
             </plugin>
