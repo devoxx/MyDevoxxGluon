@@ -318,6 +318,11 @@
 <!--                    <verbose>true</verbose>-->
                     <mainClass>${mainClassName}</mainClass>
                     <releaseConfiguration>
+                        <!-- for iOS -->
+                        <bundleName>com.devoxx.mydevoxx.swift</bundleName>
+                        <bundleVersion>409</bundleVersion>
+                        <bundleShortVersion>3.6.3</bundleShortVersion>
+                        <!-- for Android -->
                         <appLabel>Devoxx</appLabel>
                         <versionCode>409</versionCode>
                         <versionName>3.6.3</versionName>
