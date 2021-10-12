@@ -124,10 +124,8 @@ public class SessionVisuals {
         return DevoxxBundle.getString("OTN.VISUALS.FORMAT.MULTILINE",
                 session.getTalk().getTrack(),
                 service.getConference().getConferenceDayIndex(startDate),
-                com.devoxx.util.time.ZonedDateTime.ofTime(startDate),
-                com.devoxx.util.time.ZonedDateTime.ofTime(endDate),
-//                startDate.format(DevoxxSettings.TIME_FORMATTER),
-//                endDate.format(DevoxxSettings.TIME_FORMATTER),
+                startDate.format(DevoxxSettings.TIME_FORMATTER),
+                endDate.format(DevoxxSettings.TIME_FORMATTER),
                 session.getRoomName());
     }
 
@@ -137,10 +135,8 @@ public class SessionVisuals {
         ZonedDateTime endDate = session.getEndDate();
         return DevoxxBundle.getString("OTN.VISUALS.FORMAT.ONELINE",
                 service.getConference().getConferenceDayIndex(startDate),
-                com.devoxx.util.time.ZonedDateTime.ofTime(startDate),
-                com.devoxx.util.time.ZonedDateTime.ofTime(endDate),
-//                startDate.format(DevoxxSettings.TIME_FORMATTER),
-//                endDate.format(DevoxxSettings.TIME_FORMATTER),
+                startDate.format(DevoxxSettings.TIME_FORMATTER),
+                endDate.format(DevoxxSettings.TIME_FORMATTER),
                 session.getLocation());
 
     }

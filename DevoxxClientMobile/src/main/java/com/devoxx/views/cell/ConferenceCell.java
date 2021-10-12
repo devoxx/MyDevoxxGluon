@@ -45,8 +45,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 
-//import java.time.LocalDate;
-//import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -58,7 +58,7 @@ public class ConferenceCell extends CharmListCell<Conference> {
     private static final Logger LOG = Logger.getLogger(ConferenceCell.class.getName());
 
     private static final PseudoClass PSEUDO_CLASS_VOXXED = PseudoClass.getPseudoClass("voxxed");
-//    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MMMM dd, yyyy");
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MMMM dd, yyyy");
     private static final int PHONE_HEIGHT = 222;
     private static final int TABLET_HEIGHT = 333;
     private static final String CONFERENCE_TAG = "conference_";
@@ -137,13 +137,12 @@ public class ConferenceCell extends CharmListCell<Conference> {
             }
             
             name.setText(item.getName());
-//            if (item.getFromDate().equals(item.getEndDate())) {
-//                dateLabel.setText(LocalDate.parse(item.getFromDate()).format(DATE_TIME_FORMATTER));
-//            } else {
-//                dateLabel.setText(LocalDate.parse(item.getFromDate()).getDayOfMonth() + " - " +
-//                        LocalDate.parse(item.getEndDate()).format(DATE_TIME_FORMATTER));
-//            }
-            dateLabel.setText(com.devoxx.util.time.ZonedDateTime.formatToConferenceDate(item.getFromDate(), item.getEndDate()));
+            if (item.getFromDate().equals(item.getEndDate())) {
+                dateLabel.setText(LocalDate.parse(item.getFromDate()).format(DATE_TIME_FORMATTER));
+            } else {
+                dateLabel.setText(LocalDate.parse(item.getFromDate()).getDayOfMonth() + " - " +
+                        LocalDate.parse(item.getEndDate()).format(DATE_TIME_FORMATTER));
+            }
 
             if (imageTask != null) {
                 imageTask.cancel();

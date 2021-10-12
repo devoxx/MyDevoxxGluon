@@ -68,7 +68,7 @@ import javafx.scene.control.Button;
 import javax.json.JsonObject;
 import java.io.*;
 import java.time.*;
-//import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -975,8 +975,7 @@ public class DevoxxService implements Service {
                 .param("4", safeStr(sponsorBadge.getCompany()))
                 .param("5", safeStr(sponsorBadge.getEmail()))
                 .param("6", safeStr(sponsorBadge.getDetails()))
-//                .param("7", ZonedDateTime.now().format(DateTimeFormatter.ISO_INSTANT))
-                .param("7", ZonedDateTime.now().toString())
+                .param("7", ZonedDateTime.now().format(DateTimeFormatter.ISO_INSTANT))
                 .object();
         GluonObservableObject<String> sponsorBadgeResult = fnSponsorBadge.call(String.class);
         sponsorBadgeResult.setOnFailed(e -> {

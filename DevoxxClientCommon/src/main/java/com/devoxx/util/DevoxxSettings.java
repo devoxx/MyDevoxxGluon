@@ -29,7 +29,7 @@ import com.devoxx.model.Conference;
 import com.gluonhq.attach.settings.SettingsService;
 import com.gluonhq.attach.version.VersionService;
 
-//import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.*;
 
@@ -135,10 +135,10 @@ public class DevoxxSettings {
     private static final String TIME_PATTERN = "h:mma";
     private static final String NEWS_PATTERN  = "EEEE, h:mma";
 
-//    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL);
-//    public static final DateTimeFormatter WEARABLE_DATE_FORMATTER = DateTimeFormatter.ofPattern(WEARABLE_DAY_PATTERN, LOCALE);
-//    public static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern(TIME_PATTERN, LOCALE);
-//    public static final DateTimeFormatter NEWS_FORMATTER = DateTimeFormatter.ofPattern(NEWS_PATTERN, LOCALE);
+    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL);
+    public static final DateTimeFormatter WEARABLE_DATE_FORMATTER = DateTimeFormatter.ofPattern(WEARABLE_DAY_PATTERN, LOCALE);
+    public static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern(TIME_PATTERN, LOCALE);
+    public static final DateTimeFormatter NEWS_FORMATTER = DateTimeFormatter.ofPattern(NEWS_PATTERN, LOCALE);
 
     public static final String TWITTER_URL = "https://www.twitter.com/";
     
