@@ -255,6 +255,7 @@
                         <list>com.devoxx.views.badges</list>
                         <list>com.devoxx.views.confselector</list>
                         <list>com.devoxx.views.vote</list>
+                        <list>org.glassfish.json.messages</list>
                     </bundlesList>
                     <resourcesList>
                         <item>loggingON.properties</item>
