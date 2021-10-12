@@ -195,13 +195,13 @@
         <profile>
             <id>ios</id>
             <properties>
-                <clientTarget>ios</clientTarget>
+                <gluonfxTarget>ios</gluonfxTarget>
             </properties>
         </profile>
         <profile>
             <id>android</id>
             <properties>
-                <clientTarget>android</clientTarget>
+                <gluonfxTarget>android</gluonfxTarget>
             </properties>
         </profile>
     </profiles>
@@ -221,7 +221,7 @@
                 <artifactId>gluonfx-maven-plugin</artifactId>
                 <version>${gluonfx-maven-plugin-version}</version>
                 <configuration>
-                    <target>${clientTarget}</target>
+                    <target>${gluonfxTarget}</target>
                     <attachList>
                         <list>barcode-scan</list>
                         <list>browser</list>
@@ -317,11 +317,14 @@
                     </reflectionList>
 <!--                    <verbose>true</verbose>-->
                     <mainClass>${mainClassName}</mainClass>
+                    <appIdentifier>com.devoxx.mydevoxx.swift</appIdentifier>
                     <releaseConfiguration>
                         <!-- for iOS -->
-                        <bundleName>com.devoxx.mydevoxx.swift</bundleName>
+                        <bundleName>devoxx</bundleName>
                         <bundleVersion>415</bundleVersion>
                         <bundleShortVersion>3.6.5</bundleShortVersion>
+                        <providedSigningIdentity>${iosSignIdentity}</providedSigningIdentity>
+                        <providedProvisioningProfile>${iosProvisioningProfile}</providedProvisioningProfile>
                         <!-- for Android -->
                         <appLabel>Devoxx</appLabel>
                         <versionCode>415</versionCode>
