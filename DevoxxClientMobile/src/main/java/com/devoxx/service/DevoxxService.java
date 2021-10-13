@@ -540,7 +540,7 @@ public class DevoxxService implements Service {
 
         DevoxxNotifications notifications = Injector.instantiateModelOrService(DevoxxNotifications.class);
         if (!isAuthenticated()) {
-//            notifications.preloadRatingNotifications();
+            notifications.preloadRatingNotifications();
         }
 
         sessionsList.setOnFailed(e -> {
@@ -554,7 +554,7 @@ public class DevoxxService implements Service {
             sessionsList.removeListener(sessionsListChangeListener);
             retrieveAuthenticatedUserSessionInformation();
             finishNotificationsPreloading();
-//            addLocalNotification();
+            addLocalNotification();
         });
 
         sessions.set(sessionsList);

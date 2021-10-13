@@ -154,11 +154,9 @@ public class ConferenceCell extends CharmListCell<Conference> {
                 imageTask = new ETagImageTask(imageId, item.getImageURL());
                 imageTask.setOnSucceeded(e -> {
                     final Image value = imageTask.getValue();
-                    if (image != null) {
-                        imagesMap.put(imageId, value);
-                        background.setImage(value);
-                        fitImage();
-                    }
+                    imagesMap.put(imageId, value);
+                    background.setImage(value);
+                    fitImage();
                 });
                 imageTask.exceptionProperty().addListener((o, ov, nv) -> {
                     LOG.log(Level.SEVERE, "Error retrieving " + imageId + ": " + nv.getMessage());
