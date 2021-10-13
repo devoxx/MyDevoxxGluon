@@ -77,6 +77,11 @@ public class Break {
         return room;
     }
 
+    public void setRoom(String room) {
+        this.room = new Room();
+        this.room.setName(room);
+    }
+
     public void setRoom(Room room) {
         this.room = room;
     }
