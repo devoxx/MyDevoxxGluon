@@ -72,16 +72,20 @@ public class JsonToObject {
 
     private static Talk toTalk(JsonObject src) {
         final Talk talk = new Talk();
-        talk.setId(String.valueOf(src.getInt("id")));
+        talk.setId(getNullableInt(src,"id"));
         talk.setTitle(getNullable(src, "title"));
         talk.setSummary(getNullable(src, "description"));
-        talk.setTrackId(String.valueOf(src.getInt("trackId")));
+        talk.setTrackId(getNullableInt(src,"trackId"));
         talk.setTrack(getNullable(src, "trackName"));
         talk.setTalkType(getNullable(src, "sessionTypeName"));
         return talk;
     }
 
     private static String getNullable(JsonObject source, String key) {
-        return source.isNull(key) ? "" : source.getString(key);
+        return source.get(key) == null || source.isNull(key) ? "" : source.getString(key);
+    }
+
+    private static String getNullableInt(JsonObject source, String key) {
+        return source.getJsonNumber(key) == null ? null : String.valueOf(source.getInt(key));
     }
 }
