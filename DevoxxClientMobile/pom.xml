@@ -22,8 +22,8 @@
         <!-- for iOS -->
         <iosSignIdentity/>
         <iosProvisioningProfile/>
-        <bundle.version>415</bundle.version>
-        <bundle.short.version>3.6.5</bundle.short.version>
+        <bundle.version>500</bundle.version>
+        <bundle.short.version>3.7.0</bundle.short.version>
     </properties>
 
     <dependencies>

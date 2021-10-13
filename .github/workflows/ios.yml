@@ -1,0 +1,52 @@
+name: iOS
+
+on:
+  push:
+    branches: [ gluonfx ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Gluon's GraalVM
+        uses: gluonhq/setup-graalvm@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: Apple-Actions/import-codesign-certs@v1
+        with:
+          p12-file-base64: ${{ secrets.DEVOXX_IOS_CERTIFICATES_FILE_BASE64 }}
+          p12-password: ${{ secrets.DEVOXX_IOS_CERTIFICATES_PASSWORD }}
+
+      - uses: Apple-Actions/download-provisioning-profiles@v1
+        with:
+          bundle-id: com.devoxx.mydevoxx.swift
+          issuer-id: ${{ secrets.DEVOXX_IOS_APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ secrets.DEVOXX_IOS_APPSTORE_KEY_ID }}
+          api-private-key: ${{ secrets.DEVOXX_IOS_APPSTORE_PRIVATE_KEY }}
+
+      - name: Gluon License
+        uses: gluonhq/gluon-build-license@v1
+        with:
+          gluon-license: ${{ secrets.GLUON_LICENSE }}
+
+      - name: CloudLink Config
+        run: printf "${{ secrets.CLOUDLINK_CONFIG }}" > DevoxxClientMobile/src/main/resources/cloudlink_config.json
+        shell: bash
+
+      - name: Gluon Build
+        with:
+          BUNDLE_VERSION: echo $((500 + ${{ env.GITHUB_RUN_NUMBER }}))
+        run: |
+          mvn clean install
+          cd DevoxxClientMobile
+          mvn -Pios -DiosSignIdentity="${{ env.DEVOXX_SIGN_IDENTITY }}" -DiosProvisioningProfile="${{ env.DEVOXX_PROV_PROFILE }}" -Dbundle.version="$BUNDLE_VERSION" gluonfx:build gluonfx:package
+
+      - uses: Apple-Actions/upload-testflight-build@master
+        with:
+          app-path: DevoxxClientMobile/target/gluonfx/arm64-ios/DevoxxClientMobile.ipa
+          issuer-id: ${{ secrets.DEVOXX_IOS_APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ secrets.DEVOXX_IOS_APPSTORE_KEY_ID }}
+          api-private-key: ${{ secrets.DEVOXX_IOS_APPSTORE_PRIVATE_KEY }}
