@@ -48,13 +48,13 @@ jobs:
         shell: bash
 
       - name: Gluon Build
-        run: mvn -Pandroid -Dandroid.keystore.path="${{ secrets.GLUON_ANDROID_KEYSTOREPATH }}" -Dandroid.keystore.password="${{ secrets.GLUON_ANDROID_KEYSTORE_PASSWORD }}" -Dandroid.keyalias="${{ secrets.GLUON_ANDROID_KEYALIAS }}" -Dandroid.keyalias.password="${{ secrets.GLUON_ANDROID_KEYALIAS_PASSWORD }}" -Dversion.code="$VERSION_CODE" gluonfx:build gluonfx:package
+        run: |
+          mvn clean install
+          cd DevoxxClientMobile
+          mvn -Pandroid -Dandroid.keystore.path="$GLUON_ANDROID_KEYSTOREPATH" -Dandroid.keystore.password="${{ secrets.GLUON_ANDROID_KEYSTORE_PASSWORD }}" -Dandroid.keyalias="${{ secrets.GLUON_ANDROID_KEYALIAS }}" -Dandroid.keyalias.password="${{ secrets.GLUON_ANDROID_KEYALIAS_PASSWORD }}" -Dversion.code="$VERSION_CODE" gluonfx:build gluonfx:package
         env:
           VERSION_CODE: ${{ steps.variables.outputs.VERSION }}
           GLUON_ANDROID_KEYSTOREPATH: ${{ steps.android_keystore_file.outputs.filePath }}
-          GLUON_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.DEVOXX_ANDROID_KEYSTORE_PASSWORD }}
-          GLUON_ANDROID_KEYALIAS: ${{ secrets.DEVOXX_ANDROID_KEYALIAS }}
-          GLUON_ANDROID_KEYALIAS_PASSWORD: ${{ secrets.DEVOXX_ANDROID_KEYALIAS_PASSWORD }}
 
       - name: Make staging directory
         run: mkdir staging
