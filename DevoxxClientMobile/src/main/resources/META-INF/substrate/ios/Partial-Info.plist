@@ -4,6 +4,18 @@
 <dict>
         <key>ITSAppUsesNonExemptEncryption</key>
         <false/>
+        <key>NSAppTransportSecurity</key>  
+        <dict>  
+            <key>NSAllowsArbitraryLoads</key><false/>
+            <key>NSExceptionDomains</key>  
+            <dict>  
+                <key>gluonhq.com</key>  
+                <dict>  
+                    <key>NSIncludesSubdomains</key><true/>  
+                    <key>NSExceptionAllowsInsecureHTTPLoads</key><true/>  
+                </dict>
+            </dict>  
+        </dict> 
         <key>UIBackgroundModes</key>
         <array>
             <string>remote-notification</string>
