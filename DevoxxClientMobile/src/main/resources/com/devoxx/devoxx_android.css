@@ -29,11 +29,6 @@
     -fx-font-size: 1.5em;
 }
 
-.search-list-view .avatar,
-.speakers-list-view .avatar {
-   -charm-radius: 2em;
-}
-
 .exhibitor-detail .details,
 .sponsor-detail .details {
     -fx-padding: 0em 0em 0em 1.4em;
