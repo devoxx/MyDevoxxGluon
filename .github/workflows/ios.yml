@@ -34,7 +34,7 @@ jobs:
           dir: DevoxxClientMobile
 
       - name: CloudLink Config
-        run: printf "${{ secrets.CLOUDLINK_CONFIG }}" > DevoxxClientMobile/src/main/resources/gluoncloudlink_config.json
+        run: printf '${{ secrets.CLOUDLINK_CONFIG }}' > DevoxxClientMobile/src/main/resources/gluoncloudlink_config.json
         shell: bash
 
       - name: Bundle version
