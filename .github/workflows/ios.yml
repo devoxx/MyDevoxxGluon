@@ -37,13 +37,13 @@ jobs:
         shell: bash
 
       - name: Gluon Build
-        with:
-          BUNDLE_VERSION: echo $((500 + ${{ env.GITHUB_RUN_NUMBER }}))
         run: |
           mvn clean install
           cd DevoxxClientMobile
           mvn -Pios -DiosSignIdentity="${{ secrets.DEVOXX_SIGN_IDENTITY }}" -DiosProvisioningProfile="${{ secrets.DEVOXX_PROV_PROFILE }}" -Dbundle.version="$BUNDLE_VERSION" gluonfx:build gluonfx:package
-
+        env:
+          BUNDLE_VERSION: echo $((500 + ${{ env.GITHUB_RUN_NUMBER }}))
+        
       - uses: Apple-Actions/upload-testflight-build@master
         with:
           app-path: DevoxxClientMobile/target/gluonfx/arm64-ios/DevoxxClientMobile.ipa
