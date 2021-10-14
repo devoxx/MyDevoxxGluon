@@ -28,7 +28,7 @@ jobs:
           api-private-key: ${{ secrets.DEVOXX_IOS_APPSTORE_PRIVATE_KEY }}
 
       - name: Gluon License
-        uses: gluonhq/gluon-build-license@v1
+        uses: gluonhq/gluon-build-license@v2
         with:
           gluon-license: ${{ secrets.GLUON_LICENSE }}
           dir: DevoxxClientMobile
