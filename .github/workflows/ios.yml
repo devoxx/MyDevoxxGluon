@@ -37,13 +37,20 @@ jobs:
         run: printf "${{ secrets.CLOUDLINK_CONFIG }}" > DevoxxClientMobile/src/main/resources/cloudlink_config.json
         shell: bash
 
+      - name: Bundle version
+        id: variables
+        run: |
+          VERSION=`echo $((500 + ${{ env.GITHUB_RUN_NUMBER }}))`
+          echo ::set-output name=VERSION::$VERSION
+        shell: bash
+
       - name: Gluon Build
         run: |
           mvn clean install
           cd DevoxxClientMobile
           mvn -Pios -DiosSignIdentity="${{ secrets.DEVOXX_SIGN_IDENTITY }}" -DiosProvisioningProfile="${{ secrets.DEVOXX_PROV_PROFILE }}" -Dbundle.version="$BUNDLE_VERSION" gluonfx:build gluonfx:package
         env:
-          BUNDLE_VERSION: echo $((500 + ${{ env.GITHUB_RUN_NUMBER }}))
+          BUNDLE_VERSION: ${{ steps.variables.outputs.VERSION }}
         
       - uses: Apple-Actions/upload-testflight-build@master
         with:
