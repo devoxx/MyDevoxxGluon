@@ -16,9 +16,14 @@
     <properties>
         <mainClassName>com.devoxx.DevoxxApplication</mainClassName>
         <gluonfxTarget>host</gluonfxTarget>
+        <app.identifier/>
         <!-- for Android -->
-        <version.code>415</version.code>
-        <version.name>3.6.5</version.name>
+        <version.code>500</version.code>
+        <version.name>3.7.0</version.name>
+        <android.keystore.path/>
+        <android.keystore.password/>
+        <android.keyalias/>
+        <android.keyalias.password/>
         <!-- for iOS -->
         <iosSignIdentity/>
         <iosProvisioningProfile/>
@@ -205,12 +210,14 @@
             <id>ios</id>
             <properties>
                 <gluonfxTarget>ios</gluonfxTarget>
+                <app.identifier>com.devoxx.mydevoxx.swift</app.identifier>
             </properties>
         </profile>
         <profile>
             <id>android</id>
             <properties>
                 <gluonfxTarget>android</gluonfxTarget>
+                <app.identifier>com.devoxx</app.identifier>
             </properties>
         </profile>
     </profiles>
@@ -328,7 +335,7 @@
                     </reflectionList>
 <!--                    <verbose>true</verbose>-->
                     <mainClass>${mainClassName}</mainClass>
-                    <appIdentifier>com.devoxx.mydevoxx.swift</appIdentifier>
+                    <appIdentifier>${app.identifier}</appIdentifier>
                     <releaseConfiguration>
                         <!-- for iOS -->
                         <bundleName>devoxx</bundleName>
@@ -340,6 +347,10 @@
                         <appLabel>Devoxx</appLabel>
                         <versionCode>${version.code}</versionCode>
                         <versionName>${version.name}</versionName>
+                        <providedKeyStorePath>${android.keystore.path}</providedKeyStorePath>
+                        <providedKeyStorePassword>${android.keystore.password}</providedKeyStorePassword>
+                        <providedKeyAlias>${android.keyalias}</providedKeyAlias>
+                        <providedKeyAliasPassword>${android.keyalias.password}</providedKeyAliasPassword>
                     </releaseConfiguration>
                 </configuration>
             </plugin>

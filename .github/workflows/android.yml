@@ -1,0 +1,71 @@
+name: Android
+
+on:
+  push:
+    branches: [ gluonfx ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Gluon's GraalVM
+        uses: gluonhq/setup-graalvm@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install libraries
+        run: sudo apt install libasound2-dev libavcodec-dev libavformat-dev libavutil-dev libgl-dev libgtk-3-dev libpango1.0-dev libxtst-dev
+
+      - name: Setup Android Keystore
+        id: android_keystore_file
+        uses: timheuer/base64-to-file@v1
+        with:
+          fileName: 'my.keystore'
+          encodedString: ${{ secrets.DEVOXX_ANDROID_KEYSTORE_BASE64 }}
+
+      - name: Gluon License
+        uses: gluonhq/gluon-build-license@v2
+        with:
+          gluon-license: ${{ secrets.GLUON_LICENSE }}
+          dir: DevoxxClientMobile
+
+      - name: CloudLink Config
+          run: printf '${{ secrets.CLOUDLINK_CONFIG }}' > DevoxxClientMobile/src/main/resources/gluoncloudlink_config.json
+          shell: bash
+
+      - name: Version code
+          id: variables
+          run: |
+            echo "::set-output name=VERSION::$((500 + GITHUB_RUN_NUMBER))"
+          shell: bash
+
+      - name: Gluon Build
+        run: mvn -Pandroid -Dandroid.keystore.path="${{ secrets.GLUON_ANDROID_KEYSTOREPATH }}" -Dandroid.keystore.password="${{ secrets.GLUON_ANDROID_KEYSTORE_PASSWORD }}" -Dandroid.keyalias="${{ secrets.GLUON_ANDROID_KEYALIAS }}" -Dandroid.keyalias.password="${{ secrets.GLUON_ANDROID_KEYALIAS_PASSWORD }}" -Dversion.code="$VERSION_CODE" gluonfx:build gluonfx:package
+        env:
+          VERSION_CODE: ${{ steps.variables.outputs.VERSION }}
+          GLUON_ANDROID_KEYSTOREPATH: ${{ steps.android_keystore_file.outputs.filePath }}
+          GLUON_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.DEVOXX_ANDROID_KEYSTORE_PASSWORD }}
+          GLUON_ANDROID_KEYALIAS: ${{ secrets.DEVOXX_ANDROID_KEYALIAS }}
+          GLUON_ANDROID_KEYALIAS_PASSWORD: ${{ secrets.DEVOXX_ANDROID_KEYALIAS_PASSWORD }}
+
+      - name: Make staging directory
+        run: mkdir staging
+
+      - name: Copy native image to staging
+        run: cp -r DevoxxClientMobile/target/gluonfx/aarch64-android/gvm/*.apk staging
+
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: Package
+          path: staging
+
+      - name: Upload to Google Play
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.DEVOXX_ANDROID_SERVICE_ACCOUNT_JSON }}
+          packageName: com.devoxx
+          releaseFiles: DevoxxClientMobile/target/gluonfx/aarch64-android/gvm/DevoxxClientMobile.apk
+          track: beta
