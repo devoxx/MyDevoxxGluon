@@ -35,6 +35,10 @@ jobs:
           run: printf '${{ secrets.CLOUDLINK_CONFIG }}' > DevoxxClientMobile/src/main/resources/gluoncloudlink_config.json
           shell: bash
 
+      - name: Google services
+          run: printf '${{ secrets.GOOGLE_SERVICES }}' > DevoxxClientMobile/src/main/resources/google-services.json
+          shell: bash
+
       - name: Version code
           id: variables
           run: |
