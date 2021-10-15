@@ -24,7 +24,7 @@ jobs:
         id: android_keystore_file
         uses: timheuer/base64-to-file@v1
         with:
-          fileName: 'my.keystore'
+          fileName: 'my.jks'
           encodedString: ${{ secrets.DEVOXX_ANDROID_KEYSTORE_BASE64 }}
 
       - name: Gluon License
