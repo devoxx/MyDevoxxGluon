@@ -74,4 +74,4 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.DEVOXX_ANDROID_SERVICE_ACCOUNT_JSON }}
           packageName: com.devoxx
           releaseFiles: DevoxxClientMobile/target/gluonfx/aarch64-android/gvm/DevoxxClientMobile.apk
-          track: beta
+          track: alpha
