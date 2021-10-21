@@ -3,7 +3,7 @@
           package="com.devoxx" 
           android:versionCode="417"
           android:versionName="3.6.6">
-    <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="28"/>
+    <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="29"/>
 
     <supports-screens android:xlargeScreens="true"/>
 
