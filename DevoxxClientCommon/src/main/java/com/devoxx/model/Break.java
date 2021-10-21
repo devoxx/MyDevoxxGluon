@@ -77,8 +77,13 @@ public class Break {
         return room;
     }
 
-    public void setRoom(Room room) {
-        this.room = room;
+    public void setRoom(Object room) {
+        if (room instanceof Room) {
+            this.room = (Room) room;
+        } else if (room instanceof String) {
+            this.room = new Room();
+            this.room.setName((String) room);
+        }
     }
 
     public String getDayName() {
