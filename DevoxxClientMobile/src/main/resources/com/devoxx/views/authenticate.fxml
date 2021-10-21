@@ -14,7 +14,7 @@
         <PasswordField fx:id="password" styleClass="password" promptText="PASSWORD"/>
         <Button fx:id="login" styleClass="login" text="LOGIN" onAction="#login"/>
         <HBox styleClass="links">
-            <Hyperlink fx:id="forgetPassword" text="Forget Password" onAction="#forgetPassword"/>
+            <Hyperlink fx:id="forgetPassword" text="Reset your Password" onAction="#forgetPassword"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Hyperlink fx:id="register" text="Register" onAction="#register"/>
         </HBox>
