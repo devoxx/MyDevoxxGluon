@@ -86,6 +86,13 @@ public class SearchPresenter extends GluonPresenter<DevoxxApplication> {
         results = FXCollections.observableArrayList();
         prefixResults = FXCollections.observableArrayList();
         searchTextField = new TextField();
+        // first time only, needed if textField is focused before skin is set:
+        searchTextField.skinProperty().addListener((obs, ov, nv) -> {
+            if (nv != null && searchTextField.isFocused()) {
+                search.requestFocus();
+                searchTextField.requestFocus();
+            }
+        });
         searchTextField.getStyleClass().add("search-text-field");
         searchTextField.setPromptText(DevoxxBundle.getString("OTN.SEARCH.PROMPT"));
         
