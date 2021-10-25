@@ -294,6 +294,11 @@
                         <list>com.devoxx.views.SponsorsPresenter</list>
                         <list>com.devoxx.views.VenuePresenter</list>
                         <list>com.devoxx.views.VotePresenter</list>
+                        <list>com.devoxx.views.cell.BadgeCell</list>
+                        <list>com.devoxx.views.cell.ExhibitorCell</list>
+                        <list>com.devoxx.views.cell.NoteCell</list>
+                        <list>com.devoxx.views.cell.ScheduleCell</list>
+                        <list>com.devoxx.views.cell.SpeakerCell</list>
                         <list>com.devoxx.views.helper.FilterSessionsPresenter</list>
                         <list>com.devoxx.views.helper.SessionVisuals</list>
                         <list>com.devoxx.model.Badge</list>
