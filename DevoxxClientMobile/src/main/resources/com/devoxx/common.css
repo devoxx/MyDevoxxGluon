@@ -175,6 +175,8 @@
 }
 
 /* use alternate color for bottom border on text input controls */
+.charm-text-field:focused > .text-field,
+.charm-text-field:hover:focused > .text-field,
 .text-input:focused {
     -fx-border-width: 0em 0em 0.166667em 0em;
     -fx-border-color: transparent transparent -alternate-color transparent;
