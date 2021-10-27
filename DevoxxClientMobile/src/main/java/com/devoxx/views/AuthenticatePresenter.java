@@ -161,11 +161,11 @@ public class AuthenticatePresenter extends GluonPresenter<DevoxxApplication> {
     }
 
     private String forgetPasswordURL() {
-        return cfpURLWithoutAPI() + "#/resetPassword";
+        return cfpURLWithoutAPI() + "#/reset/request";
     }
 
     private String registerURL() {
-        return cfpURLWithoutAPI() + "#/login";
+        return cfpURLWithoutAPI() + "#/register";
     }
 
     private String cfpURLWithoutAPI() {
