@@ -14,6 +14,8 @@ jobs:
         uses: gluonhq/setup-graalvm@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+           jdk: 'java11'
 
       - name: Install libraries
         run: |
