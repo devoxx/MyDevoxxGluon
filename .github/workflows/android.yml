@@ -16,6 +16,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
            jdk: 'java11'
+           graalvm: '22.0.0.2-Final'
 
       - name: Install libraries
         run: |
