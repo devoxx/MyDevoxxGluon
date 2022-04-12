@@ -284,7 +284,7 @@ public class SessionsPresenter  extends GluonPresenter<DevoxxApplication> {
 //            });
         }
 
-        if (filteredSessions!= null && filteredSessions.predicateProperty().isBound()) {
+        if (filteredSessions != null && filteredSessions.predicateProperty().isBound()) {
             filteredSessions.predicateProperty().unbind();
         }
 
