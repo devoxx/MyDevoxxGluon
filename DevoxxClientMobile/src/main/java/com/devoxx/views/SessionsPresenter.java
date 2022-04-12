@@ -260,7 +260,13 @@ public class SessionsPresenter  extends GluonPresenter<DevoxxApplication> {
             Comparator<Session> sessionComparator = (s1, s2) -> {
                 int compareStartDate = s1.getStartDate().compareTo(s2.getStartDate());
                 if (compareStartDate == 0) {
-                    return s1.getEndDate().compareTo(s2.getEndDate());
+                    int compareEndDate = s1.getEndDate().compareTo(s2.getEndDate());
+                    if (compareEndDate == 0) {
+                        if (s1.getTalk() != null && s2.getTalk() != null) {
+                            return s1.getTalk().getTalkType().compareTo(s2.getTalk().getTalkType());
+                        }
+                    }
+                    return compareEndDate;
                 }
                 return compareStartDate;
             };
@@ -278,7 +284,7 @@ public class SessionsPresenter  extends GluonPresenter<DevoxxApplication> {
 //            });
         }
 
-        if(filteredSessions!= null && filteredSessions.predicateProperty().isBound()) {
+        if (filteredSessions != null && filteredSessions.predicateProperty().isBound()) {
             filteredSessions.predicateProperty().unbind();
         }
 
