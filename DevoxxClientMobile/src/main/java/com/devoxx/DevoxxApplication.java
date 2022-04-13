@@ -103,6 +103,8 @@ public class DevoxxApplication extends MobileApplication {
     static {
         // Config logging
         DevoxxLogging.config();
+        // log build number to console
+        LOG.log(Level.INFO, DevoxxBundle.getString("OTN.ABOUT.LABEL.DEVOXX", DevoxxSettings.BUILD_NUMBER));
     }
 
     @Override
