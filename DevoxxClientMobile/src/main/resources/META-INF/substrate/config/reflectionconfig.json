@@ -4,7 +4,9 @@
     "methods":[
       {"name":"<init>","parameterTypes":[] },
       {"name":"<init>","parameterTypes":["int"] },
-      {"name":"<init>","parameterTypes":["int","int"] }
+      {"name":"<init>","parameterTypes":["int","int"] },
+      {"name":"getRating","parameterTypes":[] },
+      {"name":"setRating","parameterTypes":["double"] }
     ]
   }
 ,
@@ -48,6 +50,16 @@
       {"name":"getText","parameterTypes":[] },
       {"name":"setPromptText","parameterTypes":["java.lang.String"] },
       {"name":"getPromptText","parameterTypes":[] }
+    ]
+  }
+,
+  {
+    "name":"javafx.scene.control.ListView",
+    "methods":[
+      {"name":"<init>","parameterTypes":[] },
+      {"name":"<init>","parameterTypes":["javafx.collections.ObservableList"] },
+      {"name":"setOrientation","parameterTypes":["javafx.geometry.Orientation"] },
+      {"name":"getOrientation","parameterTypes":[] }
     ]
   }
 ]
