@@ -103,7 +103,7 @@ public class DevoxxSettings {
     /**
      * URL to submit review on Play Store
      */
-    public static final String ANDROID_REVIEW_URL = "market://details?id=com.devoxx";
+    public static final String ANDROID_REVIEW_URL = "https://play.google.com/store/apps/details?id=com.devoxx";
 
     /**
      * No. of days after which a conference can be considered as a past conference.
