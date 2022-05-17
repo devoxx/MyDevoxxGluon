@@ -1,17 +1,16 @@
 package com.devoxx.util.emoji;
 
-import com.gluonhq.connect.converter.InputStreamIterableInputConverter;
-import com.gluonhq.connect.converter.JsonIterableInputConverter;
-import com.gluonhq.connect.provider.InputStreamListDataReader;
-import com.gluonhq.connect.provider.ListDataReader;
-import com.gluonhq.connect.source.BasicInputDataSource;
-import com.gluonhq.connect.source.InputDataSource;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 public class EmojiData {
@@ -23,13 +22,17 @@ public class EmojiData {
 
     static  {
         try (final InputStream emojiStream = EmojiData.class.getResourceAsStream("emoji.json")) {
-            InputDataSource dataSource = new BasicInputDataSource(emojiStream);
-            InputStreamIterableInputConverter<Emoji> converter = new JsonIterableInputConverter<>(Emoji.class);
-            ListDataReader<Emoji> listDataReader = new InputStreamListDataReader<>(dataSource, converter);
-            for (Iterator<Emoji> it = listDataReader.iterator(); it.hasNext();) {
-                Emoji e = it.next();
+            Gson gson = new Gson();
+            JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(emojiStream)));
+
+            List<Emoji> emojis = gson.fromJson(reader, new TypeToken<List<Emoji>>(){}.getType());
+            emojis.forEach(e -> {
                 EMOJI_UNICODE_MAP.put(e.getUnified(), e);
-            }
+                if (e.getSkin_variations() != null) {
+                    e.getSkin_variations().values()
+                            .forEach(v -> EMOJI_UNICODE_MAP.put(v.getUnified(), v));
+                }
+            });
         } catch (IOException e) {
             System.err.println("Could not load emoji json file" + e.getMessage());
         }

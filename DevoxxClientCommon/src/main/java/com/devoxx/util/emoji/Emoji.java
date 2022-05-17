@@ -1,6 +1,5 @@
 package com.devoxx.util.emoji;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -302,11 +301,6 @@ public class Emoji {
     }
 
     public Map<String, Emoji> getSkin_variations() {
-        if (skin_variations == null) {
-            skin_variations = new HashMap<>();
-            // TODO: Add subtype
-            // variations.forEach(variation -> skin_variations.put(variation, ));
-        }
         return skin_variations;
     }
 

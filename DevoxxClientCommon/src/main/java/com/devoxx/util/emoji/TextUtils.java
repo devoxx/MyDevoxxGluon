@@ -41,14 +41,10 @@ public class TextUtils {
                     sb.setLength(0);
                 }
 
-                if (0x1F3FB <= ch && ch <= 0x1F3FF) {
-                    // skin variations not supported yet, so we don't append them
-                } else {
-                    if (sbChain.length() > 0) {
-                        sbChain.append("-");
-                    }
-                    sbChain.append(Integer.toHexString(ch));
+                if (sbChain.length() > 0) {
+                    sbChain.append("-");
                 }
+                sbChain.append(Integer.toHexString(ch));
                 // stop and search emoji if, current codepoint is an emoji or emoji connector and:
                 // we are at last codepoint or
                 // next codepoint is not an emoji nor a connector
