@@ -20,6 +20,7 @@
         <gluon.mobile.version>6.0.6</gluon.mobile.version>
         <gluon.afterburner.version>2.0.5</gluon.afterburner.version>
         <gluon.maps.version>2.0.0-ea+5</gluon.maps.version>
+        <gluon.connect.version>2.0.1</gluon.connect.version>
         <attach.version>4.0.15-SNAPSHOT</attach.version>
         <javafx.version>18</javafx.version>
         <javafx-maven-plugin-version>0.0.8</javafx-maven-plugin-version>

@@ -62,4 +62,10 @@
       {"name":"getOrientation","parameterTypes":[] }
     ]
   }
+  ,
+  {
+    "name":"com.devoxx.util.emoji.Emoji",
+    "allPublicMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  }
 ]

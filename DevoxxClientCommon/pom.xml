@@ -44,6 +44,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.gluonhq</groupId>
+            <artifactId>connect</artifactId>
+            <version>${gluon.connect.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
             <version>2.3.2</version>

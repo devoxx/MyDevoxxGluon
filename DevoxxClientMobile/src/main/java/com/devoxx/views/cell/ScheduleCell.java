@@ -26,6 +26,7 @@
 package com.devoxx.views.cell;
 
 import com.devoxx.DevoxxView;
+import com.devoxx.control.EmojiListTile;
 import com.devoxx.model.Conference;
 import com.devoxx.model.Favorite;
 import com.devoxx.model.Session;
@@ -36,7 +37,6 @@ import com.devoxx.util.DevoxxSettings;
 import com.devoxx.views.SessionPresenter;
 import com.devoxx.views.helper.SessionVisuals;
 import com.gluonhq.charm.glisten.control.CharmListCell;
-import com.gluonhq.charm.glisten.control.ListTile;
 import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -65,7 +65,7 @@ public class ScheduleCell extends CharmListCell<Session> {
     private static final PseudoClass PSEUDO_CLASS_BREAK = PseudoClass.getPseudoClass("break");
     
     private final Service service;
-    private final ListTile listTile;
+    private final EmojiListTile listTile;
     private final BorderPane borderPane;
     private final SecondaryGraphic secondaryGraphic;
     private final Label trackLabel;
@@ -93,7 +93,7 @@ public class ScheduleCell extends CharmListCell<Session> {
         trackLabelContainer = new Group(trackLabel);
         secondaryGraphic = new SecondaryGraphic();
 
-        listTile = new ListTile() {
+        listTile = new EmojiListTile() {
 
             @Override
             protected double computeMinHeight(double width) {

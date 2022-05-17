@@ -37,6 +37,7 @@ import com.devoxx.model.TalkSpeaker;
 import com.devoxx.service.Service;
 import com.devoxx.util.DevoxxBundle;
 import com.devoxx.util.DevoxxSettings;
+import com.devoxx.util.emoji.TextUtils;
 import com.devoxx.views.dialog.VotePane;
 import com.devoxx.views.helper.LoginPrompter;
 import com.devoxx.views.helper.Placeholder;
@@ -66,6 +67,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextFlow;
 
 import javax.inject.Inject;
 import java.time.ZonedDateTime;
@@ -147,8 +149,8 @@ public class SessionPresenter extends GluonPresenter<DevoxxApplication> {
         final BottomNavigationButton infoButton = new BottomNavigationButton(DevoxxBundle.getString("OTN.BUTTON.INFO"), MaterialDesignIcon.INFO.graphic(), e -> {
             // when clicked create a label in a scrollpane. Label will contain
             // session summary for this session.
-            Label sessionSummary = new Label(session.getSummary());
-            sessionSummary.setWrapText(true);
+            TextFlow sessionSummary = new TextFlow();
+            sessionSummary.getChildren().addAll(TextUtils.textEmojiHelper(session.getSummary()));
             sessionSummary.getStyleClass().add("session-summary");
 
             final FlowPane flowPane = new FlowPane();
@@ -333,7 +335,8 @@ public class SessionPresenter extends GluonPresenter<DevoxxApplication> {
     }
 
     private Node createSessionDetails(Session session) {
-        Label sessionTitle = new Label(session.getTitle());
+        TextFlow sessionTitle = new TextFlow();
+        sessionTitle.getChildren().addAll(TextUtils.textEmojiHelper(session.getTitle()));
         sessionTitle.getStyleClass().add("header");
 
         Label sessionInfo = new Label(sessionVisuals.formatMultilineInfo(session));

@@ -180,6 +180,56 @@
     -fx-border-color: transparent transparent -alternate-color transparent;
 }
 
+.emoji-list-tile {
+    -fx-margin: 0mm 2.56mm 0mm 2.56mm;
+    -fx-text-fill: -text-light;
+    -fx-text-background-color: -text-light;
+    -fx-fill-height: true;
+    -fx-aligment: baseline-left;
+}
+
+.emoji-list-tile > .text-box {
+    -fx-spacing: 0px;
+    -fx-pref-width: 10px;
+    -fx-padding: 0 2mm 0 2mm;
+}
+
+.emoji-list-tile > .text-box > .primary-text > .text {
+    -fx-fill: -text-light;
+    -fx-font-size: 1.1em;
+}
+
+.emoji-list-tile > .text-box > .secondary-text {
+    -fx-text-fill: -text-secondary-light;
+    -fx-font-size: 1em;
+}
+
+.emoji-list-tile > .text-box > .tertiary-text {
+    -fx-text-fill: -text-secondary-light;
+    -fx-font-size: 0.9em;
+}
+
+.emoji-list-tile > .primary-graphic {
+    -fx-pref-width: 8.96mm;
+    -fx-font-size: 1.9em;
+}
+
+.emoji-list-tile > .secondary-graphic {
+    -fx-padding: 0 2.56mm 0 2.56mm;
+}
+
+.emoji-list-tile.single-line-tile {
+    -fx-pref-height: 8.96mm;
+}
+
+.emoji-list-tile.dual-line-tile {
+    -fx-pref-height: 11.52mm;
+}
+
+.emoji-list-tile.triple-line-tile {
+    -fx-pref-height: 14.08mm;
+}
+
 /* Gathering together all cells to standardize styling */
 .venue-cell,
 .exhibitor-cell,
@@ -193,10 +243,11 @@
 .speaker-cell > .list-tile > .text-box > .primary-text,
 .sponsor-cell > .list-tile > .text-box > .primary-text,
 .exhibitor-cell > .list-tile > .text-box > .primary-text,
-.schedule-cell .list-tile > .text-box > .primary-text,
+.schedule-cell .emoji-list-tile > .text-box > .primary-text > .text,
 .note-cell > .list-tile > .text-box > .primary-text,
 .badge-cell > .list-tile > .text-box > .primary-text {
     -fx-text-fill: -primary-swatch-500;
+    -fx-fill: -primary-swatch-500;
     -fx-font-weight: bold;
     -fx-font-size: 1.1em;
 }
@@ -205,7 +256,7 @@
 .speaker-cell > .list-tile > .icon-text,
 .sponsor-cell > .list-tile > .icon-text,
 .exhibitor-cell > .list-tile > .icon-text,
-.schedule-cell .list-tile > * > .icon-text,
+.schedule-cell .emoji-list-tile > * > .icon-text,
 .note-cell > .list-tile > .icon-text,
 .badge-cell > .list-tile > .icon-text {
     -fx-text-fill: -alternate-color;
@@ -263,9 +314,10 @@
     -fx-background-color: -primary-swatch-500;
 }
 
-.list-cell.schedule-cell:break .text-box > .primary-text,
+.list-cell.schedule-cell:break .text-box > .primary-text > .text,
 .list-cell.schedule-cell:break .text-box > .tertiary-text {
     -fx-text-fill: white;
+    -fx-fill: white;
 }
 
 .list-cell.schedule-cell:color {
@@ -354,60 +406,60 @@
 }
 
 /* Center the primary-graphic in the background color */
-.schedule-cell .list-tile > .primary-graphic {
+.schedule-cell .emoji-list-tile > .primary-graphic {
     -fx-translate-x: 1px;
 }
 
-.schedule-cell .list-tile > .primary-graphic  > .label {
+.schedule-cell .emoji-list-tile > .primary-graphic  > .label {
     -fx-rotate: -90;
     -fx-font-size: 0.35em;
     -fx-text-fill: white;
     -fx-font-weight: 600;
 }
 
-.schedule-cell .list-tile > .text-box {
+.schedule-cell .emoji-list-tile > .text-box {
     -fx-padding: 0.833333em 0em 0.833333em 0.833333em;
 }
 
-.schedule-cell .list-tile > .text-box > .secondary-text {
+.schedule-cell .emoji-list-tile > .text-box > .secondary-text {
     -fx-text-fill: dimgray;
     -fx-font-size: 1.05em;
     -fx-wrap-text: false;
 }
 
-.schedule-cell .list-tile > .text-box > .tertiary-text {
+.schedule-cell .emoji-list-tile > .text-box > .tertiary-text {
     -fx-text-fill: dimgray;
     -fx-font-size: 0.95em;
 }
 
-.schedule-cell .list-tile > .text-box > .extra-text {
+.schedule-cell .emoji-list-tile > .text-box > .extra-text {
     -fx-text-fill: derive(dimgray, 20%);
     -fx-font-size: 0.90em;
 }
 
-.schedule-cell .list-tile > .text-box > .extra-text > .fav-label,
-.schedule-cell .list-tile > .text-box > .tertiary-text > .fav-label {
+.schedule-cell .emoji-list-tile > .text-box > .extra-text > .fav-label,
+.schedule-cell .emoji-list-tile > .text-box > .tertiary-text > .fav-label {
     -fx-alignment: bottom-left;
     -fx-graphic-text-gap: 1.0;
 }
 
-.schedule-cell .list-tile > .text-box > .tertiary-text > .fav-label,
-.schedule-cell .list-tile > .text-box > .tertiary-text > .fav-label > .fav-graphic {
+.schedule-cell .emoji-list-tile > .text-box > .tertiary-text > .fav-label,
+.schedule-cell .emoji-list-tile > .text-box > .tertiary-text > .fav-label > .fav-graphic {
     -fx-text-fill: derive(crimson, 50%);
     -fx-font-size: 0.95em;
 }
 
-.schedule-cell .list-tile > .text-box > .extra-text > .fav-label,
-.schedule-cell .list-tile > .text-box > .extra-text > .fav-label > .fav-graphic {
+.schedule-cell .emoji-list-tile > .text-box > .extra-text > .fav-label,
+.schedule-cell .emoji-list-tile > .text-box > .extra-text > .fav-label > .fav-graphic {
     -fx-text-fill: derive(crimson, 50%);
     -fx-font-size: 0.90em;
 }
 
-.schedule-cell .list-tile > .secondary-graphic {
+.schedule-cell .emoji-list-tile > .secondary-graphic {
     -fx-padding: 0em;
 }
 
-.schedule-cell .list-tile > .secondary-graphic > .indicator {
+.schedule-cell .emoji-list-tile > .secondary-graphic > .indicator {
     -fx-background-color: derive(crimson, 50%);
     -fx-pref-width: 2.5em;
     -fx-pref-height: 2.5em;
@@ -415,14 +467,14 @@
     -fx-scale-shape: true;
 }
 
-.schedule-cell .list-tile > .secondary-graphic > .indicator > .icon-text {
+.schedule-cell .emoji-list-tile > .secondary-graphic > .indicator > .icon-text {
     -fx-text-fill: white;
     -fx-font-size: 1em;
 }
-.schedule-cell .list-tile > .secondary-graphic > .schedule.indicator > .icon-text {
+.schedule-cell .emoji-list-tile > .secondary-graphic > .schedule.indicator > .icon-text {
     -fx-padding: 0.166667em 0.083333em 0.083333em 0.166667em;
 }
-.schedule-cell .list-tile > .secondary-graphic > .favorite.indicator > .icon-text {
+.schedule-cell .emoji-list-tile > .secondary-graphic > .favorite.indicator > .icon-text {
     -fx-padding: 0.166667em 0.166667em 0.083333em 0.166667em;
     -fx-font-size: 0.9em;
 }
@@ -452,10 +504,13 @@
 }
 
 .session-view .session-info > .header {
-    -fx-text-fill: white;
     -fx-font-size: 1.3em;
     -fx-wrap-text: true;
     -fx-max-width: infinity;
+}
+
+.session-view .session-info > .header > .text {
+    -fx-fill: white;
 }
 
 .session-view .session-info > .info,
