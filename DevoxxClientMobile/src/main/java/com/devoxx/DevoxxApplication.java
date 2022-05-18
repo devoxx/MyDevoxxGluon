@@ -207,8 +207,8 @@ public class DevoxxApplication extends MobileApplication {
             connectivityService.connectedProperty().addListener((observable, oldValue, newValue) -> {
                 ConnectivityUtils.showConnectivityIndication(newValue);
             });
-
-            ConnectivityUtils.showConnectivityIndication(connectivityService.isConnected());
+            javafx.application.Platform.runLater(() ->
+                ConnectivityUtils.showConnectivityIndication(connectivityService.isConnected()));
         });
 
     }
