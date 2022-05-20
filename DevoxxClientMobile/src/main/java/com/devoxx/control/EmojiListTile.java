@@ -111,14 +111,14 @@ public class EmojiListTile extends BorderPane {
 
     private void updateText() {
         if (textProperty.size() == textBox.getChildren().size()) {
-            primaryTextLabel.getChildren().setAll(TextUtils.textEmojiHelper(textProperty.isEmpty() ? "" : textProperty.get(0)));
+            primaryTextLabel.getChildren().setAll(TextUtils.convertToTextAndImageNodes(textProperty.isEmpty() ? "" : textProperty.get(0)));
             for (int i = 1; i < textProperty.size(); i++) {
                 Label label = (Label) textBox.getChildren().get(i);
                 label.setText(textProperty.get(i));
             }
         } else {
             textBox.getChildren().clear();
-            primaryTextLabel.getChildren().setAll(TextUtils.textEmojiHelper(textProperty.isEmpty() ? "" : textProperty.get(0)));
+            primaryTextLabel.getChildren().setAll(TextUtils.convertToTextAndImageNodes(textProperty.isEmpty() ? "" : textProperty.get(0)));
             textBox.getChildren().add(primaryTextLabel);
             VBox.setVgrow(primaryTextLabel, Priority.ALWAYS);
             for (int i = 1; i <= 2; i++) {

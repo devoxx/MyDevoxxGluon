@@ -28,7 +28,7 @@ public class TextUtils {
         return imageOffset;
     }
 
-    public static List<Node> textEmojiHelper(String text) {
+    public static List<Node> convertToTextAndImageNodes(String text) {
         List<Node> list = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
         StringBuilder sbChain = new StringBuilder();

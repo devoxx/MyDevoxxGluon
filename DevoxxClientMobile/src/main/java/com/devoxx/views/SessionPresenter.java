@@ -150,7 +150,7 @@ public class SessionPresenter extends GluonPresenter<DevoxxApplication> {
             // when clicked create a label in a scrollpane. Label will contain
             // session summary for this session.
             TextFlow sessionSummary = new TextFlow();
-            sessionSummary.getChildren().addAll(TextUtils.textEmojiHelper(session.getSummary()));
+            sessionSummary.getChildren().addAll(TextUtils.convertToTextAndImageNodes(session.getSummary()));
             sessionSummary.getStyleClass().add("session-summary");
 
             final FlowPane flowPane = new FlowPane();
@@ -336,7 +336,7 @@ public class SessionPresenter extends GluonPresenter<DevoxxApplication> {
 
     private Node createSessionDetails(Session session) {
         TextFlow sessionTitle = new TextFlow();
-        sessionTitle.getChildren().addAll(TextUtils.textEmojiHelper(session.getTitle()));
+        sessionTitle.getChildren().addAll(TextUtils.convertToTextAndImageNodes(session.getTitle()));
         sessionTitle.getStyleClass().add("header");
 
         Label sessionInfo = new Label(sessionVisuals.formatMultilineInfo(session));
