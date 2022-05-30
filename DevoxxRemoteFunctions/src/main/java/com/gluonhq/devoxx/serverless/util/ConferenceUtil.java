@@ -73,7 +73,7 @@ public class ConferenceUtil {
         }
         builder.add("cfpAdminEmail",    conf.getString("cfpAdminEmail", ""));
         builder.add("maxProposals",     conf.getString("maxProposals", ""));
-        builder.add("myBadgeActive",    conf.getBoolean("myBadgeActive", true));
+        builder.add("myBadgeActive",    conf.getBoolean("myBadgeActive", false));
         builder.add("owners",
                 conf.containsKey("owners") ? conf.getJsonArray("owners") : emptyJsonArray());
         builder.add("tracks",
