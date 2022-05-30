@@ -1,6 +1,6 @@
 package com.devoxx.control;
 
-import com.devoxx.util.emoji.TextUtils;
+import com.gluonhq.emoji.util.TextUtils;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
