@@ -64,8 +64,12 @@ public class ConferenceUtil {
         builder.add("locationCity",     conf.getString("locationCity", ""));
         builder.add("locationCountry",  conf.getString("locationCountry", ""));
         builder.add("timezone",         conf.getString("timezone", ""));
-        builder.add("venueLongitude",   conf.getJsonNumber("venueLongitude"));
-        builder.add("venueLatitude",    conf.getJsonNumber("venueLatitude"));
+        if (conf.get("venueLongitude") instanceof JsonNumber) {
+            builder.add("venueLongitude", conf.getJsonNumber("venueLongitude"));
+        }
+        if (conf.get("venueLatitude") instanceof JsonNumber) {
+            builder.add("venueLatitude", conf.getJsonNumber("venueLatitude"));
+        }
         builder.add("cfpAdminEmail",    conf.getString("cfpAdminEmail", ""));
         builder.add("maxProposals",     conf.getString("maxProposals", ""));
         builder.add("myBadgeActive",    conf.getBoolean("myBadgeActive", true));
