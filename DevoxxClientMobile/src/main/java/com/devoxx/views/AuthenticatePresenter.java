@@ -170,7 +170,10 @@ public class AuthenticatePresenter extends GluonPresenter<DevoxxApplication> {
 
     private String cfpURLWithoutAPI() {
         String cfpURL = service.getConference().getCfpURL();
-        cfpURL = cfpURL.replace("api", "").replace("//", "/");
+        cfpURL = cfpURL.replace("api", "");
+        if (cfpURL.endsWith("//")) {
+            cfpURL = cfpURL.substring(0, cfpURL.length() - 1);
+        }
         return cfpURL;
     }
 }
