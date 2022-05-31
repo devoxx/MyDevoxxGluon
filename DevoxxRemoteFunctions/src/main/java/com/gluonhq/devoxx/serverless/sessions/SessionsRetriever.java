@@ -106,65 +106,60 @@ public class SessionsRetriever {
 
     private JsonObject updateSession(JsonObject source, String cfpEndpoint) {
         JsonObjectBuilder builder = Json.createObjectBuilder();
+        builder.add("day",             "");
         builder.add("slotId",          source.get("id"));
-        builder.add("roomId",          source.get("roomId"));
-        builder.add("roomName",        source.get("roomName"));
-        builder.add("day",        "");
-        builder.add("fromTime",        source.get("fromDate"));
-        builder.add("fromTimeMillis",  ZonedDateTime.parse(source.getString("fromDate")).toInstant().toEpochMilli());
-        builder.add("toTime",          source.get("toDate"));
-        builder.add("toTimeMillis",    ZonedDateTime.parse(source.getString("toDate")).toInstant().toEpochMilli());
+        builder.add("roomId",          source.getJsonObject("room").get("id"));
+        builder.add("roomName",        source.getJsonObject("room").get("name"));
         builder.add("totalFavourites", source.getInt("totalFavourites", 0));
+        builder.add("fromTime",        source.get("fromDate"));
+        builder.add("toTime",          source.get("toDate"));
+        builder.add("fromTimeMillis",  ZonedDateTime.parse(source.getString("fromDate")).toInstant().toEpochMilli());
+        builder.add("toTimeMillis",    ZonedDateTime.parse(source.getString("toDate")).toInstant().toEpochMilli());
 
-        final boolean aBreak = source.getBoolean("sessionTypeBreak");
+        final boolean aBreak = source.getJsonObject("sessionType").getBoolean("isPause", false);
         builder.add("break", aBreak ? fetchBreak(source) : JsonValue.NULL);
 
-        final int talkId = source.getInt("talkId", 0);
-        if (talkId != 0) {
-            JsonObject talk = createTalk(source);
-            builder.add("talk", talk == JsonValue.EMPTY_JSON_OBJECT ? JsonValue.NULL : talk);
+        if (source.containsKey("proposal")) {
+            if (source.getValue("/proposal").getValueType().equals(JsonValue.ValueType.OBJECT)) {
+                JsonObject propopal = source.getJsonObject("proposal");
+                final int talkId = propopal.getInt("id", 0);
+                if (talkId != 0) {
+                    JsonObject talk = createTalk(propopal);
+                    builder.add("talk", talk == JsonValue.EMPTY_JSON_OBJECT ? JsonValue.NULL : talk);
+                }
+            }
         }
         return builder.build();
     }
 
     private JsonObject fetchBreak(JsonObject source) {
         JsonObjectBuilder builder = Json.createObjectBuilder();
-        builder.add("id",        String.valueOf(source.get("sessionTypeId")));
-        builder.add("nameEN",    source.get("sessionTypeName"));
-        builder.add("nameFR",    source.get("sessionTypeName"));
-        builder.add("room",      source.isNull("roomName") ? null : fetchRoom(source));
+        JsonObject sessionType = source.getJsonObject("sessionType");
+        builder.add("id",        String.valueOf(sessionType.get("id")));
+        builder.add("nameEN",    sessionType.get("name"));
+        builder.add("nameFR",    sessionType.get("name"));
+        builder.add("room",      source.isNull("room") ? null : source.getJsonObject("room").getString("name"));
         builder.add("dayName",   ZonedDateTime.parse(source.getString("fromDate")).getDayOfWeek().toString());
         builder.add("startTime", ZonedDateTime.parse(source.getString("fromDate")).toInstant().toEpochMilli());
         builder.add("endTime",   ZonedDateTime.parse(source.getString("toDate")).toInstant().toEpochMilli());
         return builder.build();
     }
 
-    private JsonValue fetchRoom(JsonObject source) {
-        final String roomName = source.getString("roomName");
-        final JsonObjectBuilder builder = Json.createObjectBuilder();
-        builder.add("id", String.valueOf(source.getInt("roomId")));
-        builder.add("name", roomName);
-        builder.add("capacity", 0);
-        builder.add("setup", "");
-        builder.add("recorded", "");
-        return builder.build();
-    }
-
-    private JsonObject createTalk(JsonObject source) {
+    private JsonObject createTalk(JsonObject proposal) {
         JsonObjectBuilder builder = Json.createObjectBuilder();
-        builder.add("id",            source.get("talkId"));
-        builder.add("title",         source.get("talkTitle"));
-        builder.add("talkType",      source.get("sessionTypeName"));
-        builder.add("track",         source.get("trackName"));
-        builder.add("trackId",       source.get("trackId"));
-        builder.add("lang",          source.get("langName"));
-        builder.add("audienceLevel", source.get("audienceLevel"));
-        builder.add("summary",       removeHTMLTags(source.getString("talkDescription")));
-        builder.add("summaryAsHtml", source.get("talkDescription"));
+        builder.add("id",            proposal.get("id"));
+        builder.add("title",         proposal.get("title"));
+        builder.add("talkType",      proposal.getJsonObject("sessionType").getString("name"));
+        builder.add("track",         proposal.getJsonObject("track").getString("name"));
+        builder.add("trackId",       proposal.getJsonObject("track").get("id"));
+        builder.add("lang",          proposal.getString("langName", ""));
+        builder.add("audienceLevel", proposal.get("audienceLevel"));
+        builder.add("summary",       removeHTMLTags(proposal.getString("description")));
+        builder.add("summaryAsHtml", proposal.get("description"));
         builder.add("tags",
-                source.containsKey("tags") ? updateTags(source.getJsonArray("tags")) : emptyJsonArray());
+                proposal.containsKey("tags") ? updateTags(proposal.getJsonArray("tags")) : emptyJsonArray());
         builder.add("speakers",
-                source.containsKey("speakers") ? updateSpeakers(source.getJsonArray("speakers")) : emptyJsonArray());
+                proposal.containsKey("speakers") ? updateSpeakers(proposal.getJsonArray("speakers")) : emptyJsonArray());
         return builder.build();
     }
 
