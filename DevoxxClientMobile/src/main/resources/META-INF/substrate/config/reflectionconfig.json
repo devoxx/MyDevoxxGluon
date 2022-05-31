@@ -64,7 +64,7 @@
   }
   ,
   {
-    "name":"com.devoxx.util.emoji.Emoji",
+    "name":"com.gluonhq.emoji.Emoji",
     "allDeclaredFields":true,
     "allPublicMethods":true,
     "methods":[{"name":"<init>","parameterTypes":[] }]
