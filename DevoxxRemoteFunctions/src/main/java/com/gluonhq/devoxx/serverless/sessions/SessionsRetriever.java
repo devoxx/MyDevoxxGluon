@@ -106,15 +106,15 @@ public class SessionsRetriever {
 
     private JsonObject updateSession(JsonObject source, String cfpEndpoint) {
         JsonObjectBuilder builder = Json.createObjectBuilder();
-        builder.add("slotId", source.get("id"));
-        builder.add("roomId", source.getJsonObject("room").get("id"));
-        builder.add("roomName", source.getJsonObject("room").get("name"));
-        builder.add("day", "");
-        builder.add("fromTime", source.get("fromDate"));
-        builder.add("fromTimeMillis", ZonedDateTime.parse(source.getString("fromDate")).toInstant().toEpochMilli());
-        builder.add("toTime", source.get("toDate"));
-        builder.add("toTimeMillis", ZonedDateTime.parse(source.getString("toDate")).toInstant().toEpochMilli());
+        builder.add("day",             "");
+        builder.add("slotId",          source.get("id"));
+        builder.add("roomId",          source.getJsonObject("room").get("id"));
+        builder.add("roomName",        source.getJsonObject("room").get("name"));
         builder.add("totalFavourites", source.getInt("totalFavourites", 0));
+        builder.add("fromTime",        source.get("fromDate"));
+        builder.add("toTime",          source.get("toDate"));
+        builder.add("fromTimeMillis",  ZonedDateTime.parse(source.getString("fromDate")).toInstant().toEpochMilli());
+        builder.add("toTimeMillis",    ZonedDateTime.parse(source.getString("toDate")).toInstant().toEpochMilli());
 
         final boolean aBreak = source.getJsonObject("sessionType").getBoolean("isPause", false);
         builder.add("break", aBreak ? fetchBreak(source) : JsonValue.NULL);
