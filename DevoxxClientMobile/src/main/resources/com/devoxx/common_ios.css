@@ -40,3 +40,8 @@
 .vote-view > .center > .compliments > .virtual-flow > .clipped-container > .sheet > .list-cell:selected > .text {
      -fx-font-size: 1.3em;
  }
+
+.password-field {
+    -fx-font-size: 1.5em;
+    -fx-font-family: "System";
+}

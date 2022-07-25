@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Gluon Software
+ * Copyright (c) 2019, 2022, Gluon Software
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -28,33 +28,31 @@ package com.devoxx.views;
 import com.devoxx.DevoxxApplication;
 import com.devoxx.DevoxxView;
 import com.devoxx.model.User;
-import com.devoxx.service.Service;
 import com.devoxx.util.DevoxxBundle;
-import com.gluonhq.attach.browser.BrowserService;
 import com.gluonhq.attach.settings.SettingsService;
 import com.gluonhq.charm.glisten.afterburner.GluonPresenter;
 import com.gluonhq.charm.glisten.application.MobileApplication;
 import com.gluonhq.charm.glisten.control.AppBar;
+import com.gluonhq.charm.glisten.control.Icon;
 import com.gluonhq.charm.glisten.control.ProgressIndicator;
 import com.gluonhq.charm.glisten.control.TextField;
 import com.gluonhq.charm.glisten.control.Toast;
 import com.gluonhq.charm.glisten.mvc.View;
+import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
 import com.gluonhq.cloudlink.client.data.RemoteFunctionBuilder;
 import com.gluonhq.cloudlink.client.data.RemoteFunctionObject;
 import com.gluonhq.connect.GluonObservableObject;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.PasswordField;
+import javafx.scene.control.Label;
 
-import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
-import java.io.IOException;
 import java.io.StringReader;
-import java.net.URISyntaxException;
+import java.text.MessageFormat;
 import java.util.Base64;
+import java.util.ResourceBundle;
 
 import static com.devoxx.util.DevoxxSettings.*;
 
@@ -63,53 +61,41 @@ public class AuthenticatePresenter extends GluonPresenter<DevoxxApplication> {
     @FXML
     private View authenticateView;
     @FXML
-    private TextField username;
+    private Icon icon;
     @FXML
-    private PasswordField password;
+    private Label email;
+    @FXML
+    private TextField password;
     @FXML
     private Button login;
-    @Inject
-    private Service service;
+    @FXML
+    private ResourceBundle resources;
 
     private Runnable success;
     private Runnable failure;
+    private String userAccount;
 
     public void initialize() {
         authenticateView.setOnShowing(event -> {
             AppBar appBar = getApp().getAppBar();
             appBar.setNavIcon(getApp().getNavBackButton());
-            appBar.setTitleText(DevoxxView.AUTHENTICATE.getTitle());
+            appBar.setTitleText(DevoxxView.AUTHENTICATE.getTitle()  + " 2/2");
         });
+
+        userAccount = SettingsService.create().map(settingsService ->
+                        settingsService.retrieve(SAVED_ACCOUNT_USERNAME))
+                .orElse("");
+        email.setText(MessageFormat.format(resources.getString("OTN.AUTHENTICATION.USERNAME"), userAccount));
+        login.disableProperty().bind(password.textProperty().isNull().or(password.textProperty().isEmpty()));
     }
 
     public void login() {
+        icon.setContent(MaterialDesignIcon.LOCK_OPEN);
         final AppBar appBar = getApp().getAppBar();
         appBar.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
         appBar.setProgressBarVisible(true);
-        User user = new User(username.getText(), password.getText());
+        User user = new User(userAccount, password.getText());
         authenticateUser(user);
-    }
-
-    public void forgetPassword() {
-        BrowserService.create().ifPresent(b -> {
-            try {
-                b.launchExternalBrowser(forgetPasswordURL());
-            }  catch (IOException | URISyntaxException ex) {
-                Toast toast = new Toast(DevoxxBundle.getString("OTN.VISUALS.CONNECTION_FAILED"));
-                toast.show();
-            }
-        });
-    }
-
-    public void register() {
-        BrowserService.create().ifPresent(b -> {
-            try {
-                b.launchExternalBrowser(registerURL());
-            }  catch (IOException | URISyntaxException ex) {
-                Toast toast = new Toast(DevoxxBundle.getString("OTN.VISUALS.CONNECTION_FAILED"));
-                toast.show();
-            }
-        });
     }
 
     public void authenticate(Runnable success, Runnable failure) {
@@ -118,9 +104,7 @@ public class AuthenticatePresenter extends GluonPresenter<DevoxxApplication> {
     }
 
     private void authenticateUser(com.devoxx.model.User user) {
-        final String cfpURL = service.getConference().getCfpURL();
-        RemoteFunctionObject fnAuthenticate = RemoteFunctionBuilder.create("authenticate")
-                .param("cfpEndpoint", cfpURL.substring(0, cfpURL.length() - 1))
+        RemoteFunctionObject fnAuthenticate = RemoteFunctionBuilder.create("authenticate_6digit_key")
                 .param("username", user.getUsername())
                 .param("password", user.getPassword())
                 .object();
@@ -137,6 +121,7 @@ public class AuthenticatePresenter extends GluonPresenter<DevoxxApplication> {
             appBar.setProgressBarVisible(false);
         });
         response.setOnFailed(e -> {
+            icon.setContent(MaterialDesignIcon.LOCK);
             if (failure != null) {
                 failure.run();
             }
@@ -156,24 +141,7 @@ public class AuthenticatePresenter extends GluonPresenter<DevoxxApplication> {
         SettingsService.create().ifPresent(settingsService -> {
             settingsService.store(SAVED_ACCOUNT_TOKEN, token);
             settingsService.store(SAVED_ACCOUNT_EXPIRY, String.valueOf(exp));
-            settingsService.store(SAVED_ACCOUNT_USERNAME, username);
         });
     }
 
-    private String forgetPasswordURL() {
-        return cfpURLWithoutAPI() + "#/reset/request";
-    }
-
-    private String registerURL() {
-        return cfpURLWithoutAPI() + "#/register";
-    }
-
-    private String cfpURLWithoutAPI() {
-        String cfpURL = service.getConference().getCfpURL();
-        cfpURL = cfpURL.replace("api", "");
-        if (cfpURL.endsWith("//")) {
-            cfpURL = cfpURL.substring(0, cfpURL.length() - 1);
-        }
-        return cfpURL;
-    }
 }

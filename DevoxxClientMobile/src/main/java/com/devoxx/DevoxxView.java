@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, 2019 Gluon Software
+ * Copyright (c) 2016, 2022, Gluon Software
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -62,6 +62,7 @@ public class DevoxxView {
     public static final AppView FEEDBACK        = view( FeedbackPresenter.class,       MaterialDesignIcon.CREATE,             SKIP_VIEW_STACK);
     public static final AppView CONF_SELECTOR   = view( ConfSelectorPresenter.class,   MaterialDesignIcon.ANNOUNCEMENT,       SHOW_IN_DRAWER, HOME_VIEW, SKIP_VIEW_STACK);
     public static final AppView VOTE            = view( VotePresenter.class,           MaterialDesignIcon.THUMBS_UP_DOWN,     SKIP_VIEW_STACK);
+    public static final AppView ACTIVATE        = view( ActivatePresenter.class,       MaterialDesignIcon.LOCK,               SKIP_VIEW_STACK);
     public static final AppView AUTHENTICATE    = view( AuthenticatePresenter.class,   MaterialDesignIcon.LOCK,               SKIP_VIEW_STACK);
     // public static final AppView LEADERBOARD     = view( LeaderboardPresenter.class,    MaterialDesignIcon.STARS, SHOW_IN_DRAWER);
 
