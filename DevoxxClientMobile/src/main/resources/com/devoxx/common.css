@@ -175,6 +175,8 @@
 }
 
 /* use alternate color for bottom border on text input controls */
+.charm-text-field:focused > .text-field,
+.charm-text-field:hover:focused > .text-field,
 .text-input:focused {
     -fx-border-width: 0em 0em 0.166667em 0em;
     -fx-border-color: transparent transparent -alternate-color transparent;
@@ -1518,14 +1520,39 @@
     -fx-font-size: 1.1em;
 }
 
-/* Authenticate View */
-.authenticate-view .container {
-    -fx-alignment: center;
-    -fx-padding: 0.5em;
-    -fx-spacing: 1em;
+/* Activate/Authenticate Views */
+.activate-view > .container,
+.authenticate-view > .container {
+    -fx-alignment: top-center;
+    -fx-padding: 3em 2em 2em 2em;
+    -fx-spacing: 1.5em;
 }
 
-.authenticate-view .container > .links {
+.activate-view > .container > .legend,
+.authenticate-view > .container > .legend {
+    -fx-wrap-text: true;
+    -fx-text-alignment: center;
+}
+
+.activate-view > .container > .icon > .icon-text,
+.authenticate-view > .container > .icon > .icon-text {
+    -fx-font-size: 8em;
+    -fx-text-fill: -otn-lighter1;
+}
+
+.activate-view > .container > .username > .text-field {
+    -fx-font-size: 1.1em;
+}
+
+.authenticate-view > .container > .username {
+    -fx-text-fill: gray;
+}
+
+.authenticate-view > .container > .password > .text-field {
+    -fx-font-size: 1.3em;
+}
+
+.activate-view > .container > .links {
     -fx-padding: 0.5em;
 }
 

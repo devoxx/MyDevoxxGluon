@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, 2019 Gluon Software
+ * Copyright (c) 2016, 2022, Gluon Software
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -31,7 +31,7 @@ import com.devoxx.model.*;
 import com.devoxx.util.DevoxxBundle;
 import com.devoxx.util.DevoxxNotifications;
 import com.devoxx.util.DevoxxSettings;
-import com.devoxx.views.AuthenticatePresenter;
+import com.devoxx.views.ActivatePresenter;
 import com.devoxx.views.helper.Placeholder;
 import com.devoxx.views.helper.SessionVisuals.SessionListType;
 import com.devoxx.views.helper.Util;
@@ -284,8 +284,8 @@ public class DevoxxService implements Service {
     public void authenticate(Runnable successRunnable, Runnable failureRunnable) {
         if (isNewCfpURL()) {
             if (!isAuthenticated()) {
-                DevoxxView.AUTHENTICATE.switchView().ifPresent(view ->
-                        ((AuthenticatePresenter) view).authenticate(() -> loadCfpAccount(null, successRunnable), failureRunnable));
+                DevoxxView.ACTIVATE.switchView().ifPresent(view ->
+                        ((ActivatePresenter) view).activateAndAuthenticate(() -> loadCfpAccount(null, successRunnable), failureRunnable));
             }
         } else {
             authenticationClient.authenticate(user -> {

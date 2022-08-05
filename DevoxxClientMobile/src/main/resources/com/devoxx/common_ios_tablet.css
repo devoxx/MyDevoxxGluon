@@ -38,3 +38,7 @@
 .app-bar > .title-box > .label {
     -fx-font-size: 1.25em;
 }
+
+.password-field {
+    -fx-font-family: "System";
+}

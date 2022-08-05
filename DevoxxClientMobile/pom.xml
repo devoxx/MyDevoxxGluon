@@ -263,6 +263,8 @@
                     </attachList>
                     <bundlesList>
                         <list>com/devoxx/devoxx</list>
+                        <list>com.devoxx.views.activate</list>
+                        <list>com.devoxx.views.authenticate</list>
                         <list>com.devoxx.views.badge</list>
                         <list>com.devoxx.views.badges</list>
                         <list>com.devoxx.views.confselector</list>
@@ -279,6 +281,7 @@
                         <list>com.devoxx.util.DevoxxSearch</list>
                         <list>com.devoxx.views.AboutPresenter</list>
                         <list>com.devoxx.views.AttendeeBadgePresenter</list>
+                        <list>com.devoxx.views.ActivatePresenter</list>
                         <list>com.devoxx.views.AuthenticatePresenter</list>
                         <list>com.devoxx.views.BadgePresenter</list>
                         <list>com.devoxx.views.BadgesPresenter</list>
