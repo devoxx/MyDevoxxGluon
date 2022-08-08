@@ -14,9 +14,6 @@ jobs:
         uses: gluonhq/setup-graalvm@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-           jdk: 'java11'
-           graalvm: '22.0.0.2-Final'
 
       - name: Install libraries
         run: |
@@ -52,6 +49,7 @@ jobs:
 
       - name: Gluon Build
         run: |
+          export ANDROID_SDK=$ANDROID_HOME
           mvn clean install
           cd DevoxxClientMobile
           mvn -Pandroid -Dandroid.keystore.path="$GLUON_ANDROID_KEYSTOREPATH" -Dandroid.keystore.password="$GLUON_ANDROID_KEYSTORE_PASSWORD" -Dandroid.keyalias="$GLUON_ANDROID_KEYALIAS" -Dandroid.keyalias.password="$GLUON_ANDROID_KEYALIAS_PASSWORD" -Dversion.code="$VERSION_CODE" gluonfx:build gluonfx:package
