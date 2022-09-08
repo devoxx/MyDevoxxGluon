@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, 2018 Gluon Software
+ * Copyright (c) 2016, 2022, Gluon Software
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -57,6 +57,8 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
@@ -106,7 +108,8 @@ public class SessionsPresenter  extends GluonPresenter<DevoxxApplication> {
     @FXML
     private View sessions;
 
-    private CharmListView<Session, LocalDate> scheduleListView;
+    private CharmListView<Session, LocalDate> scheduleListViewAll;
+    private CharmListView<Session, LocalDate> scheduleListViewFav;
 
     @Inject
     private Service service;
@@ -117,7 +120,11 @@ public class SessionsPresenter  extends GluonPresenter<DevoxxApplication> {
 
     private final ObjectProperty<Predicate<Session>> filterPredicateProperty = new SimpleObjectProperty<>();
     private SidePopupView filterPopup;
-    private FilteredList<Session> filteredSessions;
+    private FilteredList<Session> filteredSessionsAll;
+    private FilteredList<Session> filteredSessionsFav;
+    private final ObservableList<Session> sessionsAll = FXCollections.observableArrayList();
+    private final ObservableList<Session> sessionsFav = FXCollections.observableArrayList();
+    private ContentDisplayMode contentDisplayMode = ContentDisplayMode.ALL;
 
     private EventHandler<ActionEvent> currentHandler;
 
@@ -157,8 +164,8 @@ public class SessionsPresenter  extends GluonPresenter<DevoxxApplication> {
                 }
             }
 
-            if (scheduleListView != null) {
-                scheduleListView.setSelectedItem(null);
+            if (getScheduleListViewForMode(contentDisplayMode) != null) {
+                getScheduleListViewForMode(contentDisplayMode).setSelectedItem(null);
             }
 
             // check if a reload was requested, each time the sessions view is opened
@@ -169,7 +176,7 @@ public class SessionsPresenter  extends GluonPresenter<DevoxxApplication> {
             // Only do this when no rating panel is currently showing
             // If the conference is still on going and viewers are seeing past conferences
             if (sessions.getTop() == null && service.getConference() != null &&
-                    isShowingPastSessions(service.getConference())) {
+                    isShowingPastSessions(service.getConference(), contentDisplayMode)) {
                 sessions.setTop(createFilterGrid());
             }
         });
@@ -251,77 +258,106 @@ public class SessionsPresenter  extends GluonPresenter<DevoxxApplication> {
     }
 
     private Node createSessionsList(ContentDisplayMode mode) {
-        if (scheduleListView == null) {
-            scheduleListView = new CharmListView<>();
-            scheduleListView.getStyleClass().add("schedule-view");
-            scheduleListView.setHeadersFunction(s -> s.getStartDate().toLocalDate());
-            scheduleListView.setHeaderCellFactory(c -> new ScheduleHeaderCell());
-            scheduleListView.setCellFactory(p -> new ScheduleCell(service, sessionVisuals, false, true));
-            Comparator<Session> sessionComparator = (s1, s2) -> {
-                int compareStartDate = s1.getStartDate().compareTo(s2.getStartDate());
-                if (compareStartDate == 0) {
-                    int compareEndDate = s1.getEndDate().compareTo(s2.getEndDate());
-                    if (compareEndDate == 0) {
-                        if (s1.getTalk() != null && s2.getTalk() != null) {
-                            return s1.getTalk().getTalkType().compareTo(s2.getTalk().getTalkType());
-                        }
-                    }
-                    return compareEndDate;
-                }
-                return compareStartDate;
-            };
-            scheduleListView.setComparator(sessionComparator);
-            scheduleListView.itemsProperty().addListener((InvalidationListener) c -> {
-                List<Session> copyOfSessions = new ArrayList<>(filteredSessions);
-                Collections.sort(copyOfSessions, sessionComparator);
-                updateSessionsDecoration(copyOfSessions);
-            });
-//            scheduleListView.selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-//                if (newValue != null) {
-//                    DevoxxView.SESSION.switchView().ifPresent(presenter ->
-//                        ((SessionPresenter) presenter).showSession(newValue));
-//                }
-//            });
+        contentDisplayMode = mode;
+
+        if (getFilteredSessionsList(mode) != null && getFilteredSessionsList(mode).predicateProperty().isBound()) {
+            getFilteredSessionsList(mode).predicateProperty().unbind();
         }
 
-        if (filteredSessions != null && filteredSessions.predicateProperty().isBound()) {
-            filteredSessions.predicateProperty().unbind();
-        }
+        CharmListView<Session, LocalDate> scheduleListViewForMode = getScheduleListViewForMode(mode);
 
         switch (mode) {
             case ALL: {
-                scheduleListView.placeholderProperty().bind(Bindings.createObjectBinding(() -> {
+                scheduleListViewForMode.placeholderProperty().bind(Bindings.createObjectBinding(() -> {
                     if (filterPresenter.isFilterApplied()) {
                         return new Placeholder(SESSIONS_PLACEHOLDER_FILTER_MESSAGE, SESSIONS_ICON);
                     }
                     return new Placeholder(SESSIONS_PLACEHOLDER_MESSAGE, SESSIONS_ICON);
                 }, filterPresenter.filterAppliedProperty()));
-                filteredSessions = new FilteredList<>(service.retrieveSessions());
+                sessionsAll.setAll(service.retrieveSessions());
                 break;
             }
             case FAVORITE: {
-                scheduleListView.placeholderProperty().bind(Bindings.createObjectBinding(() -> {
+                scheduleListViewForMode.placeholderProperty().bind(Bindings.createObjectBinding(() -> {
                     if (filterPresenter.isFilterApplied()) {
                         return new Placeholder(SESSIONS_PLACEHOLDER_FILTER_MESSAGE, FAVORITE_ICON);
                     }
                     return new Placeholder(FAVORITE_EMPTY_LIST_MESSAGE, FAVORITE_ICON);
                 }, filterPresenter.filterAppliedProperty()));
-                filteredSessions = new FilteredList<>(service.retrieveFavoredSessions());
+                sessionsFav.setAll(service.retrieveFavoredSessions());
                 refreshButton.setOnAction(e -> {
                     new Toast(DevoxxBundle.getString("OTN.CONTENT_CATALOG.FAVORITE_SESSIONS.REFRESH")).show();
-                    filteredSessions = new FilteredList<>(service.reloadSessionsFromCFP(SessionListType.FAVORITES));
-                    filteredSessions.predicateProperty().bind(filterPredicateProperty);
-                    scheduleListView.setItems(filteredSessions);
+                    AppBar appBar = MobileApplication.getInstance().getAppBar();
+                    appBar.setProgressBarVisible(true);
+                    service.reloadSessionsFromCFP(SessionListType.FAVORITES,
+                            () -> {
+                                sessionsFav.setAll(service.retrieveFavoredSessions());
+                                appBar.setProgressBarVisible(false);
+                            },
+                            () -> appBar.setProgressBarVisible(false));
                 });
                 break;
             }
         }
-        filteredSessions.predicateProperty().bind(filterPredicateProperty);
-        scheduleListView.setItems(filteredSessions);
+        getFilteredSessionsList(mode).predicateProperty().bind(filterPredicateProperty);
+        return scheduleListViewForMode;
+    }
 
+    private CharmListView<Session, LocalDate> getScheduleListViewForMode(ContentDisplayMode mode) {
+        if (mode == ContentDisplayMode.FAVORITE) {
+            if (scheduleListViewFav == null) {
+                scheduleListViewFav = getScheduleListView(mode);
+            }
+            return scheduleListViewFav;
+        }
+        if (scheduleListViewAll == null) {
+            scheduleListViewAll = getScheduleListView(mode);
+        }
+        return scheduleListViewAll;
+    }
+
+    private CharmListView<Session, LocalDate> getScheduleListView(ContentDisplayMode mode) {
+        CharmListView<Session, LocalDate> scheduleListView = new CharmListView<>();
+        scheduleListView.getStyleClass().add("schedule-view");
+        scheduleListView.setHeadersFunction(s -> s.getStartDate().toLocalDate());
+        scheduleListView.setHeaderCellFactory(c -> new ScheduleHeaderCell());
+        scheduleListView.setCellFactory(p -> new ScheduleCell(service, sessionVisuals, false, true));
+        Comparator<Session> sessionComparator = (s1, s2) -> {
+            int compareStartDate = s1.getStartDate().compareTo(s2.getStartDate());
+            if (compareStartDate == 0) {
+                int compareEndDate = s1.getEndDate().compareTo(s2.getEndDate());
+                if (compareEndDate == 0) {
+                    if (s1.getTalk() != null && s2.getTalk() != null) {
+                        return s1.getTalk().getTalkType().compareTo(s2.getTalk().getTalkType());
+                    }
+                }
+                return compareEndDate;
+            }
+            return compareStartDate;
+        };
+        scheduleListView.setComparator(sessionComparator);
+        scheduleListView.itemsProperty().addListener((InvalidationListener) c -> {
+            List<Session> copyOfSessions = new ArrayList<>(getFilteredSessionsList(mode));
+            Collections.sort(copyOfSessions, sessionComparator);
+            updateSessionsDecoration(copyOfSessions);
+        });
+        scheduleListView.setItems(getFilteredSessionsList(mode));
         return scheduleListView;
     }
-    
+
+    private FilteredList<Session> getFilteredSessionsList(ContentDisplayMode mode) {
+        if (mode == ContentDisplayMode.FAVORITE) {
+            if (filteredSessionsFav == null) {
+                filteredSessionsFav = new FilteredList<>(sessionsFav);
+            }
+            return filteredSessionsFav;
+        }
+        if (filteredSessionsAll == null) {
+            filteredSessionsAll = new FilteredList<>(sessionsAll);
+        }
+        return filteredSessionsAll;
+    }
+
     public void selectFavorite() {
         favoriteButton.fire();
     }
@@ -453,11 +489,11 @@ public class SessionsPresenter  extends GluonPresenter<DevoxxApplication> {
         return button;
     }
 
-    private boolean isShowingPastSessions(Conference conference) {
+    private boolean isShowingPastSessions(Conference conference, ContentDisplayMode mode) {
         // Conference is yet to end
         // We haven't shown the filter dialog for this conference in the past
         if (isOnGoing(conference) && !fetchCSVFromLocalStorage(SESSION_FILTER).contains(conference.getId())) {
-            for (Session filteredSession : filteredSessions) {
+            for (Session filteredSession : getFilteredSessionsList(mode)) {
                 if (filteredSession.getEndDate().plusHours(1).isBefore(ZonedDateTime.now(conference.getConferenceZoneId()))) {
                     return true;
                 }
