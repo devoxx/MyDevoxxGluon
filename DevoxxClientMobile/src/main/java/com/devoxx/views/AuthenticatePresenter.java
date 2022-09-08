@@ -28,6 +28,7 @@ package com.devoxx.views;
 import com.devoxx.DevoxxApplication;
 import com.devoxx.DevoxxView;
 import com.devoxx.model.User;
+import com.devoxx.service.Service;
 import com.devoxx.util.DevoxxBundle;
 import com.gluonhq.attach.settings.SettingsService;
 import com.gluonhq.charm.glisten.afterburner.GluonPresenter;
@@ -39,13 +40,11 @@ import com.gluonhq.charm.glisten.control.TextField;
 import com.gluonhq.charm.glisten.control.Toast;
 import com.gluonhq.charm.glisten.mvc.View;
 import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
-import com.gluonhq.cloudlink.client.data.RemoteFunctionBuilder;
-import com.gluonhq.cloudlink.client.data.RemoteFunctionObject;
-import com.gluonhq.connect.GluonObservableObject;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
+import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
@@ -70,6 +69,9 @@ public class AuthenticatePresenter extends GluonPresenter<DevoxxApplication> {
     private Button login;
     @FXML
     private ResourceBundle resources;
+
+    @Inject
+    private Service service;
 
     private Runnable success;
     private Runnable failure;
@@ -104,23 +106,16 @@ public class AuthenticatePresenter extends GluonPresenter<DevoxxApplication> {
     }
 
     private void authenticateUser(com.devoxx.model.User user) {
-        RemoteFunctionObject fnAuthenticate = RemoteFunctionBuilder.create("authenticate_6digit_key")
-                .param("username", user.getUsername())
-                .param("password", user.getPassword())
-                .object();
 
-        final GluonObservableObject<JsonObject> response = fnAuthenticate.call(JsonObject.class);
         AppBar appBar = getApp().getAppBar();
-        response.setOnSucceeded(e -> {
-            JsonObject tokenId = response.get();
-            storeUserDetails(tokenId.getString("id_token"));
+        service.authenticateUser(user, tokenId -> {
+            storeUserDetails(tokenId);
             MobileApplication.getInstance().switchToPreviousView();
             if (success != null) {
                 success.run();
             }
             appBar.setProgressBarVisible(false);
-        });
-        response.setOnFailed(e -> {
+        }, () -> {
             icon.setContent(MaterialDesignIcon.LOCK);
             if (failure != null) {
                 failure.run();

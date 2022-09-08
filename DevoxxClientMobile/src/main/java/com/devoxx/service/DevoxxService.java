@@ -72,6 +72,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -300,6 +301,48 @@ public class DevoxxService implements Service {
                 }
             });
         }
+    }
+
+    @Override
+    public void activateUser(String username, Runnable successRunnable, Runnable failureRunnable) {
+        RemoteFunctionObject fnActivate = RemoteFunctionBuilder.create("activation_6digit_key")
+                .param("cfpEndpoint", getCfpURL())
+                .param("email", username)
+                .object();
+
+        final GluonObservableObject<JsonObject> response = fnActivate.call(JsonObject.class);
+        response.setOnSucceeded(e -> {
+            if (successRunnable != null) {
+                successRunnable.run();
+            }
+        });
+        response.setOnFailed(e -> {
+            if (failureRunnable != null) {
+                failureRunnable.run();
+            }
+        });
+    }
+
+    @Override
+    public void authenticateUser(com.devoxx.model.User user, Consumer<String> successConsumer, Runnable failureRunnable) {
+        RemoteFunctionObject fnAuthenticate = RemoteFunctionBuilder.create("authenticate_6digit_key")
+                .param("cfpEndpoint", getCfpURL())
+                .param("username", user.getUsername())
+                .param("password", user.getPassword())
+                .object();
+
+        final GluonObservableObject<JsonObject> response = fnAuthenticate.call(JsonObject.class);
+        response.setOnSucceeded(e -> {
+            JsonObject tokenId = response.get();
+            if (successConsumer != null) {
+                successConsumer.accept(tokenId.getString("id_token"));
+            }
+        });
+        response.setOnFailed(e -> {
+            if (failureRunnable != null) {
+                failureRunnable.run();
+            }
+        });
     }
 
     private void showEmailAlert() {

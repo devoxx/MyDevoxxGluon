@@ -50,6 +50,7 @@ import javafx.collections.ObservableList;
 
 import javax.inject.Singleton;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * A service class that provides the data from a back end system. Some methods require an authenticated
@@ -191,7 +192,19 @@ public interface Service {
      * @return true if there is an authenticated user, false otherwise.
      */
     boolean isAuthenticated();
-    
+
+    /**
+     * Starts activation process to get a 6 digits code. As a first step, the email address
+     * of the user is sent, and a second authentication view is shown, on success.
+     */
+    void activateUser(String username, Runnable successRunnable, Runnable failureRunnable);
+
+    /**
+     * Finalizes activation process with the 6 digits code. The token id of the user is
+     * returned, on success.
+     */
+    void authenticateUser(com.devoxx.model.User user, Consumer<String> successConsumer, Runnable failureRunnable);
+
     /**
      * The ready property is set to true when the service has finished loading conference details
      * once a new conference is selected from the conference selector.
