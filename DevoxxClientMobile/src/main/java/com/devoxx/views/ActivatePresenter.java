@@ -27,6 +27,7 @@ package com.devoxx.views;
 
 import com.devoxx.DevoxxApplication;
 import com.devoxx.DevoxxView;
+import com.devoxx.service.Service;
 import com.devoxx.util.DevoxxBundle;
 import com.gluonhq.attach.settings.SettingsService;
 import com.gluonhq.charm.glisten.afterburner.GluonPresenter;
@@ -35,14 +36,11 @@ import com.gluonhq.charm.glisten.control.ProgressIndicator;
 import com.gluonhq.charm.glisten.control.TextField;
 import com.gluonhq.charm.glisten.control.Toast;
 import com.gluonhq.charm.glisten.mvc.View;
-import com.gluonhq.cloudlink.client.data.RemoteFunctionBuilder;
-import com.gluonhq.cloudlink.client.data.RemoteFunctionObject;
-import com.gluonhq.connect.GluonObservableObject;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 
-import javax.json.JsonObject;
+import javax.inject.Inject;
 
 import static com.devoxx.util.DevoxxSettings.SAVED_ACCOUNT_USERNAME;
 
@@ -56,6 +54,9 @@ public class ActivatePresenter extends GluonPresenter<DevoxxApplication> {
     private Button submit;
     @FXML
     private Hyperlink link;
+
+    @Inject
+    private Service service;
 
     private Runnable success;
     private Runnable failure;
@@ -82,7 +83,8 @@ public class ActivatePresenter extends GluonPresenter<DevoxxApplication> {
         this.failure = failure;
     }
 
-    public void submit() {
+    @FXML
+    private void submit() {
         final AppBar appBar = getApp().getAppBar();
         appBar.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
         appBar.setProgressBarVisible(true);
@@ -92,19 +94,13 @@ public class ActivatePresenter extends GluonPresenter<DevoxxApplication> {
     }
 
     private void activateUser(String username) {
-        RemoteFunctionObject fnActivate = RemoteFunctionBuilder.create("activation_6digit_key")
-                .param("email", username)
-                .object();
-
-        final GluonObservableObject<JsonObject> response = fnActivate.call(JsonObject.class);
         AppBar appBar = getApp().getAppBar();
-        response.setOnSucceeded(e -> {
+        service.activateUser(username, () -> {
             Toast toast = new Toast(DevoxxBundle.getString("OTN.ACTIVATION.SUCCESS"));
             toast.show();
             appBar.setProgressBarVisible(false);
             authenticate();
-        });
-        response.setOnFailed(e -> {
+        }, () -> {
             if (failure != null) {
                 failure.run();
             }
