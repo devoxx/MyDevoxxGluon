@@ -527,18 +527,17 @@ public class DevoxxService implements Service {
     }
 
     @Override
-    public ObservableList<Session> reloadSessionsFromCFP(SessionListType sessionListType) {
+    public void reloadSessionsFromCFP(SessionListType sessionListType, Runnable onSucceed, Runnable onFailed) {
         if (getConference() != null) {
             if (sessionListType == SessionListType.FAVORITES) {
-                favoredSessions = null;
                 if (internalFavoredSessions != null && internalFavoredSessionsListener != null) {
                     internalFavoredSessions.removeListener(internalFavoredSessionsListener);
                     internalFavoredSessions.clear();
-                    return retrieveFavoredSessions();
                 }
+                favoredSessions = null;
+                retrieveFavoredSessions(onSucceed, onFailed);
             }
         }
-        return FXCollections.emptyObservableList();
     }
 
     @Override
@@ -835,6 +834,11 @@ public class DevoxxService implements Service {
 
     @Override
     public ObservableList<Session> retrieveFavoredSessions() {
+        return retrieveFavoredSessions(null, null);
+    }
+
+    @Override
+    public ObservableList<Session> retrieveFavoredSessions(Runnable onSucceed, Runnable onFailed) {
         if (!isAuthenticated()) {
             throw new IllegalStateException("An authenticated user must be available when calling this method.");
         }
@@ -843,7 +847,7 @@ public class DevoxxService implements Service {
             try {
                 DevoxxNotifications notifications = Injector.instantiateModelOrService(DevoxxNotifications.class);
                 // stop recreating notifications, after the list of scheduled sessions is fully retrieved
-                favoredSessions = internalRetrieveFavoredSessions();
+                favoredSessions = internalRetrieveFavoredSessions(onSucceed, onFailed);
                 // start recreating notifications as soon as the scheduled sessions are being retrieved
                 notifications.preloadFavoriteSessions();
             } catch (IllegalStateException ise) {
@@ -859,7 +863,7 @@ public class DevoxxService implements Service {
         return cfpUserUuid.get();
     }
 
-    private ObservableList<Session> internalRetrieveFavoredSessions() {
+    private ObservableList<Session> internalRetrieveFavoredSessions(Runnable onSucceed, Runnable onFailed) {
         if (!isAuthenticated()) {
             throw new IllegalStateException("An authenticated user that was verified at Devoxx CFP must be available when calling this method.");
         }
@@ -875,16 +879,24 @@ public class DevoxxService implements Service {
             GluonObservableList<JsonObject> favoredSessions = fnFavoredV2.call(JsonObject.class);
             favoredSessions.setOnSucceeded(e -> {
                 for (JsonObject favoredSession : favoredSessions) {
-                    findSession(String.valueOf(favoredSession.getInt("proposalId"))).ifPresent(internalFavoredSessions::add);
+                    findSession(String.valueOf(favoredSession.getInt("proposalId"))).ifPresent(e1 -> {
+                        internalFavoredSessions.add(e1);
+                    });
                 }
                 internalFavoredSessionsListener = initializeSessionsListener(internalFavoredSessions);
                 ready.set(true);
                 retrievingFavoriteSessions.set(false);
                 finishNotificationsPreloading();
+                if (onSucceed != null) {
+                    onSucceed.run();
+                }
             });
             favoredSessions.setOnFailed(e -> {
                 LOG.log(Level.WARNING, String.format(REMOTE_FUNCTION_FAILED_MSG, "favoredV2"), e.getSource().getException());
                 retrievingFavoriteSessions.set(false);
+                if (onFailed != null) {
+                    onFailed.run();
+                }
             });
         } else {
             RemoteFunctionObject fnFavored = RemoteFunctionBuilder.create("favored")

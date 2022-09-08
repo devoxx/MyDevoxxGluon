@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, 2019 Gluon Software
+ * Copyright (c) 2016, 2022, Gluon Software
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -230,6 +230,17 @@ public interface Service {
     ObservableList<Session> retrieveFavoredSessions();
 
     /**
+     * Returns a list of sessions that the authenticated user marked as favorite.
+     *
+     * Some actions can be defined to be executed after the process has ended, either
+     * successfully or with failure.
+     *
+     * @return
+     * @throws IllegalStateException when no user is currently authenticated
+     */
+    ObservableList<Session> retrieveFavoredSessions(Runnable onSucceed, Runnable onFailed);
+
+    /**
      * Returns a list of notes that the authenticated user has written. Each note belongs to a specific session.
      *
      * @return
@@ -261,10 +272,13 @@ public interface Service {
 
     /**
      * Returns a list of favored or scheduled sessions from the cloud.
+     *
+     * Some actions can be defined to be executed after the process has ended, either
+     * successfully or with failure.
+
      * @param sessionListType Type of session
-     * @return A list of favored or scheduled session.
      */
-    ObservableList<Session> reloadSessionsFromCFP(SessionListType sessionListType);
+    void reloadSessionsFromCFP(SessionListType sessionListType, Runnable onSucceed, Runnable onFailed);
 
     /**
      * Retrieves the Session for a specific session uuid.
