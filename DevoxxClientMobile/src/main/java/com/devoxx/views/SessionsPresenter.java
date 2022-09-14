@@ -91,6 +91,7 @@ import static com.devoxx.views.helper.Util.isOnGoing;
 public class SessionsPresenter  extends GluonPresenter<DevoxxApplication> {
     
     private static final String SESSIONS_PLACEHOLDER_MESSAGE = DevoxxBundle.getString("OTN.CONTENT_CATALOG.ALL_SESSIONS.PLACEHOLDER_MESSAGE");
+    private static final String RETRY_MESSAGE = DevoxxBundle.getString("OTN.CONTENT_CATALOG.ALL_SESSIONS.PLACEHOLDER_RETRY_MESSAGE");
     private static final String SESSIONS_PLACEHOLDER_FILTER_MESSAGE = DevoxxBundle.getString("OTN.CONTENT_CATALOG.ALL_SESSIONS.PLACEHOLDER_FILTER_MESSAGE");
 
     private static final String FAVORITE_LOGIN_PROMPT_MESSAGE = DevoxxBundle.getString("OTN.CONTENT_CATALOG.FAVORITE_SESSIONS.LOGIN_PROMPT");
@@ -272,7 +273,11 @@ public class SessionsPresenter  extends GluonPresenter<DevoxxApplication> {
                     if (filterPresenter.isFilterApplied()) {
                         return new Placeholder(SESSIONS_PLACEHOLDER_FILTER_MESSAGE, SESSIONS_ICON);
                     }
-                    return new Placeholder(SESSIONS_PLACEHOLDER_MESSAGE, SESSIONS_ICON);
+                    Placeholder placeholder = new Placeholder(SESSIONS_PLACEHOLDER_MESSAGE, SESSIONS_ICON);
+                    final Button retry = new Button(RETRY_MESSAGE, MaterialDesignIcon.REFRESH.graphic());
+                    retry.setOnAction(e -> service.checkIfReloadRequested());
+                    placeholder.getChildren().add(retry);
+                    return placeholder;
                 }, filterPresenter.filterAppliedProperty()));
                 sessionsAll.setAll(service.retrieveSessions());
                 break;

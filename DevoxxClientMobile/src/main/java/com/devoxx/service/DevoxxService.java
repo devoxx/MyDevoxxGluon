@@ -99,17 +99,9 @@ public class DevoxxService implements Service {
                     .orElseThrow(() -> new IOException("Private storage file not available"));
             deleteOldFiles(rootDir);
             RuntimeArgsService.create().ifPresent(ras -> {
-                ras.addListener(RuntimeArgsService.LAUNCH_PUSH_NOTIFICATION_KEY, (f) -> {
+                ras.addListener(RuntimeArgsService.LAUNCH_PUSH_NOTIFICATION_KEY, f -> {
                     LOG.log(Level.INFO, ">>> received a silent push notification with contents: " + f);
-                    LOG.log(Level.INFO, "[DBG] writing reload file");
-                    File file = new File (rootDir, DevoxxSettings.RELOAD);
-                    try (BufferedWriter br = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)))) {
-                        br.write(f);
-                        LOG.log(Level.INFO, "[DBG] writing silent notification file done");
-                    } catch (IOException ex) {
-                        LOG.log(Level.SEVERE, null, ex);
-                        LOG.log(Level.INFO, "[DBG] exception writing reload file " + ex);
-                    }
+                    writeReloadFile(f);
                 });
             });
 
@@ -589,6 +581,7 @@ public class DevoxxService implements Service {
             retrievingSessions.set(false);
             sessionsList.removeListener(sessionsListChangeListener);
             ConferenceLoadingLayer.hide(getConference());
+            writeReloadFile("sessionsV2 error");
             LOG.log(Level.WARNING, String.format(REMOTE_FUNCTION_FAILED_MSG, "sessionsV2"), e.getSource().getException());
         });
         sessionsList.setOnSucceeded(e -> {
@@ -625,6 +618,7 @@ public class DevoxxService implements Service {
             speakersList.setOnFailed(e -> {
                 speakers.setAll(toSpeakers(speakersList));
                 retrievingSpeakers.set(false);
+                writeReloadFile("speakersV2 error");
                 LOG.log(Level.WARNING, String.format(REMOTE_FUNCTION_FAILED_MSG, "speakersV2"), e.getSource().getException());
             });
             speakersList.setOnSucceeded(e -> {
@@ -1429,4 +1423,17 @@ public class DevoxxService implements Service {
             settingsService.remove(SAVED_CONFERENCE_TYPE);
         });
     }
+
+    private static void writeReloadFile(String f) {
+        LOG.log(Level.INFO, "[DBG] writing reload file");
+        File file = new File (rootDir, DevoxxSettings.RELOAD);
+        try (BufferedWriter br = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)))) {
+            br.write(f);
+            LOG.log(Level.INFO, "[DBG] writing reload file done");
+        } catch (IOException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            LOG.log(Level.INFO, "[DBG] exception writing reload file " + ex);
+        }
+    }
+
 }
