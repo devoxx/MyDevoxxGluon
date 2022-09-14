@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, 2019 Gluon Software
+ * Copyright (c) 2016, 2022, Gluon Software
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -150,17 +150,17 @@ public class DevoxxSettings {
     /**
      * List of conferences contries that don't support favorite count
      */
-    private static final EnumSet<DevoxxCountry> CONFERENCE_COUNTRIES_WITHOUT_FAVORITE_COUNT = EnumSet.of(DevoxxCountry.MA);
+    private static final EnumSet<DevoxxCountry> CONFERENCE_COUNTRIES_WITHOUT_FAVORITE_COUNT = EnumSet.noneOf(DevoxxCountry.class);
 
     /**
      * List of conferences contries that don't support voting
      */
-    private static final EnumSet<DevoxxCountry> CONFERENCE_COUNTRIES_WITHOUT_VOTING = EnumSet.of(DevoxxCountry.MA);
+    private static final EnumSet<DevoxxCountry> CONFERENCE_COUNTRIES_WITHOUT_VOTING = EnumSet.noneOf(DevoxxCountry.class);
 
     /**
      * List of conferences contries that don't support favorite and schedule
      */
-    private static final EnumSet<DevoxxCountry> CONFERENCE_COUNTRIES_WITHOUT_FAVORITE = EnumSet.of(DevoxxCountry.MA);
+    private static final EnumSet<DevoxxCountry> CONFERENCE_COUNTRIES_WITHOUT_FAVORITE = EnumSet.noneOf(DevoxxCountry.class);
 
     /**
      * List of conferences countries that support multiple languages

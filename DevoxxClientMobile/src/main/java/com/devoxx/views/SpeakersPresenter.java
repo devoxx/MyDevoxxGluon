@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2016, Gluon Software
+/*
+ * Copyright (c) 2016, 2022, Gluon Software
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -38,7 +38,9 @@ import com.gluonhq.charm.glisten.control.AppBar;
 import com.gluonhq.charm.glisten.control.CharmListView;
 import com.gluonhq.charm.glisten.mvc.View;
 import com.devoxx.views.cell.SpeakerCell;
+import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.util.StringConverter;
 
 import javax.inject.Inject;
@@ -46,6 +48,7 @@ import javax.inject.Inject;
 
 public class SpeakersPresenter extends GluonPresenter<DevoxxApplication> {
     private static final String PLACEHOLDER_MESSAGE = DevoxxBundle.getString("OTN.SPEAKERS.PLACEHOLDER_MESSAGE");
+    private static final String RETRY_MESSAGE = DevoxxBundle.getString("OTN.SPEAKERS.PLACEHOLDER_RETRY_MESSAGE");
 
     @FXML
     private View speakers;
@@ -68,7 +71,11 @@ public class SpeakersPresenter extends GluonPresenter<DevoxxApplication> {
 
         speakersListView.getStyleClass().add("speakers-list-view");
 
-        speakersListView.setPlaceholder(new Placeholder(PLACEHOLDER_MESSAGE, DevoxxView.SPEAKERS.getMenuIcon()));
+        Placeholder placeholder = new Placeholder(PLACEHOLDER_MESSAGE, DevoxxView.SPEAKERS.getMenuIcon());
+        final Button retry = new Button(RETRY_MESSAGE, MaterialDesignIcon.REFRESH.graphic());
+        retry.setOnAction(e -> service.checkIfReloadRequested());
+        placeholder.getChildren().add(retry);
+        speakersListView.setPlaceholder(placeholder);
 
         speakersListView.setComparator(new SpeakerComparator());
            

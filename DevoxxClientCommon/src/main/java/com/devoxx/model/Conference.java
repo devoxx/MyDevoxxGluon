@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, 2019, Gluon Software
+ * Copyright (c) 2016, 2022, Gluon Software
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -324,7 +324,9 @@ public class Conference {
     }
 
     public boolean isMyBadgeActive() {
-        return myBadgeActive;
+        // Badges are disabled from now on, in favor of DevoxxBadges app
+//        return myBadgeActive;
+        return false;
     }
 
     public void setMyBadgeActive(boolean myBadgeActive) {
