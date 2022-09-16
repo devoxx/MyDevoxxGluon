@@ -2,7 +2,7 @@ name: Android
 
 on:
   push:
-    branches: [ gluonfx ]
+    branches: [ main ]
 
 jobs:
   build:
