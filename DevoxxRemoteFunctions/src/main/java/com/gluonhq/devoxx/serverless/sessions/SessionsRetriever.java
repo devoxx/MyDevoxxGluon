@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2016, 2019 Gluon Software
+/*
+ * Copyright (c) 2016, 2022. Gluon Software
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -57,8 +57,12 @@ public class SessionsRetriever {
     private static JsonArray talks = null;
     private String cfpEndpoint;
 
+    private static long timestamp;
+
     public String retrieve(String cfpEndpoint, String conferenceId) throws IOException {
         this.cfpEndpoint = cfpEndpoint;
+        timestamp = System.currentTimeMillis();
+        LOGGER.log(Level.INFO, "WebTarget schedules START");
         WebTarget target = client.target(cfpEndpoint);
         if (isNewCfpURL(cfpEndpoint)) {
             target = target.path("public").path("schedules/");
@@ -66,6 +70,7 @@ public class SessionsRetriever {
             target = target.path("conferences").path(conferenceId).path("schedules/");
         }
         Response schedules = target.request().get();
+        LOGGER.log(Level.INFO, "WebTarget schedules END. Took " + (System.currentTimeMillis() - timestamp) + " ms.");
         if (schedules.getStatus() == Response.Status.OK.getStatusCode()) {
             try (JsonReader schedulesReader = Json.createReader(new StringReader(schedules.readEntity(String.class)))) {
                 List<String> dayLinks = schedulesReader.readObject().getJsonArray("links").getValuesAs(JsonObject.class).stream()
@@ -75,18 +80,21 @@ public class SessionsRetriever {
 
                 JsonArrayBuilder sessions = Json.createArrayBuilder();
                 for (String dayLink : dayLinks) {
+                    timestamp = System.currentTimeMillis();
+                    LOGGER.log(Level.INFO, "WebTarget slots START for day " + dayLink);
                     Response slots = client.target(dayLink).request().get();
+                    LOGGER.log(Level.INFO, "WebTarget slots END. Took " + (System.currentTimeMillis() - timestamp) + " ms.");
                     if (slots.getStatus() == Response.Status.OK.getStatusCode()) {
                         try (JsonReader slotsReader = Json.createReader(new StringReader(slots.readEntity(String.class)))) {
                             if (isNewCfpURL(cfpEndpoint)) {
-                                LOGGER.log(Level.INFO, "New API");
+//                                LOGGER.log(Level.INFO, "New API");
                                 slotsReader.readArray().getValuesAs(JsonObject.class).stream()
                                         .map(s -> updateSession(s, cfpEndpoint))
                                         .filter(s -> (s.containsKey("talk") && !s.isNull("talk")) ||
                                                 s.containsKey("break") && !s.isNull("break"))
                                         .forEach(sessions::add);
                             } else {
-                                LOGGER.log(Level.INFO, "Old API");
+//                                LOGGER.log(Level.INFO, "Old API");
                                 slotsReader.readObject().getJsonArray("slots").getValuesAs(JsonObject.class).stream()
                                         .filter(slot -> (slot.containsKey("talk") && slot.get("talk").getValueType() == JsonValue.ValueType.OBJECT) ||
                                                 (slot.containsKey("break") && slot.get("break").getValueType() == JsonValue.ValueType.OBJECT))

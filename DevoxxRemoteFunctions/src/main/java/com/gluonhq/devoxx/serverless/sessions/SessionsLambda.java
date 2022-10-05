@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2016, 2019 Gluon Software
+/*
+ * Copyright (c) 2016, 2022, Gluon Software
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -39,25 +39,36 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SessionsLambda implements RequestStreamHandler {
 
+    private static final Logger LOGGER = Logger.getLogger(SessionsLambda.class.getName());
+
     private static final String CONFERENCE_ID_OLD = "\"65\"";
     private static final String CFP_ENDPOINT_OLD = "https://vxdbanff19.confinabox.com/api";
-    private static final String CFP_ENDPOINT_NEW = "https://dvbe19.cfp.dev/api/";
+    private static final String CFP_ENDPOINT_NEW = "https://dvbe22.cfp.dev/api/";
+
+    private static long timestamp;
 
     public void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
         String conferenceId, cfpEndpoint;
+        timestamp = System.currentTimeMillis();
+        LOGGER.log(Level.INFO, "handleRequest START");
         try (JsonReader reader = Json.createReader(input)) {
             JsonObject jsonInput = reader.readObject();
             conferenceId = jsonInput.containsKey("conferenceId") && !jsonInput.isNull("conferenceId") ? 
                     jsonInput.getString("conferenceId") : null;
             cfpEndpoint = jsonInput.getString("cfpEndpoint");
+            LOGGER.log(Level.INFO, "call SessionsRetriever, after " + (System.currentTimeMillis() - timestamp) + " ms.");
             String jsonOutput = new SessionsRetriever().retrieve(cfpEndpoint, conferenceId);
+            LOGGER.log(Level.INFO, "call OutputStreamWriter, after " + (System.currentTimeMillis() - timestamp) + " ms.");
             try (Writer writer = new OutputStreamWriter(output)) {
                 writer.write(jsonOutput);
             }
         }
+        LOGGER.log(Level.INFO, "handleRequest END. Took: " + (System.currentTimeMillis() - timestamp) + " ms.");
     }
 
     public static void main(String[] args) throws IOException {
