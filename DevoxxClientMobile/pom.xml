@@ -346,7 +346,7 @@
                         <list>com.devoxx.service.DevoxxService</list>
 
                     </reflectionList>
-<!--                    <verbose>true</verbose>-->
+                    <verbose>true</verbose>
                     <mainClass>${mainClassName}</mainClass>
                     <appIdentifier>${app.identifier}</appIdentifier>
                     <releaseConfiguration>
