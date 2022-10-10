@@ -1404,7 +1404,8 @@
 
 .vote-view > .center > .compliments {
     -fx-min-height: 110px;
-    -fx-pref-height: 200px;
+    -fx-pref-height: 150px;
+    -fx-max-height: 150px;
 }
 
 .vote-view > .center > .compliments > .virtual-flow > .clipped-container > .sheet > .list-cell {
