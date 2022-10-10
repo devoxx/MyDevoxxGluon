@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016, 2018 Gluon Software
+ * Copyright (c) 2016, 2022, Gluon Software
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -40,13 +40,10 @@ import com.gluonhq.charm.glisten.control.Dialog;
 import com.gluonhq.charm.glisten.control.ProgressIndicator;
 import com.gluonhq.charm.glisten.control.Rating;
 import com.gluonhq.charm.glisten.control.TextArea;
-import com.gluonhq.charm.glisten.control.TextArea;
 import com.gluonhq.charm.glisten.control.Toast;
 import com.gluonhq.charm.glisten.mvc.View;
 import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
 import javafx.application.Platform;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -243,21 +240,6 @@ public class VotePresenter extends GluonPresenter<DevoxxApplication> {
             });
             feedbackDialog.getButtons().addAll(cancelButton, saveButton);
             feedbackDialog.setOnCloseRequest(e -> feedbackLabel.setText(feedback.getText()));
-            if (com.gluonhq.attach.util.Platform.isAndroid()) {
-                feedback.skinProperty().addListener(new InvalidationListener() {
-                    @Override
-                    public void invalidated(Observable observable) {
-                        if (feedback.getSkin() != null) {
-                            feedback.getChildrenUnmodifiable().get(0).setOnMouseClicked(e -> {
-                                feedback.getParent().requestFocus();
-                                feedback.getChildrenUnmodifiable().get(0).requestFocus();
-                            });
-                            feedback.skinProperty().removeListener(this);
-                        }
-                    }
-                });
-                
-            }
         }
         feedbackDialog.showAndWait();
     }
