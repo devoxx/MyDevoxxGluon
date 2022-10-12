@@ -17,11 +17,12 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>11</maven.compiler.release>
-        <gluon.mobile.version>6.0.6</gluon.mobile.version>
+        <gluon.mobile.version>6.2.2</gluon.mobile.version>
+        <gluon.cloudlink.client.version>6.0.7</gluon.cloudlink.client.version>
         <gluon.afterburner.version>2.0.5</gluon.afterburner.version>
-        <gluon.maps.version>2.0.0-ea+5</gluon.maps.version>
+        <gluon.maps.version>2.0.0-ea+6</gluon.maps.version>
         <attach.version>4.0.16</attach.version>
-        <javafx.version>19</javafx.version>
+        <javafx.version>20-ea+4</javafx.version>
         <javafx-maven-plugin-version>0.0.8</javafx-maven-plugin-version>
         <gluonfx-maven-plugin-version>1.0.15</gluonfx-maven-plugin-version>
     </properties>
