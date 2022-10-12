@@ -775,6 +775,24 @@
     -fx-text-fill: -lighter-black;
 }
 
+
+.vote-content-popup  {
+    -fx-background-color: #ffffffcc;
+    -fx-padding: 10;
+    -fx-spacing: 10;
+}
+
+.vote-content-popup > HBox {
+    -fx-spacing: 10;
+    -fx-alignment: center-right;
+}
+
+.vote-content-popup > .charm-text-area > .text-area,
+.vote-content-popup > .charm-text-area > .text-area > .scroll-pane,
+.vote-content-popup > .charm-text-area > .text-area > .scroll-pane > .viewport {
+    -fx-background-color: #ffffff10;
+}
+
 /** Session-Conflict Dialogs **/
 
 .session-conflict-dialog > .container > .content {
