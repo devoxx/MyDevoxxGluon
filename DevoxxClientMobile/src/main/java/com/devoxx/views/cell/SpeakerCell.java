@@ -49,7 +49,6 @@ public class SpeakerCell extends CharmListCell<Speaker> {
         // a RuntimeException
 //        tile.setWrapText(true);
         tile.setSecondaryGraphic(MaterialDesignIcon.CHEVRON_RIGHT.graphic());
-        setGraphic(tile);
         setText(null);
         getStyleClass().add("speaker-cell");
     }
@@ -57,28 +56,31 @@ public class SpeakerCell extends CharmListCell<Speaker> {
     @Override
     public void updateItem(Speaker speaker, boolean empty) {
         super.updateItem(speaker, empty);
+        if (speaker != null && !empty) {
+            final Avatar avatar = Util.getSpeakerAvatar(speaker, "list-avatar");
+            avatar.setMouseTransparent(true);
+            tile.setPrimaryGraphic(avatar);
 
-        final Avatar avatar = Util.getSpeakerAvatar(speaker, "list-avatar");
-        avatar.setMouseTransparent(true);
-        tile.setPrimaryGraphic(avatar);
+            //To keep height of the tile same for all cases we add "one space text instead of nulls
+            List<String> lines = new ArrayList<>(Arrays.asList(
+                    speaker.getFullName() == null ? " " : speaker.getFullName(),
+        //                speaker.getJobTitle() == null? " ": speaker.getJobTitle(),
+                    speaker.getCompany() == null ? " " : speaker.getCompany()));
+            lines.removeAll(Arrays.asList("", null));
+            for (int i = 0; i < 3 - lines.size(); i++) {
+                lines.add("");
+            }
 
-        //To keep height of the tile same for all cases we add "one space text instead of nulls
-        List<String> lines = new ArrayList<>(Arrays.asList(
-                speaker.getFullName() == null? " ": speaker.getFullName(),
-//                speaker.getJobTitle() == null? " ": speaker.getJobTitle(),
-                speaker.getCompany()  == null? " ": speaker.getCompany()));
-        lines.removeAll(Arrays.asList("", null));
-        for (int i = 0; i < 3 - lines.size(); i++) {
-            lines.add("");
+            tile.textProperty().setAll(lines);
+
+            // FIX for OTN-568
+            tile.setOnMouseReleased(event -> {
+                DevoxxView.SPEAKER.switchView().ifPresent(presenter ->
+                        ((SpeakerPresenter) presenter).setSpeaker(speaker));
+            });
+            setGraphic(tile);
+        } else {
+            setGraphic(null);
         }
-
-        tile.textProperty().setAll(lines);
-
-        // FIX for OTN-568
-        tile.setOnMouseReleased(event -> {
-            DevoxxView.SPEAKER.switchView().ifPresent(presenter ->
-                    ((SpeakerPresenter)presenter).setSpeaker(speaker));
-        });
-
     }
 }

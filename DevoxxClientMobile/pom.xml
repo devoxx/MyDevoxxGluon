@@ -73,7 +73,7 @@
         <dependency>
             <groupId>com.gluonhq</groupId>
             <artifactId>charm-cloudlink-client</artifactId>
-            <version>${gluon.mobile.version}</version>
+            <version>${gluon.cloudlink.client.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.openjfx</groupId>
@@ -243,6 +243,7 @@
                 <version>${gluonfx-maven-plugin-version}</version>
                 <configuration>
                     <target>${gluonfxTarget}</target>
+                    <javafxStaticSdkVersion>${javafx.version}</javafxStaticSdkVersion>
                     <attachList>
                         <list>barcode-scan</list>
                         <list>browser</list>
