@@ -227,10 +227,12 @@ public class VotePresenter extends GluonPresenter<DevoxxApplication> {
         }
         feedback.setUserData(feedback.getText());
         if (feedbackSideView == null) {
-            VBox content = new VBox(new Label(resources.getString("OTN.VOTE.TEXT")), feedback);
+            Pane pane = new Pane();
+            pane.setPrefHeight(MobileApplication.getInstance().getAppBar().getHeight());
+            VBox content = new VBox(pane, new Label(resources.getString("OTN.VOTE.TEXT")), feedback);
             content.getStyleClass().add("vote-content-popup");
             feedbackSideView = new SidePopupView(content);
-            feedbackSideView.setSide(Side.BOTTOM);
+            feedbackSideView.setSide(Side.TOP);
             feedbackSideView.setOnHiding(e -> vote.requestFocus());
             Button saveButton = new Button(resources.getString("OTN.VOTE.BUTTON.ACCEPT"));
             saveButton.setOnAction(e -> {
@@ -242,9 +244,7 @@ public class VotePresenter extends GluonPresenter<DevoxxApplication> {
                 feedback.setText((String) feedback.getUserData());
                 feedbackSideView.hide();
             });
-            Pane pane = new Pane();
-            pane.setPrefHeight(300);
-            content.getChildren().addAll(new HBox(cancelButton, saveButton), pane);
+            content.getChildren().addAll(new HBox(cancelButton, saveButton));
         }
         feedbackSideView.show();
     }
