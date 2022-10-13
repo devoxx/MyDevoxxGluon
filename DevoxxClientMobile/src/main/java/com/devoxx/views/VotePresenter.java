@@ -36,17 +36,18 @@ import com.devoxx.views.helper.Util;
 import com.gluonhq.charm.glisten.afterburner.GluonPresenter;
 import com.gluonhq.charm.glisten.application.MobileApplication;
 import com.gluonhq.charm.glisten.control.AppBar;
-import com.gluonhq.charm.glisten.control.Dialog;
 import com.gluonhq.charm.glisten.control.ProgressIndicator;
 import com.gluonhq.charm.glisten.control.Rating;
 import com.gluonhq.charm.glisten.control.TextArea;
 import com.gluonhq.charm.glisten.control.Toast;
+import com.gluonhq.charm.glisten.layout.layer.SidePopupView;
 import com.gluonhq.charm.glisten.mvc.View;
 import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
 import javafx.application.Platform;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.geometry.Side;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -56,6 +57,8 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import javax.inject.Inject;
@@ -81,7 +84,7 @@ public class VotePresenter extends GluonPresenter<DevoxxApplication> {
     
     private Session session;
     private TextArea feedback;
-    private Dialog<String> feedbackDialog;
+    private SidePopupView feedbackSideView;
 
     public void initialize() {
 
@@ -223,25 +226,27 @@ public class VotePresenter extends GluonPresenter<DevoxxApplication> {
             feedback = new TextArea();
         }
         feedback.setUserData(feedback.getText());
-        if (feedbackDialog == null) {
-            feedbackDialog = new Dialog<>();
-            feedbackDialog.setContent(new VBox(10, new Label(resources.getString("OTN.VOTE.TEXT")), feedback));
-            feedbackDialog.setOnShown(e -> 
-                    feedbackDialog.getContent().getParent().getParent().setTranslateY(-100));
-            feedbackDialog.setOnHiding(e -> vote.requestFocus());
+        if (feedbackSideView == null) {
+            Pane pane = new Pane();
+            pane.setPrefHeight(MobileApplication.getInstance().getAppBar().getHeight());
+            VBox content = new VBox(pane, new Label(resources.getString("OTN.VOTE.TEXT")), feedback);
+            content.getStyleClass().add("vote-content-popup");
+            feedbackSideView = new SidePopupView(content);
+            feedbackSideView.setSide(Side.TOP);
+            feedbackSideView.setOnHiding(e -> vote.requestFocus());
             Button saveButton = new Button(resources.getString("OTN.VOTE.BUTTON.ACCEPT"));
             saveButton.setOnAction(e -> {
-                feedbackDialog.hide();
+                feedbackLabel.setText(feedback.getText());
+                feedbackSideView.hide();
             });
             Button cancelButton = new Button(resources.getString("OTN.VOTE.BUTTON.CANCEL"));
             cancelButton.setOnAction(e -> {
                 feedback.setText((String) feedback.getUserData());
-                feedbackDialog.hide();
+                feedbackSideView.hide();
             });
-            feedbackDialog.getButtons().addAll(cancelButton, saveButton);
-            feedbackDialog.setOnCloseRequest(e -> feedbackLabel.setText(feedback.getText()));
+            content.getChildren().addAll(new HBox(cancelButton, saveButton));
         }
-        feedbackDialog.showAndWait();
+        feedbackSideView.show();
     }
 
     private class UnselectListCell<T> extends ListCell<T> {
