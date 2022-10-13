@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, 2019, Gluon Software
+ * Copyright (c) 2016, 2022, Gluon Software
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -32,18 +32,25 @@ import com.devoxx.util.DevoxxBundle;
 import com.devoxx.util.DevoxxNotifications;
 import com.devoxx.util.DevoxxSettings;
 import com.gluonhq.attach.settings.SettingsService;
-import com.gluonhq.charm.glisten.control.Dialog;
+import com.gluonhq.charm.glisten.application.MobileApplication;
 import com.gluonhq.charm.glisten.control.Toast;
+import com.gluonhq.charm.glisten.layout.layer.SidePopupView;
 import com.gluonhq.charm.glisten.visual.GlistenStyleClasses;
 import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -105,6 +112,7 @@ public class SessionVisuals {
 
     private boolean usingOfflineEmptyLists = true;
     private final Map<SessionListType, ObservableList<Session>> cloudLists = new HashMap<>();
+    private final BooleanProperty popupShownProperty = new SimpleBooleanProperty();
 
     // Method marked with @PostConstruct is called immediately after
     // instance is created and and members are injected
@@ -261,19 +269,34 @@ public class SessionVisuals {
                 if (listType == SessionListType.FAVORITES) {
                     devoxxNotifications.addFavoriteSessionNotifications(session); 
                 }
-                SettingsService.create().ifPresent(settings -> {
-                    String skip = settings.retrieve(DevoxxSettings.SKIP_FAV_DIALOG);
-                    if (skip == null || skip.isEmpty() || !Boolean.parseBoolean(skip)) {
-                        final Dialog<TextFlow> information = createFavoriteDialog();
-                        information.showAndWait();
-                        settings.store(DevoxxSettings.SKIP_FAV_DIALOG, Boolean.TRUE.toString());
-                    }
-                }); 
+                String skip = SettingsService.create()
+                        .map(settings -> {
+                            String value = settings.retrieve(DevoxxSettings.SKIP_FAV_DIALOG);
+                            settings.store(DevoxxSettings.SKIP_FAV_DIALOG, Boolean.TRUE.toString());
+                            return value;
+                        })
+                        .orElse(null);
+                if (skip == null || skip.isEmpty() || !Boolean.parseBoolean(skip)) {
+                    popupShownProperty.addListener(new InvalidationListener() {
+                        @Override
+                        public void invalidated(Observable observable) {
+                            if (popupShownProperty.get()) {
+                                addToListAndShowToast(listType, session);
+                                popupShownProperty.removeListener(this);
+                            }
+                        }
+                    });
+                    createFavoriteDialog().show();
+                    return;
+                }
             }
-
-            getList(listType).add(session);
-            showToast(listType, true); 
+            addToListAndShowToast(listType, session);
         } 
+    }
+
+    private void addToListAndShowToast(SessionListType listType, Session session) {
+        getList(listType).add(session);
+        showToast(listType, true);
     }
 
     /**
@@ -334,8 +357,7 @@ public class SessionVisuals {
         toast.show();
     }
 
-    private Dialog<TextFlow> createFavoriteDialog() {
-        final Dialog<TextFlow> information = new Dialog<>();
+    private SidePopupView createFavoriteDialog() {
         final Node graphicFav = MaterialDesignIcon.FAVORITE.graphic();
         final Text favText = new Text(DevoxxBundle.getString("OTN.VISUALS.SESSION.FAVORITE_DIALOG.MSG") + " ");
         graphicFav.getStyleClass().add("fav-dialog-icon");
@@ -346,13 +368,21 @@ public class SessionVisuals {
         schFavText.setWrapText(true);
 
         Button okButton = new Button("OK");
-        okButton.setOnAction(e -> information.hide());
-        information.getButtons().add(okButton);
+        HBox buttons = new HBox(okButton);
 
-        final VBox content = new VBox(10, schFavText, textFlowFav);
-        content.getStyleClass().add("sch-fav-dialog");
-        information.setContent(content);
-        information.setTitleText(DevoxxBundle.getString("OTN.BUTTON.MY_FAVORITES"));
-        return information;
+        Pane pane = new Pane();
+        pane.setPrefHeight(MobileApplication.getInstance().getAppBar().getHeight());
+
+        Label title = new Label(DevoxxBundle.getString("OTN.BUTTON.MY_FAVORITES"));
+        title.getStyleClass().add("title");
+
+        final VBox content = new VBox(pane, title, schFavText, textFlowFav, buttons);
+        content.getStyleClass().add("sch-fav-popup");
+        SidePopupView sidePopupView = new SidePopupView(content);
+        sidePopupView.setSide(Side.TOP);
+        sidePopupView.setOnHiding(e -> popupShownProperty.set(true));
+        okButton.setOnAction(e -> sidePopupView.hide());
+        popupShownProperty.set(false);
+        return sidePopupView;
     }
 }

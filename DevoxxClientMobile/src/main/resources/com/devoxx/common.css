@@ -1299,13 +1299,30 @@
     -fx-font-size: 4.0mm;
 }
 
-.sch-fav-dialog > * > .text {
+.sch-fav-dialog > * > .text,
+.sch-fav-popup > * > .text {
     -fx-fill: #333333;
 }
 
 .sch-fav-dialog > .label,
 .sch-fav-dialog > * > .icon-text {
     -fx-text-fill: #333333;
+}
+
+.sch-fav-popup {
+    -fx-background-color: white;
+    -fx-padding: 10;
+    -fx-spacing: 10;
+    -fx-text-fill: #333333;
+}
+
+.sch-fav-popup > .title {
+    -fx-font-size: 1.4em;
+}
+
+.sch-fav-popup > HBox {
+    -fx-spacing: 10;
+    -fx-alignment: center-right;
 }
 
 /** DataLabel **/
