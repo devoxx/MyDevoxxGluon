@@ -22,9 +22,9 @@
         <gluon.afterburner.version>2.0.5</gluon.afterburner.version>
         <gluon.maps.version>2.0.0-ea+6</gluon.maps.version>
         <attach.version>4.0.16</attach.version>
-        <javafx.version>20-ea+4</javafx.version>
+        <javafx.version>21-ea+5</javafx.version>
         <javafx-maven-plugin-version>0.0.8</javafx-maven-plugin-version>
-        <gluonfx-maven-plugin-version>1.0.15</gluonfx-maven-plugin-version>
+        <gluonfx-maven-plugin-version>1.0.17-SNAPSHOT</gluonfx-maven-plugin-version>
     </properties>
     
     <repositories>
