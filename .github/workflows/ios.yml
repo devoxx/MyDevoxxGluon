@@ -42,6 +42,11 @@ jobs:
         run: |
           echo "::set-output name=VERSION::$((500 + GITHUB_RUN_NUMBER))"
         shell: bash
+        
+      - name: Set up Maven
+        uses: stCarolas/setup-maven@v4.5
+        with:
+          maven-version: 3.8.6
 
       - name: Gluon Build
         run: |
