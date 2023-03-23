@@ -243,7 +243,6 @@
                 <version>${gluonfx-maven-plugin-version}</version>
                 <configuration>
                     <target>${gluonfxTarget}</target>
-                    <javafxStaticSdkVersion>${javafx.version}</javafxStaticSdkVersion>
                     <attachList>
                         <list>barcode-scan</list>
                         <list>browser</list>
