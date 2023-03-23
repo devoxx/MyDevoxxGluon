@@ -15,6 +15,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Setup Maven Action
+        uses: s4u/setup-maven-action@v1.7.0
+        with:
+          maven-version: 3.8.8
+          java-version: 17
+
       - uses: Apple-Actions/import-codesign-certs@v1
         with:
           p12-file-base64: ${{ secrets.DEVOXX_IOS_CERTIFICATES_FILE_BASE64 }}
@@ -43,12 +49,6 @@ jobs:
           echo "::set-output name=VERSION::$((500 + GITHUB_RUN_NUMBER))"
         shell: bash
         
-      - name: Setup Maven Action
-        uses: s4u/setup-maven-action@v1.7.0
-        with:
-          maven-version: 3.8.8
-          java-version: 17
-
       - name: Gluon Build
         run: |
           mvn clean install
