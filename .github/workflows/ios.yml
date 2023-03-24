@@ -15,12 +15,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Maven Action
-        uses: s4u/setup-maven-action@v1.7.0
-        with:
-          maven-version: 3.8.8
-          java-version: 17
-
       - uses: Apple-Actions/import-codesign-certs@v1
         with:
           p12-file-base64: ${{ secrets.DEVOXX_IOS_CERTIFICATES_FILE_BASE64 }}
@@ -51,9 +45,8 @@ jobs:
         
       - name: Gluon Build
         run: |
-          mvn clean install
-          cd DevoxxClientMobile
-          mvn -Pios -DiosSignIdentity="${{ secrets.DEVOXX_SIGN_IDENTITY }}" -DiosProvisioningProfile="${{ secrets.DEVOXX_PROV_PROFILE }}" -Dbundle.version="$BUNDLE_VERSION" gluonfx:build gluonfx:package
+          ./mvnw clean install
+          ./mvnw -fDevoxxClientMobile -Pios -DiosSignIdentity="${{ secrets.DEVOXX_SIGN_IDENTITY }}" -DiosProvisioningProfile="${{ secrets.DEVOXX_PROV_PROFILE }}" -Dbundle.version="$BUNDLE_VERSION" gluonfx:build gluonfx:package
         env:
           BUNDLE_VERSION: ${{ steps.variables.outputs.VERSION }}
         
