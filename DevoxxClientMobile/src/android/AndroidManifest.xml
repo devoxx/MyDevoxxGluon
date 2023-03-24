@@ -5,6 +5,7 @@
 
     <application android:label='Devoxx' android:icon="@mipmap/ic_launcher">
         <activity android:name='com.gluonhq.helloandroid.MainActivity'
+                  android:exported="true"
                   android:configChanges="orientation|keyboardHidden"
                   android:screenOrientation="portrait">
             <intent-filter>
@@ -12,6 +13,7 @@
                 <action android:name='android.intent.action.MAIN'/>
             </intent-filter>
         </activity>
-        <activity android:name='com.gluonhq.helloandroid.PermissionRequestActivity'/>
+        <activity android:name='com.gluonhq.helloandroid.PermissionRequestActivity'
+                  android:exported="true"/>
     </application>
 </manifest>
