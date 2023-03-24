@@ -20,12 +20,6 @@ jobs:
           sudo apt-get update
           sudo apt install libasound2-dev libavcodec-dev libavformat-dev libavutil-dev libgl-dev libgtk-3-dev libpango1.0-dev libxtst-dev
 
-      - name: Setup Maven Action
-        uses: s4u/setup-maven-action@v1.7.0
-        with:
-          maven-version: 3.8.8
-          java-version: 17
-
       - name: Setup Android Keystore
         id: android_keystore_file
         uses: timheuer/base64-to-file@v1
@@ -56,9 +50,8 @@ jobs:
       - name: Gluon Build
         run: |
           export ANDROID_SDK=$ANDROID_HOME
-          mvn clean install
-          cd DevoxxClientMobile
-          mvn -Pandroid -Dandroid.keystore.path="$GLUON_ANDROID_KEYSTOREPATH" -Dandroid.keystore.password="$GLUON_ANDROID_KEYSTORE_PASSWORD" -Dandroid.keyalias="$GLUON_ANDROID_KEYALIAS" -Dandroid.keyalias.password="$GLUON_ANDROID_KEYALIAS_PASSWORD" -Dversion.code="$VERSION_CODE" gluonfx:build gluonfx:package
+          ./mvnw clean install
+          ./mvnw -fDevoxxClientMobile -Pandroid -Dandroid.keystore.path="$GLUON_ANDROID_KEYSTOREPATH" -Dandroid.keystore.password="$GLUON_ANDROID_KEYSTORE_PASSWORD" -Dandroid.keyalias="$GLUON_ANDROID_KEYALIAS" -Dandroid.keyalias.password="$GLUON_ANDROID_KEYALIAS_PASSWORD" -Dversion.code="$VERSION_CODE" gluonfx:build gluonfx:package
         env:
           VERSION_CODE: ${{ steps.variables.outputs.VERSION }}
           GLUON_ANDROID_KEYSTOREPATH: ${{ steps.android_keystore_file.outputs.filePath }}
