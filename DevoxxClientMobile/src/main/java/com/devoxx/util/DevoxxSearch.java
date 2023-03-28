@@ -63,8 +63,8 @@ public class DevoxxSearch {
     );
 
     private final Collection<Supplier<Collection<? extends Searchable>>> authSearchables = Arrays.asList(
-            () -> service.retrieveNotes(),
-            () -> service.retrieveBadges()
+            () -> service.retrieveNotes()
+//            () -> service.retrieveBadges()
     );
 
 
