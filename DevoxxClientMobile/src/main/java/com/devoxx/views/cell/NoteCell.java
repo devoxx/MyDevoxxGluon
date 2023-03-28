@@ -25,6 +25,7 @@
  */
 package com.devoxx.views.cell;
 
+import com.airhacks.afterburner.injection.Injector;
 import com.devoxx.service.Service;
 import com.gluonhq.charm.glisten.control.CharmListCell;
 import com.gluonhq.charm.glisten.control.ListTile;
@@ -42,8 +43,8 @@ public class NoteCell extends CharmListCell<Note> {
 
     private final Service service;
 
-    public NoteCell(Service service) {
-        this.service = service;
+    public NoteCell() {
+        this.service = Injector.instantiateModelOrService(Service.class);
 
         tile = new ListTile();
         tile.setSecondaryGraphic(MaterialDesignIcon.CHEVRON_RIGHT.graphic());

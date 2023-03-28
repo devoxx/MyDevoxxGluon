@@ -80,7 +80,7 @@ public class NotesPresenter extends GluonPresenter<DevoxxApplication> {
 
         lvNotes = new CharmListView<>();
         lvNotes.setPlaceholder(new Placeholder(EMPTY_LIST_MESSAGE, DevoxxView.NOTES.getMenuIcon()));
-        lvNotes.setCellFactory(param -> new NoteCell(service));
+        lvNotes.setCellFactory(param -> new NoteCell());
 //        lvNotes.selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 //            if (newValue != null) {
 //                service.findSession(newValue.getSessionUuid()).ifPresent(session ->
