@@ -194,7 +194,10 @@ public class Speaker extends Searchable {
 
     public String getSummary() {
         if (bio != null) {
-            return bio.replaceAll("\\[(.*?)]\\(.*?\\)", "$1");
+            return bio
+                    .replaceAll("\\[(.*?)]\\(.*?\\)", "$1")
+                    .replaceAll("\\<(/?[^\\>]+)\\>", "\\ ")
+                    .replaceAll("\\s+", " ").trim();
         }
         return null;
     }
