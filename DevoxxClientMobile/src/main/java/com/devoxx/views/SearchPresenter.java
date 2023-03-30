@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2016, Gluon Software
+/*
+ * Copyright (c) 2016, 2023, Gluon Software
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -40,6 +40,7 @@ import com.devoxx.views.cell.SearchHeaderCell;
 import com.devoxx.views.helper.Placeholder;
 import com.devoxx.views.helper.SessionVisuals;
 import com.gluonhq.charm.glisten.afterburner.GluonPresenter;
+import com.gluonhq.charm.glisten.application.AppManager;
 import com.gluonhq.charm.glisten.control.AppBar;
 import com.gluonhq.charm.glisten.control.CharmListView;
 import com.gluonhq.charm.glisten.mvc.View;
@@ -47,6 +48,7 @@ import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -57,8 +59,8 @@ import javax.inject.Inject;
 public class SearchPresenter extends GluonPresenter<DevoxxApplication> {
 
     private static final int MIN_CHARACTERS = 3;
-    private Placeholder emptySearchPlaceholder = new Placeholder(DevoxxBundle.getString("OTN.SEARCH.PLACEHOLDER"), MaterialDesignIcon.SEARCH),
-                        noResultsPlaceholder = new Placeholder(DevoxxBundle.getString("OTN.SEARCH.NO_RESULTS"), MaterialDesignIcon.SEARCH);
+    private final Placeholder emptySearchPlaceholder = new Placeholder(DevoxxBundle.getString("OTN.SEARCH.PLACEHOLDER"), MaterialDesignIcon.SEARCH);
+    private final Placeholder noResultsPlaceholder = new Placeholder(DevoxxBundle.getString("OTN.SEARCH.NO_RESULTS"), MaterialDesignIcon.SEARCH);
 
     @FXML
     private View search;
@@ -88,7 +90,7 @@ public class SearchPresenter extends GluonPresenter<DevoxxApplication> {
         searchTextField = new TextField();
         searchTextField.getStyleClass().add("search-text-field");
         searchTextField.setPromptText(DevoxxBundle.getString("OTN.SEARCH.PROMPT"));
-        
+        searchTextField.setOnAction(e -> searchListView.requestFocus());
         clearButton = MaterialDesignIcon.CLEAR.button(e -> {
             searchTextField.clear();
             searchListView.itemsProperty().clear();
@@ -118,7 +120,7 @@ public class SearchPresenter extends GluonPresenter<DevoxxApplication> {
             }, searchTextField.textProperty()));
         
         search.setOnShowing(e -> {
-            AppBar appBar = getApp().getAppBar();
+            AppBar appBar = AppManager.getInstance().getAppBar();
             appBar.setPrefHeight(appBar.getHeight());
             if (!appBar.getStyleClass().contains("search-app-bar")) {
                 appBar.getStyleClass().add("search-app-bar");
@@ -135,10 +137,8 @@ public class SearchPresenter extends GluonPresenter<DevoxxApplication> {
             
         });
         search.setOnHiding(e -> {
-            AppBar appBar = getApp().getAppBar();
-            if (appBar.getStyleClass().contains("search-app-bar")) {
-                appBar.getStyleClass().remove("search-app-bar");
-            }
+            AppBar appBar = AppManager.getInstance().getAppBar();
+            appBar.getStyleClass().remove("search-app-bar");
             appBar.setPrefHeight(-1);
             searchTextField.clear();
         });
@@ -152,8 +152,9 @@ public class SearchPresenter extends GluonPresenter<DevoxxApplication> {
             }
         });
         searchListView.setHeadersFunction(item -> item.getClass().toString());
-        searchListView.setCellFactory(p -> new SearchCell(service, sessionVisuals));
+        searchListView.setCellFactory(p -> new SearchCell<>(service, sessionVisuals));
         searchListView.getStyleClass().add("search-list-view");
+        searchListView.itemsProperty().addListener((ListChangeListener<Searchable>) change -> searchListView.refresh());
         searchListView.setItems(results);
         searchListView.setHeaderCellFactory(p -> new SearchHeaderCell());
         addViewChangeListener(searchListView);

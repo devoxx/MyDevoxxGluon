@@ -19,7 +19,7 @@
         <app.identifier/>
         <!-- for Android -->
         <version.code>500</version.code>
-        <version.name>3.7.10</version.name>
+        <version.name>4.8.0</version.name>
         <android.keystore.path/>
         <android.keystore.password/>
         <android.keyalias/>
@@ -28,7 +28,7 @@
         <iosSignIdentity/>
         <iosProvisioningProfile/>
         <bundle.version>500</bundle.version>
-        <bundle.short.version>3.7.10</bundle.short.version>
+        <bundle.short.version>4.8.0</bundle.short.version>
     </properties>
 
     <dependencies>
