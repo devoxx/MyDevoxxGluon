@@ -24,7 +24,7 @@
         <attach.version>4.0.18</attach.version>
         <javafx.version>21-ea+5</javafx.version>
         <javafx-maven-plugin-version>0.0.8</javafx-maven-plugin-version>
-        <gluonfx-maven-plugin-version>1.0.18</gluonfx-maven-plugin-version>
+        <gluonfx-maven-plugin-version>1.0.19-SNAPSHOT</gluonfx-maven-plugin-version>
     </properties>
     
     <repositories>
