@@ -1,4 +1,4 @@
-# Devoxx
+# Devoxx (Obsolete version)
 
 **From developers, For developers**
 
